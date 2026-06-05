@@ -14,7 +14,7 @@ import {
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "antd";
-import { CloudImageWithFallback } from "@/components/cloudsteps";
+import { CloudImageWithFallback } from "@/components/CloudImageWithFallback";
 import { useAuthStore } from "@/stores/authStore";
 
 const features = (role: string) => [

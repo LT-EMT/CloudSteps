@@ -1,8 +1,5 @@
-"use client";
-
 import * as React from "react";
-import * as AvatarPrimitive from "@radix-ui/react-avatar";
-
+import { Avatar as AntAvatar } from "antd";
 import { cn } from "./utils";
 
 function hashStringToHue(input: string) {
@@ -24,49 +21,8 @@ function getInitials(name?: string) {
   return compact.slice(0, 2).toUpperCase();
 }
 
-function Avatar({
-  className,
-  ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Root>) {
-  return (
-    <AvatarPrimitive.Root
-      data-slot="avatar"
-      className={cn(
-        "relative flex size-10 shrink-0 overflow-hidden rounded-full",
-        className,
-      )}
-      {...props}
-    />
-  );
-}
-
-function AvatarImage({
-  className,
-  ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Image>) {
-  return (
-    <AvatarPrimitive.Image
-      data-slot="avatar-image"
-      className={cn("aspect-square size-full", className)}
-      {...props}
-    />
-  );
-}
-
-function AvatarFallback({
-  className,
-  ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {
-  return (
-    <AvatarPrimitive.Fallback
-      data-slot="avatar-fallback"
-      className={cn(
-        "bg-muted flex size-full items-center justify-center rounded-full",
-        className,
-      )}
-      {...props}
-    />
-  );
+function Avatar({ className, ...props }: React.ComponentProps<typeof AntAvatar>) {
+  return <AntAvatar className={cn("", className)} {...props} />;
 }
 
 type SmartAvatarProps = {
@@ -91,19 +47,15 @@ function SmartAvatar({
   const background = `hsl(${hue} 70% 45%)`;
 
   return (
-    <Avatar className={className}>
-      {src ? <AvatarImage src={src} alt={alt ?? name} className={imageClassName} /> : null}
-      <AvatarFallback
-        className={cn(
-          "text-white font-semibold",
-          fallbackClassName,
-        )}
-        style={{ backgroundColor: background }}
-      >
-        {initials}
-      </AvatarFallback>
-    </Avatar>
+    <AntAvatar
+      src={src}
+      alt={alt ?? name}
+      className={className}
+      style={!src ? { backgroundColor: background } : undefined}
+    >
+      {!src && <span className={cn("text-white font-semibold", fallbackClassName)}>{initials}</span>}
+    </AntAvatar>
   );
 }
 
-export { Avatar, AvatarImage, AvatarFallback, SmartAvatar };
+export { Avatar, SmartAvatar };

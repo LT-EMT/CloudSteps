@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Calendar, Clock, Eye, BookOpen, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { listReviewBooksByDate } from "@/api/review";
-import { Button, Modal } from "antd";
+import { Button } from "antd";
+import { DatePickerModal } from "@/components/ui/date-picker-modal";
 
 type ReviewBookStat = { wordBookId: number; cnt: number; name: string; level: string };
 
@@ -158,35 +159,12 @@ export default function AntiForgetting() {
       </div>
 
       {/* 日期选择模态框 */}
-      <Modal
+      <DatePickerModal
         open={showDatePicker}
-        onCancel={() => setShowDatePicker(false)}
-        footer={null}
-        centered
-        width={320}
-        styles={{ body: { padding: '24px' } }}
-      >
-        <div className="space-y-4">
-          <div className="text-lg font-semibold text-[#2D3748]">选择日期</div>
-          <input
-            type="date"
-            value={selectedDate}
-            onChange={(e) => {
-              setSelectedDate(e.target.value);
-              setShowDatePicker(false);
-            }}
-            style={{ width: '100%', padding: '8px 12px', fontSize: '16px', border: '1px solid #E2E8F0', borderRadius: '8px' }}
-          />
-          <div className="flex gap-2 pt-4">
-            <Button
-              onClick={() => setShowDatePicker(false)}
-              className="flex-1"
-            >
-              关闭
-            </Button>
-          </div>
-        </div>
-      </Modal>
+        onClose={() => setShowDatePicker(false)}
+        value={selectedDate}
+        onChange={(newDate) => setSelectedDate(newDate)}
+      />
 
       {/* 当前用户和任务统计 */}
       {totalTasks > 0 && (

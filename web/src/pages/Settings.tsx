@@ -15,6 +15,15 @@ import {
   type UserActivity,
 } from "@/api/auth";
 
+// Custom styles for Modal
+const modalStyles = `
+  .settings-modal .ant-modal-content {
+    border-radius: 16px !important;
+    border: 1px solid rgb(226 232 240) !important;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+  }
+`;
+
 const settingOptions = [
   {
     id: 1,
@@ -121,6 +130,7 @@ export default function Settings() {
 
   return (
     <div className="min-h-screen bg-[#F7F9FC] pb-6">
+      <style>{modalStyles}</style>
       {/* 顶部导航 */}
       <div className="bg-white border-b border-[#E2E8F0] mb-6">
         <div className="flex items-center h-14 px-4">
@@ -228,8 +238,11 @@ export default function Settings() {
           onCancel={() => setPanel(null)}
           footer={null}
           centered
-          className="rounded-2xl"
           width={520}
+          className="settings-modal"
+          styles={{
+            body: { padding: '24px' }
+          }}
         >
           {panel === "password" ? (
             <>

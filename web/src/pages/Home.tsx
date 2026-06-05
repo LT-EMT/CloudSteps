@@ -209,6 +209,7 @@ export default function Home() {
         <Button
           onClick={() => navigate("/vocabulary-test")}
           className="bg-white rounded-xl p-6 text-left hover:shadow-lg transition-all border border-slate-100 h-auto flex flex-col items-start"
+          style={{ minHeight: '160px' }}
         >
           <div className="w-12 h-12 mb-4">
             <div className="w-12 h-12 bg-[#4ECDC4]/10 rounded-lg flex items-center justify-center">
@@ -223,6 +224,7 @@ export default function Home() {
           <Button
             onClick={() => navigate("/my-students")}
             className="bg-white rounded-xl p-6 text-left hover:shadow-lg transition-all border border-slate-100 h-auto flex flex-col items-start"
+            style={{ minHeight: '160px' }}
           >
             <div className="w-12 h-12 mb-4">
               <div className="w-12 h-12 bg-[#55A3FF]/10 rounded-lg flex items-center justify-center">
@@ -236,6 +238,7 @@ export default function Home() {
           <Button
             onClick={() => navigate("/material-selection")}
             className="bg-white rounded-xl p-6 text-left hover:shadow-lg transition-all border border-slate-100 h-auto flex flex-col items-start"
+            style={{ minHeight: '160px' }}
           >
             <div className="w-12 h-12 mb-4">
               <div className="w-12 h-12 bg-[#55A3FF]/10 rounded-lg flex items-center justify-center">

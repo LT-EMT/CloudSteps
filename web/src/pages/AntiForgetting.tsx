@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Calendar, Clock, Eye, BookOpen, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { listReviewBooksByDate } from "@/api/review";
+import { Button, DatePicker, Modal } from "antd";
 
 type ReviewBookStat = { wordBookId: number; cnt: number; name: string; level: string };
 
@@ -38,7 +39,7 @@ function formatDateZhLong(ymd: string) {
 
 export default function AntiForgetting() {
   const [selectedDate, setSelectedDate] = useState(() => toDateInputValue(new Date()));
-  const dateInputRef = useRef<HTMLInputElement>(null);
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const navigate = useNavigate();
 
   const [bookStats, setBookStats] = useState<ReviewBookStat[]>([]);
@@ -99,21 +100,6 @@ export default function AntiForgetting() {
     setSelectedDate(toDateInputValue(d));
   };
 
-  const openNativeDatePicker = () => {
-    const el = dateInputRef.current;
-    if (!el) return;
-    const anyEl = el as HTMLInputElement & { showPicker?: () => void };
-    if (typeof anyEl.showPicker === "function") {
-      try {
-        anyEl.showPicker();
-        return;
-      } catch {
-        // 部分浏览器仍可能抛错，回退为 click
-      }
-    }
-    el.click();
-  };
-
   const handleOpenTask = (task: ReviewTask) => {
     sessionStorage.setItem("lb_mode", "review");
     sessionStorage.setItem("lb_review_wordbook_id", String(task.wordBookId));
@@ -133,7 +119,7 @@ export default function AntiForgetting() {
         </p>
       </div>
 
-      {/* 日期筛选器：移动端用大字 + 系统日历，避免原生 date 输入条难点 */}
+      {/* 日期筛选器：使用 Ant Design DatePicker 在模态框中 */}
       <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm">
         <div className="flex items-stretch justify-between gap-2 sm:gap-4">
           <button
@@ -147,7 +133,7 @@ export default function AntiForgetting() {
 
           <button
             type="button"
-            onClick={openNativeDatePicker}
+            onClick={() => setShowDatePicker(true)}
             className="flex-1 min-w-0 flex flex-col items-center justify-center rounded-xl px-2 py-4 hover:bg-[#F7F9FC]/80 active:bg-[#F7F9FC] transition-colors"
           >
             <div className="flex items-center gap-1.5 text-[#4ECDC4] mb-2">
@@ -157,18 +143,8 @@ export default function AntiForgetting() {
             <div className="text-base sm:text-lg font-semibold text-[#2D3748] text-center leading-snug">
               {formatDateZhLong(selectedDate)}
             </div>
-            <span className="text-xs text-[#A0AEC0] mt-2">点按打开日历</span>
+            <span className="text-xs text-[#A0AEC0] mt-2">点按打开日期选择器</span>
           </button>
-
-          <input
-            ref={dateInputRef}
-            type="date"
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            className="absolute opacity-0 w-px h-px overflow-hidden -z-10"
-            tabIndex={-1}
-            aria-label="选择日期"
-          />
 
           <button
             type="button"
@@ -180,6 +156,47 @@ export default function AntiForgetting() {
           </button>
         </div>
       </div>
+
+      {/* 日期选择模态框 */}
+      <Modal
+        open={showDatePicker}
+        onCancel={() => setShowDatePicker(false)}
+        footer={null}
+        centered
+        width={320}
+        styles={{ body: { padding: '24px' } }}
+      >
+        <div className="space-y-4">
+          <div className="text-lg font-semibold text-[#2D3748]">选择日期</div>
+          <DatePicker
+            value={parseYMDLocal(selectedDate) as any}
+            onChange={(date: any) => {
+              if (date) {
+                const d = date.toDate();
+                setSelectedDate(toDateInputValue(d));
+                setShowDatePicker(false);
+              }
+            }}
+            style={{ width: '100%' }}
+            format="YYYY-MM-DD"
+          />
+          <div className="flex gap-2 pt-4">
+            <Button
+              onClick={() => setShowDatePicker(false)}
+              className="flex-1"
+            >
+              取消
+            </Button>
+            <Button
+              onClick={() => setShowDatePicker(false)}
+              type="primary"
+              className="flex-1"
+            >
+              确定
+            </Button>
+          </div>
+        </div>
+      </Modal>
 
       {/* 当前用户和任务统计 */}
       {totalTasks > 0 && (

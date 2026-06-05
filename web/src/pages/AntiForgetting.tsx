@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Calendar, Clock, Eye, BookOpen, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { listReviewBooksByDate } from "@/api/review";
-import { Button, DatePicker, Modal } from "antd";
+import { Button, Modal } from "antd";
 
 type ReviewBookStat = { wordBookId: number; cnt: number; name: string; level: string };
 
@@ -168,31 +168,21 @@ export default function AntiForgetting() {
       >
         <div className="space-y-4">
           <div className="text-lg font-semibold text-[#2D3748]">选择日期</div>
-          <DatePicker
-            value={parseYMDLocal(selectedDate) as any}
-            onChange={(date: any) => {
-              if (date) {
-                const d = date.toDate();
-                setSelectedDate(toDateInputValue(d));
-                setShowDatePicker(false);
-              }
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={(e) => {
+              setSelectedDate(e.target.value);
+              setShowDatePicker(false);
             }}
-            style={{ width: '100%' }}
-            format="YYYY-MM-DD"
+            style={{ width: '100%', padding: '8px 12px', fontSize: '16px', border: '1px solid #E2E8F0', borderRadius: '8px' }}
           />
           <div className="flex gap-2 pt-4">
             <Button
               onClick={() => setShowDatePicker(false)}
               className="flex-1"
             >
-              取消
-            </Button>
-            <Button
-              onClick={() => setShowDatePicker(false)}
-              type="primary"
-              className="flex-1"
-            >
-              确定
+              关闭
             </Button>
           </div>
         </div>

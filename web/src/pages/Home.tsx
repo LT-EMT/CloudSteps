@@ -205,48 +205,48 @@ export default function Home() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4">
         <Button
           onClick={() => navigate("/vocabulary-test")}
-          className="bg-white rounded-xl p-6 text-left hover:shadow-lg transition-all border border-slate-100 h-auto flex flex-col items-start"
-          style={{ minHeight: '160px' }}
+          className="bg-white rounded-xl p-4 sm:p-6 text-left hover:shadow-lg transition-all border border-slate-100 h-auto flex flex-col items-start"
+          style={{ minHeight: '140px' }}
         >
-          <div className="w-12 h-12 mb-4">
-            <div className="w-12 h-12 bg-[#4ECDC4]/10 rounded-lg flex items-center justify-center">
-              <FileText className="text-[#4ECDC4]" size={24} />
+          <div className="w-10 h-10 sm:w-12 sm:h-12 mb-3 sm:mb-4">
+            <div className="w-full h-full bg-[#4ECDC4]/10 rounded-lg flex items-center justify-center">
+              <FileText className="text-[#4ECDC4]" size={20} />
             </div>
           </div>
-          <div className="text-[#2D3748] text-sm md:text-base font-semibold">词汇测试</div>
-          <p className="text-xs text-[#718096] mt-2">进入测评流程</p>
+          <div className="text-[#2D3748] text-xs sm:text-base font-semibold">词汇测试</div>
+          <p className="text-xs text-[#718096] mt-1 sm:mt-2 line-clamp-2">进入测评流程</p>
         </Button>
 
         {isCoach ? (
           <Button
             onClick={() => navigate("/my-students")}
-            className="bg-white rounded-xl p-6 text-left hover:shadow-lg transition-all border border-slate-100 h-auto flex flex-col items-start"
-            style={{ minHeight: '160px' }}
+            className="bg-white rounded-xl p-4 sm:p-6 text-left hover:shadow-lg transition-all border border-slate-100 h-auto flex flex-col items-start"
+            style={{ minHeight: '140px' }}
           >
-            <div className="w-12 h-12 mb-4">
-              <div className="w-12 h-12 bg-[#55A3FF]/10 rounded-lg flex items-center justify-center">
-                <Users className="text-[#55A3FF]" size={24} />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 mb-3 sm:mb-4">
+              <div className="w-full h-full bg-[#55A3FF]/10 rounded-lg flex items-center justify-center">
+                <Users className="text-[#55A3FF]" size={20} />
               </div>
             </div>
-            <div className="text-[#2D3748] text-sm md:text-base font-semibold">学员管理</div>
-            <p className="text-xs text-[#718096] mt-2">查看名下学员与陪练剩余时长</p>
+            <div className="text-[#2D3748] text-xs sm:text-base font-semibold">学员管理</div>
+            <p className="text-xs text-[#718096] mt-1 sm:mt-2 line-clamp-2">查看名下学员与陪练剩余时长</p>
           </Button>
         ) : (
           <Button
             onClick={() => navigate("/material-selection")}
-            className="bg-white rounded-xl p-6 text-left hover:shadow-lg transition-all border border-slate-100 h-auto flex flex-col items-start"
-            style={{ minHeight: '160px' }}
+            className="bg-white rounded-xl p-4 sm:p-6 text-left hover:shadow-lg transition-all border border-slate-100 h-auto flex flex-col items-start"
+            style={{ minHeight: '140px' }}
           >
-            <div className="w-12 h-12 mb-4">
-              <div className="w-12 h-12 bg-[#55A3FF]/10 rounded-lg flex items-center justify-center">
-                <FileText className="text-[#55A3FF]" size={24} />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 mb-3 sm:mb-4">
+              <div className="w-full h-full bg-[#55A3FF]/10 rounded-lg flex items-center justify-center">
+                <FileText className="text-[#55A3FF]" size={20} />
               </div>
             </div>
-            <div className="text-[#2D3748] text-sm md:text-base font-semibold">单词训练</div>
-            <p className="text-xs text-[#718096] mt-2">选择词库开始练习</p>
+            <div className="text-[#2D3748] text-xs sm:text-base font-semibold">单词训练</div>
+            <p className="text-xs text-[#718096] mt-1 sm:mt-2 line-clamp-2">选择词库开始练习</p>
           </Button>
         )}
       </div>

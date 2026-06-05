@@ -206,48 +206,45 @@ export default function Home() {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <button
-          type="button"
+        <Button
           onClick={() => navigate("/vocabulary-test")}
-          className="bg-white rounded-xl p-6 text-left hover:shadow-lg transition-shadow border border-slate-100"
+          className="bg-white rounded-xl p-6 text-left hover:shadow-lg transition-all border border-slate-100 h-auto flex flex-col items-start"
         >
           <div className="w-12 h-12 mb-4">
             <div className="w-12 h-12 bg-[#4ECDC4]/10 rounded-lg flex items-center justify-center">
               <FileText className="text-[#4ECDC4]" size={24} />
             </div>
           </div>
-          <div className="text-[#2D3748] text-sm md:text-base font-medium">词汇测试</div>
+          <div className="text-[#2D3748] text-sm md:text-base font-semibold">词汇测试</div>
           <p className="text-xs text-[#718096] mt-2">进入测评流程</p>
-        </button>
+        </Button>
 
         {isCoach ? (
-          <button
-            type="button"
+          <Button
             onClick={() => navigate("/my-students")}
-            className="bg-white rounded-xl p-6 text-left hover:shadow-lg transition-shadow border border-slate-100"
+            className="bg-white rounded-xl p-6 text-left hover:shadow-lg transition-all border border-slate-100 h-auto flex flex-col items-start"
           >
             <div className="w-12 h-12 mb-4">
               <div className="w-12 h-12 bg-[#55A3FF]/10 rounded-lg flex items-center justify-center">
                 <Users className="text-[#55A3FF]" size={24} />
               </div>
             </div>
-            <div className="text-[#2D3748] text-sm md:text-base font-medium">学员管理</div>
+            <div className="text-[#2D3748] text-sm md:text-base font-semibold">学员管理</div>
             <p className="text-xs text-[#718096] mt-2">查看名下学员与陪练剩余时长</p>
-          </button>
+          </Button>
         ) : (
-          <button
-            type="button"
+          <Button
             onClick={() => navigate("/material-selection")}
-            className="bg-white rounded-xl p-6 text-left hover:shadow-lg transition-shadow border border-slate-100"
+            className="bg-white rounded-xl p-6 text-left hover:shadow-lg transition-all border border-slate-100 h-auto flex flex-col items-start"
           >
             <div className="w-12 h-12 mb-4">
               <div className="w-12 h-12 bg-[#55A3FF]/10 rounded-lg flex items-center justify-center">
                 <FileText className="text-[#55A3FF]" size={24} />
               </div>
             </div>
-            <div className="text-[#2D3748] text-sm md:text-base font-medium">单词训练</div>
+            <div className="text-[#2D3748] text-sm md:text-base font-semibold">单词训练</div>
             <p className="text-xs text-[#718096] mt-2">选择词库开始练习</p>
-          </button>
+          </Button>
         )}
       </div>
 

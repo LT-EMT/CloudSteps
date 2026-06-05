@@ -80,6 +80,10 @@ export default function AntiForgetting() {
     }));
   }, [bookStats]);
 
+  // 获取当前用户名
+  const currentStudent = sessionStorage.getItem("lb_user_name") || "当前用户";
+  const totalTasks = reviewTasks.length;
+
   // 按学员分组
   const groupedByStudent: { [key: string]: typeof reviewTasks } = {};
   reviewTasks.forEach((task) => {
@@ -144,16 +148,16 @@ export default function AntiForgetting() {
           <button
             type="button"
             onClick={openNativeDatePicker}
-            className="flex-1 min-w-0 flex flex-col items-center justify-center rounded-xl px-2 py-3 hover:bg-[#F7F9FC]/80 active:bg-[#F7F9FC] transition-colors"
+            className="flex-1 min-w-0 flex flex-col items-center justify-center rounded-xl px-2 py-4 hover:bg-[#F7F9FC]/80 active:bg-[#F7F9FC] transition-colors"
           >
-            <div className="flex items-center gap-1.5 text-[#4ECDC4] mb-1">
+            <div className="flex items-center gap-1.5 text-[#4ECDC4] mb-2">
               <Calendar size={18} />
               <span className="text-xs font-medium text-[#718096]">选择日期</span>
             </div>
-            <div className="text-[15px] sm:text-lg font-semibold text-[#2D3748] text-center leading-snug">
+            <div className="text-base sm:text-lg font-semibold text-[#2D3748] text-center leading-snug">
               {formatDateZhLong(selectedDate)}
             </div>
-            <span className="text-[11px] text-[#A0AEC0] mt-1.5">点按打开系统日历</span>
+            <span className="text-xs text-[#A0AEC0] mt-2">点按打开日历</span>
           </button>
 
           <input
@@ -176,6 +180,23 @@ export default function AntiForgetting() {
           </button>
         </div>
       </div>
+
+      {/* 当前用户和任务统计 */}
+      {totalTasks > 0 && (
+        <div className="bg-gradient-to-r from-[#4ECDC4]/10 to-[#55A3FF]/10 rounded-xl p-4 md:p-6 border border-[#E2E8F0]">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#4ECDC4] to-[#55A3FF] flex items-center justify-center text-white font-semibold text-sm">
+              {currentStudent.charAt(0)}
+            </div>
+            <div>
+              <div className="text-[#2D3748] font-semibold">{currentStudent}</div>
+              <div className="text-sm text-[#718096] mt-1">
+                本日 <span className="font-semibold text-[#4ECDC4]">{totalTasks}</span> 个复习任务（按所选日期统计）
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {loadingBooks ? (
         <div className="flex justify-center py-16">

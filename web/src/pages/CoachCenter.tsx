@@ -13,7 +13,8 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router";
-import { CloudButton, CloudImageWithFallback } from "@/components/cloudsteps";
+import { Button } from "antd";
+import { CloudImageWithFallback } from "@/components/cloudsteps";
 import { useAuthStore } from "@/stores/authStore";
 
 const features = (role: string) => [
@@ -94,12 +95,12 @@ export default function CoachCenter() {
                 <Star size={18} />
                 <span className="text-sm">角色：{user?.role || "-"}</span>
               </div>
-              <CloudButton
+              <Button
                 onClick={() => navigate("/profile/edit")}
                 className="h-9 px-4 rounded-lg bg-white/20 hover:bg-white/25 text-white border border-white/30 transition-all duration-200 hover:shadow-sm active:scale-[0.99]"
               >
                 编辑资料
-              </CloudButton>
+              </Button>
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { ChevronLeft, ChevronRight, Search, Volume2, Loader2 } from "lucide-react";
-import { CloudButton } from "@/components/cloudsteps";
+import { Button } from "antd";
 import { getWordBook, listWordBookWords, type WordBookWord } from "@/api/wordbooks";
 import { resolveMediaUrl } from "@/utils/mediaUrl";
 
@@ -163,13 +163,12 @@ export default function WordBookWords() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-3">
         <Link to="/word-books">
-          <CloudButton
-            type="button"
+          <Button
             className="inline-flex items-center gap-1 px-3 py-2 rounded-full text-sm border border-[#E2E8F0] text-[#4A5568] bg-white"
           >
             <ChevronLeft size={18} />
             词库列表
-          </CloudButton>
+          </Button>
         </Link>
       </div>
 
@@ -224,8 +223,7 @@ export default function WordBookWords() {
                   ) : null}
                 </div>
                 <div className="shrink-0">
-                  <CloudButton
-                    type="button"
+                  <Button
                     disabled={!hasAudio}
                     onClick={() => play(w)}
                     className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm ${
@@ -238,7 +236,7 @@ export default function WordBookWords() {
                   >
                     <Volume2 size={18} />
                     {hasAudio ? (playingId === w.id ? "播放中…" : "播放") : "无音频"}
-                  </CloudButton>
+                  </Button>
                 </div>
               </div>
             );
@@ -252,8 +250,7 @@ export default function WordBookWords() {
             第 {page} / {totalPages} 页
           </span>
           <div className="flex items-center gap-2">
-            <CloudButton
-              type="button"
+            <Button
               disabled={loading || page <= 1}
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               className="px-3 py-1.5 rounded-lg border border-[#E2E8F0] text-[#2D3748] disabled:opacity-50 transition-all duration-200 hover:bg-[#F7F9FC] hover:border-[#4ECDC4] hover:shadow-sm active:scale-95"
@@ -266,7 +263,7 @@ export default function WordBookWords() {
                 )}
                 <span>上一页</span>
               </div>
-            </CloudButton>
+            </Button>
             
             <div className="px-3 py-1.5 text-sm text-[#718096] bg-[#F7F9FC] rounded-lg border border-[#E2E8F0] min-w-[80px] text-center">
               {loading ? (
@@ -279,8 +276,7 @@ export default function WordBookWords() {
               )}
             </div>
             
-            <CloudButton
-              type="button"
+            <Button
               disabled={loading || page >= totalPages}
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               className="px-3 py-1.5 rounded-lg border border-[#E2E8F0] text-[#2D3748] disabled:opacity-50 transition-all duration-200 hover:bg-[#F7F9FC] hover:border-[#4ECDC4] hover:shadow-sm active:scale-95"
@@ -293,7 +289,7 @@ export default function WordBookWords() {
                   <ChevronRight size={16} />
                 )}
               </div>
-            </CloudButton>
+            </Button>
           </div>
         </div>
       )}

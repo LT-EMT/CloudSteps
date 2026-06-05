@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { Calendar, ChevronLeft, CheckCircle2, Search, TrendingUp, BookOpen, GraduationCap, Dumbbell } from "lucide-react";
-import { CloudButton } from "@/components/cloudsteps";
+import { Button } from "antd";
 import {
   getStudentCoachingSessionAsTeacher,
   getStudentStudySessionAsTeacher,
@@ -234,14 +234,13 @@ export default function StudentTrainingRecords() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-3">
-        <CloudButton
-          type="button"
+        <Button
           onClick={() => navigate("/my-students")}
           className="inline-flex items-center gap-1 px-3 py-2 rounded-full text-sm border border-[#E2E8F0] text-[#4A5568] bg-white"
         >
           <ChevronLeft size={18} />
           学员管理
-        </CloudButton>
+        </Button>
       </div>
 
       <div className="bg-white rounded-2xl border border-slate-200 p-5">
@@ -375,22 +374,20 @@ export default function StudentTrainingRecords() {
           第 {page}/{totalPages} 页（每页 {pageSize} 条），筛选后共 {filteredData.length} 条
         </div>
         <div className="flex gap-2">
-          <CloudButton
-            type="button"
+          <Button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={loading || page <= 1}
             className="px-4 py-2 rounded-lg border border-[#E2E8F0] bg-white text-[#2D3748] disabled:opacity-50"
           >
             上一页
-          </CloudButton>
-          <CloudButton
-            type="button"
+          </Button>
+          <Button
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={loading || page >= totalPages}
             className="px-4 py-2 rounded-lg border border-[#E2E8F0] bg-white text-[#2D3748] disabled:opacity-50"
           >
             下一页
-          </CloudButton>
+          </Button>
         </div>
       </div>
 

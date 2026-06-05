@@ -1,7 +1,7 @@
 import { Calendar, Clock, FileText, User, Users, Timer } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { CloudButton } from "@/components/cloudsteps";
+import { Button } from "antd";
 import { useAuthStore } from "@/stores/authStore";
 import {
   endCoachingAppointment,
@@ -259,27 +259,24 @@ export default function Home() {
               <p className="text-xs text-[#718096] mt-1">周范围：{weekRangeLabel}</p>
             </div>
             <div className="flex flex-wrap gap-2 shrink-0">
-              <CloudButton
-                type="button"
+              <Button
                 className="px-3 py-1.5 rounded-full text-xs border border-[#E2E8F0] text-[#4A5568] bg-white"
                 onClick={() => setWeekAnchor(addDays(weekAnchor, -7))}
               >
                 上一周
-              </CloudButton>
-              <CloudButton
-                type="button"
+              </Button>
+              <Button
                 className="px-3 py-1.5 rounded-full text-xs border border-[#E2E8F0] text-[#4A5568] bg-white"
                 onClick={() => setWeekAnchor(new Date())}
               >
                 本周
-              </CloudButton>
-              <CloudButton
-                type="button"
+              </Button>
+              <Button
                 className="px-3 py-1.5 rounded-full text-xs border border-[#E2E8F0] text-[#4A5568] bg-white"
                 onClick={() => setWeekAnchor(addDays(weekAnchor, 7))}
               >
                 下一周
-              </CloudButton>
+              </Button>
             </div>
           </div>
           <div className="space-y-3">
@@ -360,32 +357,30 @@ export default function Home() {
                     {isCoach && (canStart || canEnd) && (
                       <div className="flex gap-2 shrink-0">
                         {canStart && (
-                          <CloudButton
+                          <Button
                             onClick={(e) => {
                               e.stopPropagation();
                               void onStart(s.id);
                             }}
                             loading={pendingAction === "start"}
-                            loadingText="开始中..."
                             disabled={pendingAction !== null}
                             className="px-4 py-2 bg-[#4ECDC4] text-white rounded-full text-sm"
                           >
-                            开始上课
-                          </CloudButton>
+                            {pendingAction === "start" ? "开始中..." : "开始上课"}
+                          </Button>
                         )}
                         {canEnd && (
-                          <CloudButton
+                          <Button
                             onClick={(e) => {
                               e.stopPropagation();
                               void onEnd(s.id);
                             }}
                             loading={pendingAction === "end"}
-                            loadingText="下课中..."
                             disabled={pendingAction !== null}
                             className="px-4 py-2 bg-[#FF6B6B] text-white rounded-full text-sm"
                           >
-                            下课
-                          </CloudButton>
+                            {pendingAction === "end" ? "下课中..." : "下课"}
+                          </Button>
                         )}
                       </div>
                     )}

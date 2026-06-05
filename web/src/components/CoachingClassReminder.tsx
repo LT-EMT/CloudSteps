@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { CloudButton } from "@/components/cloudsteps";
+import { Button } from "antd";
 
 const REMIND_EVERY_MS = 3 * 60 * 1000;
 const POLL_MS = 30_000;
@@ -165,13 +165,12 @@ export function CoachingClassReminder() {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <CloudButton
-            type="button"
+          <Button
             onClick={closeReminder}
             className="w-full py-3 bg-[#4ECDC4] text-white rounded-full font-medium hover:bg-[#45b8b0]"
           >
             知道了
-          </CloudButton>
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

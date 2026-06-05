@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { ChevronLeft, ChevronRight, Lock, Smartphone, Bell, Shield, LogOut } from "lucide-react";
-import { CloudButton } from "@/components/cloudsteps";
+import { Button } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { useAuthStore } from "@/stores/authStore";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -125,9 +125,9 @@ export default function Settings() {
       {/* 顶部导航 */}
       <div className="bg-white border-b border-[#E2E8F0] mb-6">
         <div className="flex items-center h-14 px-4">
-          <CloudButton onClick={() => navigate(-1)} className="mr-4">
+          <Button onClick={() => navigate(-1)} className="mr-4">
             <ChevronLeft size={24} className="text-[#2D3748]" />
-          </CloudButton>
+          </Button>
           <h1 className="text-lg font-semibold text-[#2D3748]">设置</h1>
         </div>
       </div>
@@ -140,7 +140,7 @@ export default function Settings() {
             {settingOptions.map((option) => {
               const Icon = option.icon;
               return (
-                <CloudButton
+                <Button
                   key={option.id}
                   onClick={() => {
                     if (option.id === 1) openPanel("password");
@@ -166,7 +166,7 @@ export default function Settings() {
                     size={20}
                     className="text-[#A0AEC0] group-hover:text-[#4ECDC4] group-hover:translate-x-1 transition-all"
                   />
-                </CloudButton>
+                </Button>
               );
             })}
           </div>
@@ -176,38 +176,38 @@ export default function Settings() {
         <div className="bg-white rounded-xl p-4">
           <h2 className="text-[18px] font-semibold text-[#2D3748] mb-4 px-2">其他</h2>
           <div className="space-y-2">
-            <CloudButton
+            <Button
               onClick={() => navigate("/about")}
               className="w-full flex items-center justify-between p-4 hover:bg-[#F7F9FC] rounded-lg transition-colors"
             >
               <span className="text-[#2D3748] font-medium">关于我们</span>
               <ChevronRight size={20} className="text-[#A0AEC0]" />
-            </CloudButton>
-            <CloudButton
+            </Button>
+            <Button
               onClick={() => navigate("/terms")}
               className="w-full flex items-center justify-between p-4 hover:bg-[#F7F9FC] rounded-lg transition-colors"
             >
               <span className="text-[#2D3748] font-medium">用户协议</span>
               <ChevronRight size={20} className="text-[#A0AEC0]" />
-            </CloudButton>
-            <CloudButton
+            </Button>
+            <Button
               onClick={() => navigate("/privacy")}
               className="w-full flex items-center justify-between p-4 hover:bg-[#F7F9FC] rounded-lg transition-colors"
             >
               <span className="text-[#2D3748] font-medium">隐私政策</span>
               <ChevronRight size={20} className="text-[#A0AEC0]" />
-            </CloudButton>
+            </Button>
           </div>
         </div>
 
         {/* 退出登录 */}
-        <CloudButton
+        <Button
           onClick={() => setLogoutOpen(true)}
           className="w-full bg-white rounded-xl p-4 text-[#FF6B6B] font-medium hover:bg-[#FF6B6B]/5 transition-colors flex items-center justify-center gap-2"
         >
           <LogOut size={20} />
           <span>退出登录</span>
-        </CloudButton>
+        </Button>
 
         <ConfirmDialog
           open={logoutOpen}
@@ -272,16 +272,14 @@ export default function Settings() {
                 </div>
 
                 <DialogFooter className="gap-2 sm:gap-2">
-                  <CloudButton
-                    type="button"
+                  <Button
                     onClick={() => setPanel(null)}
                     disabled={savingPassword}
                     className="h-10 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 transition-all duration-200 hover:shadow-sm active:scale-[0.99]"
                   >
                     取消
-                  </CloudButton>
-                  <CloudButton
-                    type="button"
+                  </Button>
+                  <Button
                     disabled={savingPassword}
                     onClick={async () => {
                       setErrorText(null);
@@ -336,7 +334,7 @@ export default function Settings() {
                     ) : (
                       "保存"
                     )}
-                  </CloudButton>
+                  </Button>
                 </DialogFooter>
               </>
             ) : null}
@@ -362,8 +360,7 @@ export default function Settings() {
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <CloudButton
-                      type="button"
+                    <Button
                       disabled={sendingPhoneCode}
                       onClick={async () => {
                         setErrorText(null);
@@ -388,7 +385,7 @@ export default function Settings() {
                       className="h-10 px-4 rounded-xl font-medium bg-[#4ECDC4] text-white hover:bg-[#45b8b0] transition-all duration-200 hover:shadow-md active:scale-[0.99]"
                     >
                       {sendingPhoneCode ? "发送中..." : "发送验证码"}
-                    </CloudButton>
+                    </Button>
                     <input
                       value={phoneCode}
                       onChange={(e) => setPhoneCode(e.target.value)}
@@ -405,16 +402,14 @@ export default function Settings() {
                 </div>
 
                 <DialogFooter className="gap-2 sm:gap-2">
-                  <CloudButton
-                    type="button"
+                  <Button
                     onClick={() => setPanel(null)}
                     disabled={verifyingPhone}
                     className="h-10 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 transition-all duration-200 hover:shadow-sm active:scale-[0.99]"
                   >
                     关闭
-                  </CloudButton>
-                  <CloudButton
-                    type="button"
+                  </Button>
+                  <Button
                     disabled={verifyingPhone}
                     onClick={async () => {
                       setErrorText(null);
@@ -441,7 +436,7 @@ export default function Settings() {
                     className="h-10 px-4 rounded-xl font-medium bg-[#4ECDC4] text-white hover:bg-[#45b8b0] transition-all duration-200 hover:shadow-md active:scale-[0.99]"
                   >
                     {verifyingPhone ? "验证中..." : "确认绑定"}
-                  </CloudButton>
+                  </Button>
                 </DialogFooter>
               </>
             ) : null}
@@ -490,16 +485,14 @@ export default function Settings() {
                 </div>
 
                 <DialogFooter className="gap-2 sm:gap-2">
-                  <CloudButton
-                    type="button"
+                  <Button
                     onClick={() => setPanel(null)}
                     disabled={savingNotifications}
                     className="h-10 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 transition-all duration-200 hover:shadow-sm active:scale-[0.99]"
                   >
                     关闭
-                  </CloudButton>
-                  <CloudButton
-                    type="button"
+                  </Button>
+                  <Button
                     disabled={savingNotifications}
                     onClick={async () => {
                       setErrorText(null);
@@ -526,7 +519,7 @@ export default function Settings() {
                     className="h-10 px-4 rounded-xl font-medium bg-[#4ECDC4] text-white hover:bg-[#45b8b0] transition-all duration-200 hover:shadow-md active:scale-[0.99]"
                   >
                     {savingNotifications ? "保存中..." : "保存"}
-                  </CloudButton>
+                  </Button>
                 </DialogFooter>
               </>
             ) : null}
@@ -578,13 +571,12 @@ export default function Settings() {
                 </div>
 
                 <DialogFooter className="gap-2 sm:gap-2">
-                  <CloudButton
-                    type="button"
+                  <Button
                     onClick={() => setPanel(null)}
                     className="h-10 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 transition-all duration-200 hover:shadow-sm active:scale-[0.99]"
                   >
                     关闭
-                  </CloudButton>
+                  </Button>
                 </DialogFooter>
               </>
             ) : null}

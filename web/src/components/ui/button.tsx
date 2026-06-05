@@ -1,60 +1,83 @@
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
-
+import { Button as AntButton } from "antd";
 import { cn } from "./utils";
 
-const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium outline-none select-none transition-[transform,box-shadow,background-color,color,border-color,opacity] duration-200 ease-out disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none active:scale-[0.98] hover:-translate-y-[1px] active:translate-y-0 hover:shadow-sm focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0",
-  {
-    variants: {
-      variant: {
-        default:
-          "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm hover:shadow-md",
-        destructive:
-          "bg-destructive text-white hover:bg-destructive/90 shadow-sm hover:shadow-md focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
-        outline:
-          "border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground shadow-sm hover:shadow-md dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm hover:shadow-md",
-        ghost:
-          "hover:bg-accent hover:text-accent-foreground shadow-none hover:shadow-none hover:translate-y-0 dark:hover:bg-accent/50",
-        link:
-          "text-primary underline-offset-4 hover:underline shadow-none hover:shadow-none hover:translate-y-0 active:scale-100",
-      },
-      size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        icon: "size-9 rounded-md",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  },
-);
+export interface ButtonProps extends Omit<React.ComponentProps<typeof AntButton>, 'variant' | 'size'> {
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  size?: "default" | "sm" | "lg" | "icon";
+  asChild?: boolean;
+}
 
-function Button({
+const variantStyles: Record<string, string> = {
+  default: "bg-[#4ECDC4] text-white hover:bg-[#45b8b0]",
+  destructive: "bg-[#FF6B6B] text-white hover:bg-[#ff5252]",
+  outline: "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50",
+  secondary: "bg-slate-100 text-slate-900 hover:bg-slate-200",
+  ghost: "text-slate-900 hover:bg-slate-100",
+  link: "text-[#4ECDC4] hover:underline",
+};
+
+const sizeStyles: Record<string, string> = {
+  default: "h-10 px-4 py-2",
+  sm: "h-9 px-3",
+  lg: "h-11 px-8",
+  icon: "h-10 w-10",
+};
+
+export function buttonVariants({
+  variant = "default",
+  size = "default",
   className,
-  variant,
-  size,
+}: {
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  size?: "default" | "sm" | "lg" | "icon";
+  className?: string;
+} = {}) {
+  return cn(
+    "inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 hover:shadow-md active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50",
+    variantStyles[variant],
+    sizeStyles[size],
+    className,
+  );
+}
+
+function Button({ 
+  variant = "default", 
+  size = "default", 
   asChild = false,
-  ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
-  const Comp = asChild ? Slot : "button";
+  className,
+  ...props 
+}: ButtonProps) {
+  const variantMap: Record<string, React.ComponentProps<typeof AntButton>["type"]> = {
+    default: "primary",
+    destructive: "primary",
+    outline: "default",
+    secondary: "default",
+    ghost: "text",
+    link: "link",
+  };
+
+  const sizeMap: Record<string, React.ComponentProps<typeof AntButton>["size"]> = {
+    default: "middle",
+    sm: "small",
+    lg: "large",
+    icon: "small",
+  };
+
+  const antdType = variantMap[variant] || "default";
+  const antdSize = sizeMap[size] || "middle";
+
+  const danger = variant === "destructive";
 
   return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+    <AntButton
+      type={antdType}
+      size={antdSize}
+      danger={danger}
+      className={buttonVariants({ variant, size, className })}
       {...props}
     />
   );
 }
 
-export { Button, buttonVariants };
+export { Button };

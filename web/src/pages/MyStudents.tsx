@@ -1,7 +1,7 @@
 import { Users, RefreshCw, ChevronLeft, ClipboardList } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { CloudButton } from "@/components/cloudsteps";
+import { Button } from "antd";
 import { getTeacherCoachingQuotas, type TeacherCoachingQuotaRow } from "@/api/coaching";
 
 function studentLabel(row: TeacherCoachingQuotaRow) {
@@ -49,22 +49,20 @@ export default function MyStudents() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-3">
-        <CloudButton
-          type="button"
+        <Button
           onClick={() => navigate(-1)}
           className="inline-flex items-center gap-1 px-3 py-2 rounded-full text-sm border border-[#E2E8F0] text-[#4A5568] bg-white"
         >
           <ChevronLeft size={18} />
           返回
-        </CloudButton>
-        <CloudButton
-          type="button"
+        </Button>
+        <Button
           onClick={() => void load()}
           className="inline-flex items-center gap-1 px-3 py-2 rounded-full text-sm border border-[#E2E8F0] text-[#4A5568] bg-white"
         >
           <RefreshCw size={16} />
           刷新
-        </CloudButton>
+        </Button>
       </div>
 
       <div className="bg-white rounded-2xl border border-slate-200 p-5">
@@ -141,8 +139,7 @@ export default function MyStudents() {
                       )}
                     </td>
                     <td className="p-3">
-                      <CloudButton
-                        type="button"
+                      <Button
                         onClick={() =>
                           navigate(`/my-students/${r.studentId}/training`, {
                             state: { studentName: studentLabel(r) },
@@ -152,7 +149,7 @@ export default function MyStudents() {
                       >
                         <ClipboardList size={14} />
                         活动记录
-                      </CloudButton>
+                      </Button>
                     </td>
                   </tr>
                 ))}

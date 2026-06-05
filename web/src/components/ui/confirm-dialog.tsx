@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { CloudButton } from "@/components/cloudsteps";
+import { Button } from "antd";
 
 export function ConfirmDialog({
   open,
@@ -50,18 +50,17 @@ export function ConfirmDialog({
         </DialogHeader>
 
         <DialogFooter className="gap-2 sm:gap-2">
-          <CloudButton
-            type="button"
+          <Button
             onClick={() => onOpenChange(false)}
             disabled={isLoading}
             className="h-10 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 transition-all duration-200 hover:shadow-sm active:scale-[0.99]"
           >
             {cancelText}
-          </CloudButton>
-          <CloudButton
-            type="button"
+          </Button>
+          <Button
             onClick={handleConfirm}
             disabled={isLoading}
+            loading={isLoading}
             className={
               "h-10 px-4 rounded-xl font-medium text-white transition-all duration-200 hover:shadow-md active:scale-[0.99] " +
               (confirmVariant === "destructive"
@@ -69,15 +68,8 @@ export function ConfirmDialog({
                 : "bg-[#4ECDC4] hover:bg-[#45b8b0]")
             }
           >
-            {isLoading ? (
-              <span className="inline-flex items-center justify-center gap-2">
-                <span className="inline-block h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
-                <span>{confirmText}</span>
-              </span>
-            ) : (
-              confirmText
-            )}
-          </CloudButton>
+            {confirmText}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

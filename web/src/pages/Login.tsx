@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
-import { CloudButton } from "@/components/cloudsteps";
+import { Button } from "antd";
 import { getCaptcha, loginWithPassword, type User } from "@/api/auth";
 import { useAuthStore } from "@/stores/authStore";
 
@@ -170,8 +170,7 @@ export default function Login() {
                 placeholder="请输入验证码"
                 className="flex-1 px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 transition-all duration-200 outline-none hover:border-slate-300 hover:shadow-sm focus:border-[#4ECDC4] focus:ring-2 focus:ring-[#4ECDC4]/20 active:scale-[0.99]"
               />
-              <CloudButton
-                type="button"
+              <Button
                 onClick={refreshCaptcha}
                 disabled={isSubmitting}
                 className="h-[46px] w-[120px] rounded-xl border border-slate-200 bg-white/70 hover:bg-white transition-all duration-200 overflow-hidden flex items-center justify-center p-0 hover:shadow-sm active:scale-[0.99]"
@@ -186,7 +185,7 @@ export default function Login() {
                 ) : (
                   <span className="text-xs text-[#718096]">加载中...</span>
                 )}
-              </CloudButton>
+              </Button>
             </div>
           </div>
 
@@ -196,15 +195,14 @@ export default function Login() {
             </div>
           ) : null}
 
-          <CloudButton
+          <Button
             onClick={onSubmit}
             loading={isSubmitting}
-            loadingText="登录中..."
             className="w-full py-3 rounded-xl font-medium bg-[#4ECDC4] text-white hover:bg-[#45b8b0] transition-all duration-200 hover:shadow-md active:scale-[0.99]"
             disabled={isSubmitting}
           >
-            登录
-          </CloudButton>
+            {isSubmitting ? "登录中..." : "登录"}
+          </Button>
 
           <div className="text-xs text-[#A0AEC0] leading-relaxed">请使用你的后端账号进行登录。</div>
         </div>

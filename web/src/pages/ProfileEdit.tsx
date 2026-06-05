@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
-import { CloudButton } from "@/components/cloudsteps";
+import { Button } from "antd";
 import { updateCurrentUser } from "@/api/auth";
 import { useAuthStore } from "@/stores/authStore";
 import Select from "@/components/ui/select";
@@ -104,12 +104,12 @@ export default function ProfileEdit() {
             <div className="text-slate-900 text-xl font-semibold">编辑个人资料</div>
             <div className="text-slate-500 text-sm mt-1">账号：{user?.email || "-"}</div>
           </div>
-          <CloudButton
+          <Button
             onClick={() => navigate(-1)}
             className="h-9 px-4 rounded-lg border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 transition-all duration-200 hover:shadow-sm active:scale-[0.99]"
           >
             返回
-          </CloudButton>
+          </Button>
         </div>
       </div>
 
@@ -185,20 +185,14 @@ export default function ProfileEdit() {
         ) : null}
 
         <div className="pt-2 flex items-center justify-end">
-          <CloudButton
+          <Button
             onClick={onSave}
             disabled={!canSave}
+            loading={saving}
             className="h-11 px-6 rounded-xl font-medium bg-[#4ECDC4] text-white hover:bg-[#45b8b0] transition-all duration-200 hover:shadow-md active:scale-[0.99] disabled:opacity-50 disabled:hover:shadow-none"
           >
-            {saving ? (
-              <span className="inline-flex items-center justify-center gap-2">
-                <span className="inline-block h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
-                <span>保存中...</span>
-              </span>
-            ) : (
-              "保存"
-            )}
-          </CloudButton>
+            {saving ? "保存中..." : "保存"}
+          </Button>
         </div>
       </div>
     </div>

@@ -122,16 +122,18 @@ export default function VocabularyTestResult() {
   return (
     <div className="min-h-screen bg-[#F7F9FC] pb-20">
       {/* 顶部导航 */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#E2E8F0]">
-        <div className="flex items-center h-14 px-4">
-          <button onClick={() => navigate(-1)} className="mr-4">
-            <ChevronLeft size={24} className="text-[#2D3748]" />
-          </button>
-          <h1 className="text-lg font-semibold text-[#2D3748]">测试结果</h1>
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#E2E8F0] shadow-sm">
+        <div className="flex items-center justify-between h-16 px-4">
+          <div className="flex items-center gap-3">
+            <button onClick={() => navigate(-1)} className="p-2 hover:bg-[#F7F9FC] rounded-lg transition-colors">
+              <ChevronLeft size={24} className="text-[#2D3748]" />
+            </button>
+            <h1 className="text-lg font-semibold text-[#2D3748]">测试结果</h1>
+          </div>
         </div>
       </div>
 
-      <div className="pt-16 px-4">
+      <div className="pt-20 px-4">
         {loading ? (
           <div className="max-w-md mx-auto text-center text-[#718096] py-16">
             结果加载中...

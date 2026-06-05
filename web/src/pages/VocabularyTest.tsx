@@ -7,17 +7,19 @@ export default function VocabularyTest() {
   return (
     <div className="min-h-screen bg-[#F7F9FC] pb-20">
       {/* 顶部导航 */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#E2E8F0]">
-        <div className="flex items-center h-14 px-4">
-          <button onClick={() => navigate(-1)} className="mr-4">
-            <ChevronLeft size={24} className="text-[#2D3748]" />
-          </button>
-          <h1 className="text-lg font-semibold text-[#2D3748]">词汇量测试</h1>
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#E2E8F0] shadow-sm">
+        <div className="flex items-center justify-between h-16 px-4">
+          <div className="flex items-center gap-3">
+            <button onClick={() => navigate(-1)} className="p-2 hover:bg-[#F7F9FC] rounded-lg transition-colors">
+              <ChevronLeft size={24} className="text-[#2D3748]" />
+            </button>
+            <h1 className="text-lg font-semibold text-[#2D3748]">词汇量测试</h1>
+          </div>
         </div>
       </div>
 
       {/* 主内容 */}
-      <div className="pt-14 px-4 flex flex-col items-center justify-center min-h-screen">
+      <div className="pt-20 px-4 flex flex-col items-center justify-center min-h-screen">
         <div className="max-w-md w-full">
           {/* 标题 */}
           <div className="text-center mb-8">

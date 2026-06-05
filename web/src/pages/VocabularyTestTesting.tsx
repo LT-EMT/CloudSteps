@@ -199,30 +199,30 @@ export default function VocabularyTestTesting() {
   return (
     <div className="min-h-screen bg-[#F7F9FC]">
       {/* 顶部导航 */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#E2E8F0]">
-        <div className="flex items-center h-14 px-4">
-          <button onClick={() => navigate(-1)} className="mr-4">
-            <ChevronLeft size={24} className="text-[#2D3748]" />
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#E2E8F0] shadow-sm">
+        <div className="flex items-center justify-between h-16 px-4">
+          <div className="flex items-center gap-3">
+            <button onClick={() => navigate(-1)} className="p-2 hover:bg-[#F7F9FC] rounded-lg transition-colors">
+              <ChevronLeft size={24} className="text-[#2D3748]" />
+            </button>
+            <h1 className="text-lg font-semibold text-[#2D3748]">词汇量测试</h1>
+          </div>
+          <button onClick={() => navigate(-1)} className="p-2 hover:bg-[#F7F9FC] rounded-lg transition-colors">
+            <X size={24} className="text-[#718096]" />
           </button>
-          <h1 className="text-lg font-semibold text-[#2D3748]">词汇量测试</h1>
         </div>
       </div>
 
       {/* 主内容 */}
-      <div className="pt-14 px-4 pb-32">
+      <div className="pt-20 px-4 pb-32">
         {/* 进度和提示 */}
-        <div className="flex items-center justify-between mb-6 mt-4">
-          <div className="flex items-center gap-2">
-            <div className="text-[#4ECDC4] text-lg font-semibold">
-              {String(currentIndex + 1).padStart(2, "0")}
-            </div>
+        <div className="flex items-center justify-between mb-8 mt-6">
+          <div className="text-sm text-[#718096]">
+            <span>第 {String(currentIndex + 1).padStart(2, "0")} 题</span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-[#718096]">
+          <div className="text-sm text-[#718096]">
             <span>停留时间超过 10 秒，建议选择不认识</span>
           </div>
-          <button onClick={() => navigate(-1)}>
-            <X size={24} className="text-[#718096]" />
-          </button>
         </div>
 
         {/* 单词卡片 */}

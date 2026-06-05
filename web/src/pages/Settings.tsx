@@ -143,9 +143,9 @@ export default function Settings() {
 
       <div className="max-w-[800px] mx-auto px-4 space-y-6">
         {/* 设置选项 */}
-        <div className="bg-white rounded-xl p-4">
-          <h2 className="text-[18px] font-semibold text-[#2D3748] mb-4 px-2">账号设置</h2>
-          <div className="space-y-2">
+        <div className="bg-white rounded-xl p-6">
+          <h2 className="text-[18px] font-semibold text-[#2D3748] mb-6 px-2">账号设置</h2>
+          <div className="space-y-3">
             {settingOptions.map((option) => {
               const Icon = option.icon;
               return (
@@ -157,23 +157,24 @@ export default function Settings() {
                     if (option.id === 3) openPanel("notifications");
                     if (option.id === 4) openPanel("security");
                   }}
-                  className="w-full flex items-center justify-between p-4 hover:bg-[#F7F9FC] rounded-lg transition-colors group"
+                  className="w-full flex items-center justify-between px-6 py-5 hover:bg-[#F7F9FC] rounded-lg transition-colors group border border-transparent hover:border-[#E2E8F0]"
+                  style={{ height: 'auto', minHeight: '80px' }}
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-4 flex-1">
                     <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center"
+                      className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
                       style={{ backgroundColor: `${option.color}15` }}
                     >
-                      <Icon size={20} style={{ color: option.color }} />
+                      <Icon size={24} style={{ color: option.color }} />
                     </div>
                     <div className="text-left">
-                      <div className="text-[#2D3748] font-medium mb-1">{option.label}</div>
+                      <div className="text-[#2D3748] font-semibold text-base mb-1">{option.label}</div>
                       <div className="text-sm text-[#718096]">{option.description}</div>
                     </div>
                   </div>
                   <ChevronRight
                     size={20}
-                    className="text-[#A0AEC0] group-hover:text-[#4ECDC4] group-hover:translate-x-1 transition-all"
+                    className="text-[#A0AEC0] group-hover:text-[#4ECDC4] group-hover:translate-x-1 transition-all flex-shrink-0 ml-4"
                   />
                 </Button>
               );
@@ -182,28 +183,31 @@ export default function Settings() {
         </div>
 
         {/* 其他设置 */}
-        <div className="bg-white rounded-xl p-4">
-          <h2 className="text-[18px] font-semibold text-[#2D3748] mb-4 px-2">其他</h2>
-          <div className="space-y-2">
+        <div className="bg-white rounded-xl p-6">
+          <h2 className="text-[18px] font-semibold text-[#2D3748] mb-6 px-2">其他</h2>
+          <div className="space-y-3">
             <Button
               onClick={() => navigate("/about")}
-              className="w-full flex items-center justify-between p-4 hover:bg-[#F7F9FC] rounded-lg transition-colors"
+              className="w-full flex items-center justify-between px-6 py-5 hover:bg-[#F7F9FC] rounded-lg transition-colors border border-transparent hover:border-[#E2E8F0]"
+              style={{ height: 'auto', minHeight: '70px' }}
             >
-              <span className="text-[#2D3748] font-medium">关于我们</span>
+              <span className="text-[#2D3748] font-semibold text-base">关于我们</span>
               <ChevronRight size={20} className="text-[#A0AEC0]" />
             </Button>
             <Button
               onClick={() => navigate("/terms")}
-              className="w-full flex items-center justify-between p-4 hover:bg-[#F7F9FC] rounded-lg transition-colors"
+              className="w-full flex items-center justify-between px-6 py-5 hover:bg-[#F7F9FC] rounded-lg transition-colors border border-transparent hover:border-[#E2E8F0]"
+              style={{ height: 'auto', minHeight: '70px' }}
             >
-              <span className="text-[#2D3748] font-medium">用户协议</span>
+              <span className="text-[#2D3748] font-semibold text-base">用户协议</span>
               <ChevronRight size={20} className="text-[#A0AEC0]" />
             </Button>
             <Button
               onClick={() => navigate("/privacy")}
-              className="w-full flex items-center justify-between p-4 hover:bg-[#F7F9FC] rounded-lg transition-colors"
+              className="w-full flex items-center justify-between px-6 py-5 hover:bg-[#F7F9FC] rounded-lg transition-colors border border-transparent hover:border-[#E2E8F0]"
+              style={{ height: 'auto', minHeight: '70px' }}
             >
-              <span className="text-[#2D3748] font-medium">隐私政策</span>
+              <span className="text-[#2D3748] font-semibold text-base">隐私政策</span>
               <ChevronRight size={20} className="text-[#A0AEC0]" />
             </Button>
           </div>
@@ -212,7 +216,8 @@ export default function Settings() {
         {/* 退出登录 */}
         <Button
           onClick={() => setLogoutOpen(true)}
-          className="w-full bg-white rounded-xl p-4 text-[#FF6B6B] font-medium hover:bg-[#FF6B6B]/5 transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-white rounded-xl px-6 py-5 text-[#FF6B6B] font-semibold text-base hover:bg-[#FF6B6B]/5 transition-colors flex items-center justify-center gap-2 border border-transparent hover:border-[#FFE2E2]"
+          style={{ height: 'auto', minHeight: '70px' }}
         >
           <LogOut size={20} />
           <span>退出登录</span>

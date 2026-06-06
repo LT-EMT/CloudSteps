@@ -105,6 +105,38 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: "/scenario-dialogues",
+    element: (
+      <RequireAuth>
+        <ScenarioSelection />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/scenario-dialogues/history",
+    element: (
+      <RequireAuth>
+        <ScenarioHistory />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/scenario-dialogue",
+    element: (
+      <RequireAuth>
+        <ScenarioDialogue />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/scenario-review/:sessionId",
+    element: (
+      <RequireAuth>
+        <ScenarioReview />
+      </RequireAuth>
+    ),
+  },
+  {
     path: "/commission-check",
     element: (
       <RequireAuth>

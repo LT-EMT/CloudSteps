@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button } from 'antd'
+import { Button, Input } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import { get, post, put, del } from '@/utils/request'
 import { getApiBaseURL } from '@/config/apiConfig'
 import { showAlert } from '@/utils/notification'
 import { Plus, Pencil, Trash2, Search, ChevronLeft, ChevronRight, Upload, X, Library, RefreshCw } from 'lucide-react'
+
+const { TextArea } = Input
 
 interface WordBook {
   id: number
@@ -162,12 +164,11 @@ export default function WordBooks() {
         {/* 顶部操作栏 */}
         <div className="flex items-center justify-between gap-4">
           <div className="relative flex-1 max-w-xs">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input
+            <Input
               value={keyword}
               onChange={e => { setKeyword(e.target.value); setPage(1) }}
               placeholder="搜索词库名称..."
-              className="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              prefix={<Search className="w-4 h-4 text-slate-400" />}
             />
           </div>
           <Button onClick={openCreate} icon={<Plus className="w-4 h-4" />} type="primary">
@@ -284,13 +285,11 @@ export default function WordBooks() {
             <div className="p-6 space-y-4 overflow-y-auto flex-1">
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">词库名称 *</label>
-                <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                <Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">描述</label>
-                <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={3}
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none" />
+                <TextArea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={3} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -302,8 +301,7 @@ export default function WordBooks() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">排序权重</label>
-                  <input type="number" value={form.sortOrder} onChange={e => setForm(f => ({ ...f, sortOrder: Number(e.target.value) }))}
-                    className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                  <Input type="number" value={form.sortOrder} onChange={e => setForm(f => ({ ...f, sortOrder: Number(e.target.value) }))} />
                 </div>
               </div>
               <div>
@@ -312,13 +310,13 @@ export default function WordBooks() {
                   {form.coverUrl ? (
                     <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-600 flex-shrink-0">
                       <img src={form.coverUrl} alt="封面" className="w-full h-full object-cover" />
-                      <button
-                        type="button"
+                      <Button
+                        type="text"
+                        size="small"
                         onClick={() => setForm(f => ({ ...f, coverUrl: '' }))}
-                        className="absolute top-0.5 right-0.5 w-5 h-5 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black/70"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
+                        className="absolute top-0.5 right-0.5 w-5 h-5 min-w-0 p-0 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black/70"
+                        icon={<X className="w-3 h-3" />}
+                      />
                     </div>
                   ) : (
                     <div className="w-16 h-16 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-600 flex items-center justify-center flex-shrink-0 text-slate-400">
@@ -346,35 +344,29 @@ export default function WordBooks() {
                 <div className="mt-4 space-y-3 pt-1">
                   <div>
                     <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">考试标签（JSON 数组，如 [&quot;CET-4&quot;,&quot;考研&quot;]）</label>
-                    <textarea value={form.examTags} onChange={e => setForm(f => ({ ...f, examTags: e.target.value }))} rows={2}
-                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white font-mono resize-none focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                    <TextArea value={form.examTags} onChange={e => setForm(f => ({ ...f, examTags: e.target.value }))} rows={2} className="font-mono" />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">CEFR 区间</label>
-                      <input value={form.cefrRange} onChange={e => setForm(f => ({ ...f, cefrRange: e.target.value }))} placeholder="如 A2-B1"
-                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                      <Input value={form.cefrRange} onChange={e => setForm(f => ({ ...f, cefrRange: e.target.value }))} placeholder="如 A2-B1" />
                     </div>
                     <div>
                       <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">变体</label>
-                      <input value={form.regionalVariant} onChange={e => setForm(f => ({ ...f, regionalVariant: e.target.value }))} placeholder="en-US / en-GB"
-                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                      <Input value={form.regionalVariant} onChange={e => setForm(f => ({ ...f, regionalVariant: e.target.value }))} placeholder="en-US / en-GB" />
                     </div>
                   </div>
                   <div>
                     <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">数据来源名称</label>
-                    <input value={form.sourceName} onChange={e => setForm(f => ({ ...f, sourceName: e.target.value }))}
-                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                    <Input value={form.sourceName} onChange={e => setForm(f => ({ ...f, sourceName: e.target.value }))} />
                   </div>
                   <div>
                     <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">来源链接</label>
-                    <input value={form.sourceUrl} onChange={e => setForm(f => ({ ...f, sourceUrl: e.target.value }))}
-                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                    <Input value={form.sourceUrl} onChange={e => setForm(f => ({ ...f, sourceUrl: e.target.value }))} />
                   </div>
                   <div>
                     <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">授权 / 版权说明</label>
-                    <textarea value={form.licenseNote} onChange={e => setForm(f => ({ ...f, licenseNote: e.target.value }))} rows={2}
-                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white resize-none focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                    <TextArea value={form.licenseNote} onChange={e => setForm(f => ({ ...f, licenseNote: e.target.value }))} rows={2} />
                   </div>
                 </div>
               </details>

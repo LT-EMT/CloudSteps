@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { Button, Input } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import { get, post, put, del } from '@/utils/request'
 import { getApiBaseURL } from '@/config/apiConfig'
@@ -117,32 +118,30 @@ export default function Achievements() {
             <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">成就管理</h1>
             <p className="text-slate-500 dark:text-slate-400 mt-1">管理成就定义（阈值、奖励、排序、启用状态）</p>
           </div>
-          <button
+          <Button
             onClick={openCreate}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+            type="primary"
+            icon={<Plus className="w-4 h-4" />}
           >
-            <Plus className="w-4 h-4" />
             新建成就
-          </button>
+          </Button>
         </div>
 
         <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
           <div className="flex items-center gap-3">
-            <div className="relative flex-1">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                value={keyword}
-                onChange={(e) => { setKeyword(e.target.value); setPage(1) }}
-                placeholder="搜索 title / key"
-                className="w-full pl-9 pr-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-transparent"
-              />
-            </div>
-            <button
+            <Input
+              value={keyword}
+              onChange={(e) => { setKeyword(e.target.value); setPage(1) }}
+              placeholder="搜索 title / key"
+              prefix={<Search className="w-4 h-4 text-slate-400" />}
+              className="flex-1"
+            />
+            <Button
               onClick={fetchList}
-              className="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
+              type="default"
             >
               刷新
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -180,18 +179,21 @@ export default function Achievements() {
                       <td className="px-4 py-3">{a.isActive ? '是' : '否'}</td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <button
+                          <Button
                             onClick={() => openEdit(a)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
+                            size="small"
+                            icon={<Pencil className="w-4 h-4" />}
                           >
-                            <Pencil className="w-4 h-4" /> 编辑
-                          </button>
-                          <button
+                            编辑
+                          </Button>
+                          <Button
                             onClick={() => handleDelete(a)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-red-200 dark:border-red-900 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
+                            size="small"
+                            danger
+                            icon={<Trash2 className="w-4 h-4" />}
                           >
-                            <Trash2 className="w-4 h-4" /> 删除
-                          </button>
+                            删除
+                          </Button>
                         </div>
                       </td>
                     </tr>
@@ -204,21 +206,23 @@ export default function Achievements() {
           <div className="flex items-center justify-between p-4 border-t border-slate-200 dark:border-slate-800">
             <div className="text-sm text-slate-500">共 {total} 条</div>
             <div className="flex items-center gap-2">
-              <button
+              <Button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page <= 1}
-                className="inline-flex items-center gap-1 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-50"
+                size="small"
+                icon={<ChevronLeft className="w-4 h-4" />}
               >
-                <ChevronLeft className="w-4 h-4" /> 上一页
-              </button>
+                上一页
+              </Button>
               <div className="text-sm text-slate-600 dark:text-slate-300">{page} / {totalPages}</div>
-              <button
+              <Button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page >= totalPages}
-                className="inline-flex items-center gap-1 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-50"
+                size="small"
+                icon={<ChevronRight className="w-4 h-4" />}
               >
-                下一页 <ChevronRight className="w-4 h-4" />
-              </button>
+                下一页
+              </Button>
             </div>
           </div>
         </div>
@@ -228,12 +232,11 @@ export default function Achievements() {
             <div className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xl">
               <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 dark:border-slate-800">
                 <div className="font-semibold text-slate-900 dark:text-slate-100">{editing ? '编辑成就' : '新建成就'}</div>
-                <button
+                <Button
                   onClick={() => setModalOpen(false)}
-                  className="p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+                  type="text"
+                  icon={<X className="w-4 h-4" />}
+                />
               </div>
 
               <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -324,19 +327,19 @@ export default function Achievements() {
               </div>
 
               <div className="flex justify-end gap-2 px-5 py-4 border-t border-slate-200 dark:border-slate-800">
-                <button
+                <Button
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700"
                 >
                   取消
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={handleSave}
                   disabled={saving}
-                  className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
+                  type="primary"
+                  loading={saving}
                 >
                   {saving ? '保存中...' : '保存'}
-                </button>
+                </Button>
               </div>
             </div>
           </div>

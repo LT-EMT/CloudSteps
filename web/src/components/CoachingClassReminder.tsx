@@ -1,18 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Clock } from "lucide-react";
+import { Modal } from "antd";
 import { getTeacherCoachingWeek, type CoachingWeekSchedule } from "@/api/coaching";
 import { useAuthStore } from "@/stores/authStore";
 import { minutesUntilCoachingEnd } from "@/utils/coachingSchedule";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "antd";
 
+const REMIND_THRESHOLD_MIN = 10;
 const REMIND_EVERY_MS = 3 * 60 * 1000;
 const POLL_MS = 30_000;
 
@@ -31,7 +24,7 @@ type ReminderModal = {
 
 /**
  * 老师端全站陪练提醒（含 material-selection 等无 Layout 页面）
- * 上课中每 3 分钟弹出一次模态框，直至下课或到点自动结束
+ * 仅在剩余 ≤10 分钟时提醒，每 3 分钟一次；到点提示下课
  */
 export function CoachingClassReminder() {
   const user = useAuthStore((s) => s.user);
@@ -114,6 +107,9 @@ export function CoachingClassReminder() {
           return;
         }
 
+        // 剩余超过 10 分钟时不提醒
+        if (mins > REMIND_THRESHOLD_MIN) return;
+
         const last = lastRemindAtRef.current[s.id] ?? 0;
         if (Date.now() - last < REMIND_EVERY_MS) return;
 
@@ -137,42 +133,54 @@ export function CoachingClassReminder() {
 
   if (!isCoach || !user) return null;
 
+  const isEnding = modal.minutesLeft != null && modal.minutesLeft > 0;
+
   return (
-    <Dialog open={modal.open} onOpenChange={(open) => !open && closeReminder()}>
-      <DialogContent className="sm:max-w-md rounded-2xl border-[#E2E8F0] shadow-xl z-[200]">
-        <DialogHeader>
-          <div className="flex items-center gap-3 mb-1">
-            <div className="w-10 h-10 rounded-full bg-[#4ECDC4]/15 flex items-center justify-center">
-              <Clock className="text-[#4ECDC4]" size={22} />
-            </div>
-            <DialogTitle className="text-lg text-[#2D3748]">{modal.title}</DialogTitle>
-          </div>
-          <DialogDescription asChild>
-            <div className="text-left space-y-2 pt-2">
-              <p className="text-base font-medium text-[#2D3748]">{modal.student}</p>
-              <p className="text-sm text-[#718096]">{modal.slot}</p>
-              {modal.minutesLeft != null && modal.minutesLeft > 0 ? (
-                <p className="text-sm text-[#FF9800] font-medium">
-                  还剩约 {modal.minutesLeft} 分钟，请准备下课。
-                </p>
-              ) : (
-                <p className="text-sm text-[#718096]">
-                  系统已按排课结束时间自动下课并结算（不超过计划时长）。
-                </p>
-              )}
-              <p className="text-xs text-[#A0AEC0]">每 3 分钟提醒一次，关闭后仍会按时再次提醒。</p>
-            </div>
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button
-            onClick={closeReminder}
-            className="w-full py-3 bg-[#4ECDC4] text-white rounded-full font-medium hover:bg-[#45b8b0]"
-          >
-            知道了
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <Modal
+      open={modal.open}
+      onCancel={closeReminder}
+      footer={null}
+      centered
+      width={400}
+      destroyOnClose
+      maskClosable
+      className="coaching-reminder-modal"
+      styles={{
+        content: { borderRadius: 16, padding: "24px 24px 20px" },
+        body: { padding: 0 },
+      }}
+    >
+      <div className="flex items-start gap-3">
+        <div className="w-11 h-11 shrink-0 rounded-full bg-[#4ECDC4]/15 flex items-center justify-center">
+          <Clock className="text-[#4ECDC4]" size={22} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <h3 className="text-lg font-semibold text-[#2D3748] leading-tight">{modal.title}</h3>
+          <p className="text-base font-medium text-[#2D3748] mt-3">{modal.student}</p>
+          <p className="text-sm text-[#718096] mt-1">{modal.slot}</p>
+          {isEnding ? (
+            <p className="text-sm text-[#FF9800] font-medium mt-3">
+              还剩约 {modal.minutesLeft} 分钟，请准备下课。
+            </p>
+          ) : (
+            <p className="text-sm text-[#718096] mt-3">
+              系统已按排课结束时间自动下课并结算（不超过计划时长）。
+            </p>
+          )}
+          {isEnding && (
+            <p className="text-xs text-[#A0AEC0] mt-2">
+              剩余 10 分钟内每 3 分钟提醒一次。
+            </p>
+          )}
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={closeReminder}
+        className="w-full mt-6 py-3 bg-[#4ECDC4] text-white rounded-full font-medium hover:bg-[#45b8b0] transition-colors"
+      >
+        知道了
+      </button>
+    </Modal>
   );
 }

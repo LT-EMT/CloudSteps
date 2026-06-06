@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import { Layout } from "@/components/Layout";
 import Home from "@/pages/Home";
 import AntiForgetting from "@/pages/AntiForgetting";
@@ -27,6 +27,10 @@ import ProfileEdit from "@/pages/ProfileEdit";
 import About from "@/pages/About";
 import Terms from "@/pages/Terms";
 import Privacy from "@/pages/Privacy";
+import ScenarioSelection from "@/pages/ScenarioSelection";
+import ScenarioHistory from "@/pages/ScenarioHistory";
+import ScenarioDialogue from "@/pages/ScenarioDialogue";
+import ScenarioReview from "@/pages/ScenarioReview";
 import { RouteErrorBoundary } from "@/components/RouteErrorBoundary";
 import { PublicOnly, RequireAuth, RequireRole } from "@/components/AuthGuard";
 import MyStudents from "@/pages/MyStudents";
@@ -34,6 +38,7 @@ import StudentTrainingRecords from "@/pages/StudentTrainingRecords";
 import WordBooks from "@/pages/WordBooks";
 import WordBookWords from "@/pages/WordBookWords";
 import LighthouseWords from "@/pages/LighthouseWords";
+import AIInterview from "@/pages/AIInterview";
 
 export const router = createBrowserRouter([
   {
@@ -101,6 +106,38 @@ export const router = createBrowserRouter([
     element: (
       <RequireAuth>
         <ReviewWordList />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/scenario-dialogues",
+    element: (
+      <RequireAuth>
+        <ScenarioSelection />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/scenario-dialogues/history",
+    element: (
+      <RequireAuth>
+        <ScenarioHistory />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/scenario-dialogue",
+    element: (
+      <RequireAuth>
+        <ScenarioDialogue />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/scenario-review/:sessionId",
+    element: (
+      <RequireAuth>
+        <ScenarioReview />
       </RequireAuth>
     ),
   },
@@ -236,6 +273,14 @@ export const router = createBrowserRouter([
     element: (
       <RequireAuth>
         <CreateAntiForgetting />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/ai-interview",
+    element: (
+      <RequireAuth>
+        <AIInterview />
       </RequireAuth>
     ),
   },

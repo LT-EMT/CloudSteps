@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Button, Input, Select } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Button from '@/components/UI/Button'
 import { get, post, put, del } from '@/utils/request'
 import { getApiBaseURL } from '@/config/apiConfig'
 import { showAlert } from '@/utils/notification'
 import { Plus, Pencil, Trash2, Search, ChevronLeft, ChevronRight, Upload, X, Library, RefreshCw } from 'lucide-react'
+
+const { TextArea } = Input
 
 interface WordBook {
   id: number
@@ -162,15 +164,14 @@ export default function WordBooks() {
         {/* 顶部操作栏 */}
         <div className="flex items-center justify-between gap-4">
           <div className="relative flex-1 max-w-xs">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input
+            <Input
               value={keyword}
               onChange={e => { setKeyword(e.target.value); setPage(1) }}
               placeholder="搜索词库名称..."
-              className="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              prefix={<Search className="w-4 h-4 text-slate-400" />}
             />
           </div>
-          <Button onClick={openCreate} leftIcon={<Plus className="w-4 h-4" />} variant="primary">
+          <Button onClick={openCreate} icon={<Plus className="w-4 h-4" />} type="primary">
             新建词库
           </Button>
         </div>
@@ -187,21 +188,21 @@ export default function WordBooks() {
               <h3 className="mt-4 text-base font-semibold text-slate-800 dark:text-slate-100">还没有词库</h3>
               <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">先创建一个词库，然后就可以在里面维护单词与分级内容。</p>
               <div className="mt-6 flex items-center justify-center gap-3">
-                <Button onClick={openCreate} leftIcon={<Plus className="w-4 h-4" />} variant="primary">
+                <Button onClick={openCreate} icon={<Plus className="w-4 h-4" />} type="primary">
                   创建词库
                 </Button>
                 <Button
                   onClick={() => load()}
-                  leftIcon={<RefreshCw className="w-4 h-4" />}
-                  variant="outline"
+                  icon={<RefreshCw className="w-4 h-4" />}
+                  type="default"
                 >
                   刷新
                 </Button>
                 {keyword && (
                   <Button
                     onClick={() => { setKeyword(''); setPage(1) }}
-                    leftIcon={<X className="w-4 h-4" />}
-                    variant="ghost"
+                    icon={<X className="w-4 h-4" />}
+                    type="text"
                   >
                     清空搜索
                   </Button>
@@ -246,18 +247,16 @@ export default function WordBooks() {
                     {!b.isActive && <span className="px-2 py-0.5 text-xs bg-slate-100 dark:bg-slate-700 text-slate-500 rounded-full">已下架</span>}
                   </div>
                   <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
-                    <button
+                    <Button
                       onClick={() => navigate(`/wordbooks/${b.id}`)}
-                      className="flex-1 text-xs text-center py-1.5 rounded-lg bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-200 hover:bg-teal-100 dark:hover:bg-teal-900/40 transition-colors"
+                      size="small"
+                      type="default"
+                      className="flex-1"
                     >
                       管理单词
-                    </button>
-                    <button onClick={() => openEdit(b)} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 transition-colors">
-                      <Pencil className="w-3.5 h-3.5" />
-                    </button>
-                    <button onClick={() => handleDelete(b)} className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-500 hover:text-red-500 transition-colors">
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
+                    </Button>
+                    <Button onClick={() => openEdit(b)} size="small" type="text" icon={<Pencil className="w-3.5 h-3.5" />} />
+                    <Button onClick={() => handleDelete(b)} size="small" type="text" danger icon={<Trash2 className="w-3.5 h-3.5" />} />
                   </div>
                 </div>
               </div>
@@ -268,13 +267,9 @@ export default function WordBooks() {
         {/* 分页 */}
         {totalPages > 1 && (
           <div className="flex items-center justify-center gap-2">
-            <button disabled={page <= 1} onClick={() => setPage(p => p - 1)} className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-800">
-              <ChevronLeft className="w-4 h-4" />
-            </button>
+            <Button disabled={page <= 1} onClick={() => setPage(p => p - 1)} icon={<ChevronLeft className="w-4 h-4" />} />
             <span className="text-sm text-slate-600 dark:text-slate-400">{page} / {totalPages}</span>
-            <button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)} className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-800">
-              <ChevronRight className="w-4 h-4" />
-            </button>
+            <Button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)} icon={<ChevronRight className="w-4 h-4" />} />
           </div>
         )}
       </div>
@@ -285,31 +280,30 @@ export default function WordBooks() {
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col">
             <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700 shrink-0">
               <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{editing ? '编辑词库' : '新建词库'}</h2>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 text-xl leading-none">×</button>
+              <Button type="text" onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 text-xl leading-none">×</Button>
             </div>
             <div className="p-6 space-y-4 overflow-y-auto flex-1">
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">词库名称 *</label>
-                <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                <Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">描述</label>
-                <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={3}
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none" />
+                <TextArea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={3} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">等级</label>
-                  <select value={form.level} onChange={e => setForm(f => ({ ...f, level: e.target.value }))}
-                    className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500">
-                    {LEVELS.map(l => <option key={l} value={l}>{l || '不限'}</option>)}
-                  </select>
+                  <Select
+                    value={form.level || undefined}
+                    onChange={(value) => setForm(f => ({ ...f, level: value || '' }))}
+                    className="w-full"
+                    options={LEVELS.map(l => ({ label: l || '不限', value: l }))}
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">排序权重</label>
-                  <input type="number" value={form.sortOrder} onChange={e => setForm(f => ({ ...f, sortOrder: Number(e.target.value) }))}
-                    className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                  <Input type="number" value={form.sortOrder} onChange={e => setForm(f => ({ ...f, sortOrder: Number(e.target.value) }))} />
                 </div>
               </div>
               <div>
@@ -318,27 +312,27 @@ export default function WordBooks() {
                   {form.coverUrl ? (
                     <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-600 flex-shrink-0">
                       <img src={form.coverUrl} alt="封面" className="w-full h-full object-cover" />
-                      <button
-                        type="button"
+                      <Button
+                        type="text"
+                        size="small"
                         onClick={() => setForm(f => ({ ...f, coverUrl: '' }))}
-                        className="absolute top-0.5 right-0.5 w-5 h-5 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black/70"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
+                        className="absolute top-0.5 right-0.5 w-5 h-5 min-w-0 p-0 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black/70"
+                        icon={<X className="w-3 h-3" />}
+                      />
                     </div>
                   ) : (
                     <div className="w-16 h-16 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-600 flex items-center justify-center flex-shrink-0 text-slate-400">
                       <Upload className="w-5 h-5" />
                     </div>
                   )}
-                  <button
-                    type="button"
+                  <Button
+                    type="default"
                     onClick={() => coverInputRef.current?.click()}
                     disabled={coverUploading}
-                    className="px-3 py-2 text-sm border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50"
+                    size="small"
                   >
                     {coverUploading ? '上传中...' : '选择图片'}
-                  </button>
+                  </Button>
                   <input ref={coverInputRef} type="file" accept="image/*" className="hidden" onChange={handleCoverUpload} />
                 </div>
               </div>
@@ -352,44 +346,38 @@ export default function WordBooks() {
                 <div className="mt-4 space-y-3 pt-1">
                   <div>
                     <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">考试标签（JSON 数组，如 [&quot;CET-4&quot;,&quot;考研&quot;]）</label>
-                    <textarea value={form.examTags} onChange={e => setForm(f => ({ ...f, examTags: e.target.value }))} rows={2}
-                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white font-mono resize-none focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                    <TextArea value={form.examTags} onChange={e => setForm(f => ({ ...f, examTags: e.target.value }))} rows={2} className="font-mono" />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">CEFR 区间</label>
-                      <input value={form.cefrRange} onChange={e => setForm(f => ({ ...f, cefrRange: e.target.value }))} placeholder="如 A2-B1"
-                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                      <Input value={form.cefrRange} onChange={e => setForm(f => ({ ...f, cefrRange: e.target.value }))} placeholder="如 A2-B1" />
                     </div>
                     <div>
                       <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">变体</label>
-                      <input value={form.regionalVariant} onChange={e => setForm(f => ({ ...f, regionalVariant: e.target.value }))} placeholder="en-US / en-GB"
-                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                      <Input value={form.regionalVariant} onChange={e => setForm(f => ({ ...f, regionalVariant: e.target.value }))} placeholder="en-US / en-GB" />
                     </div>
                   </div>
                   <div>
                     <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">数据来源名称</label>
-                    <input value={form.sourceName} onChange={e => setForm(f => ({ ...f, sourceName: e.target.value }))}
-                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                    <Input value={form.sourceName} onChange={e => setForm(f => ({ ...f, sourceName: e.target.value }))} />
                   </div>
                   <div>
                     <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">来源链接</label>
-                    <input value={form.sourceUrl} onChange={e => setForm(f => ({ ...f, sourceUrl: e.target.value }))}
-                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                    <Input value={form.sourceUrl} onChange={e => setForm(f => ({ ...f, sourceUrl: e.target.value }))} />
                   </div>
                   <div>
                     <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">授权 / 版权说明</label>
-                    <textarea value={form.licenseNote} onChange={e => setForm(f => ({ ...f, licenseNote: e.target.value }))} rows={2}
-                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white resize-none focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                    <TextArea value={form.licenseNote} onChange={e => setForm(f => ({ ...f, licenseNote: e.target.value }))} rows={2} />
                   </div>
                 </div>
               </details>
             </div>
             <div className="flex justify-end gap-3 p-6 border-t border-slate-200 dark:border-slate-700 shrink-0">
-              <button onClick={() => setShowModal(false)} className="px-4 py-2 text-sm border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700">取消</button>
-              <button onClick={handleSave} disabled={saving} className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
+              <Button onClick={() => setShowModal(false)}>取消</Button>
+              <Button onClick={handleSave} disabled={saving} type="primary">
                 {saving ? '保存中...' : '保存'}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

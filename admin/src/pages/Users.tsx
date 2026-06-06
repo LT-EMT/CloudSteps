@@ -13,15 +13,11 @@ import {
   UserCheck,
   UserX,
 } from 'lucide-react'
+import { Button, Select, Modal, Card, Input } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Card from '@/components/UI/Card'
-import Button from '@/components/UI/Button'
-import Input from '@/components/UI/Input'
 import Badge from '@/components/UI/Badge'
 import EmptyState from '@/components/UI/EmptyState'
-import Modal from '@/components/UI/Modal'
 import ConfirmDialog from '@/components/UI/ConfirmDialog'
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/UI/Select'
 import { showAlert } from '@/utils/notification'
 import {
   listUsers,
@@ -222,61 +218,57 @@ const Users = () => {
       <div className="space-y-6">
         {/* Toolbar */}
         <Card>
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between p-4">
             <div className="flex flex-1 flex-wrap gap-3 items-center">
               <Input
                 placeholder="搜索邮箱、姓名..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full sm:w-64"
-                leftIcon={<Search className="w-4 h-4" />}
+                prefix={<Search className="w-4 h-4" />}
               />
-              <Select value={roleFilter} onValueChange={setRoleFilter}>
-                <SelectTrigger className="w-full sm:w-40">
-                  <SelectValue placeholder="角色" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">全部角色</SelectItem>
-                  {ROLES.map((role) => (
-                    <SelectItem key={role.value} value={role.value}>
-                      {role.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Select value={enabledFilter} onValueChange={setEnabledFilter}>
-                <SelectTrigger className="w-full sm:w-32">
-                  <SelectValue placeholder="状态" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">全部状态</SelectItem>
-                  <SelectItem value="true">已启用</SelectItem>
-                  <SelectItem value="false">已禁用</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select value={isStaffFilter} onValueChange={setIsStaffFilter}>
-                <SelectTrigger className="w-full sm:w-32">
-                  <SelectValue placeholder="员工" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">全部</SelectItem>
-                  <SelectItem value="true">是</SelectItem>
-                  <SelectItem value="false">否</SelectItem>
-                </SelectContent>
-              </Select>
+              <Select
+                value={roleFilter || undefined}
+                onChange={setRoleFilter}
+                placeholder="角色"
+                className="w-full sm:w-40"
+                options={[{ label: '全部角色', value: '' }, ...ROLES.map(role => ({ label: role.label, value: role.value }))]}
+              />
+              <Select
+                value={enabledFilter || undefined}
+                onChange={setEnabledFilter}
+                placeholder="状态"
+                className="w-full sm:w-32"
+                options={[
+                  { label: '全部状态', value: '' },
+                  { label: '已启用', value: 'true' },
+                  { label: '已禁用', value: 'false' }
+                ]}
+              />
+              <Select
+                value={isStaffFilter || undefined}
+                onChange={setIsStaffFilter}
+                placeholder="员工"
+                className="w-full sm:w-32"
+                options={[
+                  { label: '全部', value: '' },
+                  { label: '是', value: 'true' },
+                  { label: '否', value: 'false' }
+                ]}
+              />
               <Button
-                variant="outline"
-                size="sm"
+                type="default"
+                size="small"
                 onClick={fetchUsers}
-                leftIcon={<RefreshCw className="w-4 h-4" />}
+                icon={<RefreshCw className="w-4 h-4" />}
               >
                 <span>刷新</span>
               </Button>
               <Button
-                variant="primary"
-                size="sm"
+                type="primary"
+                size="small"
                 onClick={handleCreate}
-                leftIcon={<Plus className="w-4 h-4" />}
+                icon={<Plus className="w-4 h-4" />}
               >
                 <span>新建用户</span>
               </Button>
@@ -286,9 +278,10 @@ const Users = () => {
 
         {/* Users Table */}
         <Card>
-          {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <RefreshCw className="w-6 h-6 animate-spin text-slate-400" />
+          <div className="p-4">
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <RefreshCw className="w-6 h-6 animate-spin text-slate-400" />
             </div>
           ) : users.length === 0 ? (
             <EmptyState
@@ -357,19 +350,19 @@ const Users = () => {
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-2">
                           <Button
-                            variant="ghost"
-                            size="sm"
+                            type="text"
+                            size="small"
                             onClick={() => handleEdit(user)}
-                            leftIcon={<Edit className="w-4 h-4" />}
+                            icon={<Edit className="w-4 h-4" />}
                           >
                             <span>编辑</span>
                           </Button>
                           <Button
-                            variant="ghost"
-                            size="sm"
+                            type="text"
+                            size="small"
+                            danger
                             onClick={() => handleDelete(user)}
-                            leftIcon={<Trash2 className="w-4 h-4" />}
-                            className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                            icon={<Trash2 className="w-4 h-4" />}
                           >
                             <span>删除</span>
                           </Button>
@@ -390,16 +383,16 @@ const Users = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Button
-                  variant="outline"
-                  size="sm"
+                  type="default"
+                  size="small"
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
                 >
                   上一页
                 </Button>
                 <Button
-                  variant="outline"
-                  size="sm"
+                  type="default"
+                  size="small"
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
                 >
@@ -408,63 +401,67 @@ const Users = () => {
               </div>
             </div>
           )}
+          </div>
         </Card>
 
         {/* Create Modal */}
         <Modal
-          isOpen={showCreateModal}
-          onClose={() => setShowCreateModal(false)}
+          open={showCreateModal}
+          onCancel={() => setShowCreateModal(false)}
           title="新建用户"
-          size="lg"
+          width={800}
+          footer={null}
         >
           <div className="space-y-4">
-            <Input
-              label="邮箱 *"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              type="email"
-              required
-            />
-            <Input
-              label="显示名称"
-              value={formData.displayName}
-              onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
-            />
-            <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">邮箱 *</label>
               <Input
-                label="名"
-                value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                type="email"
+                required
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">显示名称</label>
               <Input
-                label="姓"
-                value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                value={formData.displayName}
+                onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-2">角色</label>
-                <Select value={formData.role || ''} onValueChange={(value) => setFormData({ ...formData, role: value })}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="选择角色">
-                      {ROLES.find(r => r.value === formData.role)?.label || '选择角色'}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {ROLES.map((role) => (
-                      <SelectItem key={role.value} value={role.value}>
-                        {role.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <label className="block text-sm font-medium mb-2">名</label>
+                <Input
+                  value={formData.firstName}
+                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                />
               </div>
-              <Input
-                label="手机号"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              />
+              <div>
+                <label className="block text-sm font-medium mb-2">姓</label>
+                <Input
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">角色</label>
+                <Select
+                  value={formData.role || undefined}
+                  onChange={(value) => setFormData({ ...formData, role: value })}
+                  placeholder="选择角色"
+                  options={ROLES.map(role => ({ label: role.label, value: role.value }))}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">手机号</label>
+                <Input
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                />
+              </div>
             </div>
               <div className="flex items-center gap-4">
                 <label className="flex items-center gap-2">
@@ -497,10 +494,10 @@ const Users = () => {
               </div>
               
               <div className="flex justify-end gap-3 pt-4">
-              <Button variant="outline" onClick={() => setShowCreateModal(false)}>
+              <Button type="default" onClick={() => setShowCreateModal(false)}>
                 <span>取消</span>
               </Button>
-              <Button variant="primary" onClick={handleSubmitCreate} leftIcon={<Save className="w-4 h-4" />}>
+              <Button type="primary" onClick={handleSubmitCreate} icon={<Save className="w-4 h-4" />}>
                 <span>创建</span>
               </Button>
             </div>
@@ -509,63 +506,66 @@ const Users = () => {
 
         {/* Edit Modal */}
         <Modal
-          isOpen={showEditModal}
-          onClose={() => {
+          open={showEditModal}
+          onCancel={() => {
             setShowEditModal(false)
             setEditingUser(null)
           }}
           title="编辑用户"
-          size="lg"
+          width={800}
+          footer={null}
         >
           {editingUser && (
             <div className="space-y-4">
-              <Input
-                label="邮箱 *"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                type="email"
-                required
-              />
-              <Input
-                label="显示名称"
-                value={formData.displayName}
-                onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
-              />
-              <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">邮箱 *</label>
                 <Input
-                  label="名"
-                  value={formData.firstName}
-                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  type="email"
+                  required
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">显示名称</label>
                 <Input
-                  label="姓"
-                  value={formData.lastName}
-                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                  value={formData.displayName}
+                  onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">角色</label>
-                  <Select value={formData.role || 'user'} onValueChange={(value) => setFormData({ ...formData, role: value })}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="选择角色">
-                        {ROLES.find(r => r.value === formData.role)?.label || '选择角色'}
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      {ROLES.map((role) => (
-                        <SelectItem key={role.value} value={role.value}>
-                          {role.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <label className="block text-sm font-medium mb-2">名</label>
+                  <Input
+                    value={formData.firstName}
+                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                  />
                 </div>
-                <Input
-                  label="手机号"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                />
+                <div>
+                  <label className="block text-sm font-medium mb-2">姓</label>
+                  <Input
+                    value={formData.lastName}
+                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">角色</label>
+                  <Select
+                    value={formData.role || 'user'}
+                    onChange={(value) => setFormData({ ...formData, role: value })}
+                    placeholder="选择角色"
+                    options={ROLES.map(role => ({ label: role.label, value: role.value }))}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">手机号</label>
+                  <Input
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  />
+                </div>
               </div>
               <div className="flex items-center gap-4">
                 <label className="flex items-center gap-2">
@@ -598,13 +598,13 @@ const Users = () => {
               </div>
               
               <div className="flex justify-end gap-3 pt-4">
-                <Button variant="outline" onClick={() => {
+                <Button type="default" onClick={() => {
                   setShowEditModal(false)
                   setEditingUser(null)
                 }}>
                   <span>取消</span>
                 </Button>
-                <Button variant="primary" onClick={handleSubmitUpdate} leftIcon={<Save className="w-4 h-4" />}>
+                <Button type="primary" onClick={handleSubmitUpdate} icon={<Save className="w-4 h-4" />}>
                   <span>保存</span>
                 </Button>
               </div>

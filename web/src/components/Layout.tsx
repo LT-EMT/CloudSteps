@@ -5,8 +5,6 @@ import {
   RefreshCw,
   Users,
   Library,
-  Menu,
-  X,
 } from "lucide-react";
 import { Header } from "@/components/header";
 import { NavMenu } from "@/components/NavMenu";

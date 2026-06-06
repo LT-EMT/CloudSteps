@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { Button } from 'antd'
 import * as XLSX from 'xlsx'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import { get, post, put, del } from '@/utils/request'
 import { getApiBaseURL } from '@/config/apiConfig'
 import { showAlert } from '@/utils/notification'
-import { Plus, Pencil, Trash2, Search, ChevronLeft, ChevronRight, ArrowLeft, Upload, Download, AlertTriangle, Wand2 } from 'lucide-react'
+import { Plus, Pencil, Trash2, ChevronLeft, ChevronRight, ArrowLeft, Upload, Download, AlertTriangle, Wand2 } from 'lucide-react'
 import LingechoTTS from '@/components/UI/LingechoTTS'
 import VoicePlayer from '@/components/VoicePlayer'
 import { generateWordAudioUrls, sleep, TTS_WORD_GAP_MS } from '@/utils/lingechoTts'
@@ -329,9 +330,9 @@ export default function WordBookWords() {
       <div className="p-6 space-y-5">
         {/* 面包屑 */}
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate('/wordbooks')} className="flex items-center gap-1 text-sm text-slate-500 hover:text-blue-600 transition-colors">
-            <ArrowLeft className="w-4 h-4" /> 词库列表
-          </button>
+          <Button onClick={() => navigate('/wordbooks')} type="text" icon={<ArrowLeft className="w-4 h-4" />} className="text-sm">
+            词库列表
+          </Button>
           <span className="text-slate-300 dark:text-slate-600">/</span>
           <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
             {book?.name || '词库详情'}
@@ -342,35 +343,30 @@ export default function WordBookWords() {
         {/* 操作栏 */}
         <div className="flex items-center justify-between gap-4">
           <div className="relative flex-1 max-w-xs">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input value={keyword} onChange={e => { setKeyword(e.target.value); setPage(1) }} placeholder="搜索单词或释义..."
               className="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
           <div className="flex items-center gap-2">
-            <button onClick={downloadTemplate} className="flex items-center gap-2 px-3 py-2 border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 rounded-lg text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-              <Download className="w-4 h-4" /> 下载模板
-            </button>
-            <button onClick={() => fileInputRef.current?.click()} disabled={parsing} className="flex items-center gap-2 px-3 py-2 border border-green-500 text-green-600 dark:text-green-400 rounded-lg text-sm hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors disabled:opacity-50">
-              <Upload className="w-4 h-4" /> {parsing ? '解析中...' : 'Excel 导入'}
-            </button>
+            <Button onClick={downloadTemplate} icon={<Download className="w-4 h-4" />}>
+              下载模板
+            </Button>
+            <Button onClick={() => fileInputRef.current?.click()} disabled={parsing} icon={<Upload className="w-4 h-4" />}>
+              {parsing ? '解析中...' : 'Excel 导入'}
+            </Button>
             <input ref={fileInputRef} type="file" accept=".xlsx,.xls" className="hidden" onChange={handleFileChange} />
-            <button
+            <Button
               onClick={batchRunning ? () => { batchStopRef.current = true } : handleBatchAudio}
               disabled={loading}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors disabled:opacity-50 ${
-                batchRunning
-                  ? 'border border-red-400 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20'
-                  : 'border border-indigo-400 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20'
-              }`}
+              danger={batchRunning}
+              icon={<Wand2 className="w-4 h-4" />}
             >
-              <Wand2 className="w-4 h-4" />
               {batchRunning
                 ? `停止 (${batchProgress?.done}/${batchProgress?.total})`
                 : '批量生成音频'}
-            </button>
-            <button onClick={openCreate} className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition-colors">
-              <Plus className="w-4 h-4" /> 添加单词
-            </button>
+            </Button>
+            <Button onClick={openCreate} type="primary" icon={<Plus className="w-4 h-4" />}>
+              添加单词
+            </Button>
           </div>
         </div>
 
@@ -407,8 +403,8 @@ export default function WordBookWords() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-1">
-                      <button onClick={() => openEdit(w)} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 transition-colors"><Pencil className="w-3.5 h-3.5" /></button>
-                      <button onClick={() => handleDelete(w)} className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-500 hover:text-red-500 transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
+                      <Button onClick={() => openEdit(w)} type="text" size="small" icon={<Pencil className="w-3.5 h-3.5" />} />
+                      <Button onClick={() => handleDelete(w)} type="text" size="small" danger icon={<Trash2 className="w-3.5 h-3.5" />} />
                     </div>
                   </td>
                 </tr>
@@ -421,9 +417,9 @@ export default function WordBookWords() {
           <div className="flex items-center justify-between text-sm text-slate-500">
             <span>共 {total} 条</span>
             <div className="flex items-center gap-2">
-              <button disabled={page <= 1} onClick={() => setPage(p => p - 1)} className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-800"><ChevronLeft className="w-4 h-4" /></button>
+              <Button disabled={page <= 1} onClick={() => setPage(p => p - 1)} size="small" icon={<ChevronLeft className="w-4 h-4" />} />
               <span>{page} / {totalPages}</span>
-              <button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)} className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-800"><ChevronRight className="w-4 h-4" /></button>
+              <Button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)} size="small" icon={<ChevronRight className="w-4 h-4" />} />
             </div>
           </div>
         )}
@@ -438,7 +434,7 @@ export default function WordBookWords() {
                 <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100">导入预览</h2>
                 <p className="text-xs text-slate-500 mt-0.5">共 {importRows.length} 条，{dupCount > 0 && <span className="text-amber-500">{dupCount} 条重复（已默认取消勾选）</span>}，已选 {selectedCount} 条</p>
               </div>
-              <button onClick={() => setShowImportModal(false)} className="text-slate-400 hover:text-slate-600 text-xl leading-none">×</button>
+              <Button onClick={() => setShowImportModal(false)} type="text">×</Button>
             </div>
 
             {/* 全选/反选 */}
@@ -447,8 +443,8 @@ export default function WordBookWords() {
                 <input type="checkbox" checked={importRows.every(r => r.selected)} onChange={e => toggleAll(e.target.checked)} className="rounded" />
                 全选
               </label>
-              <button onClick={() => toggleAll(false)} className="text-slate-500 hover:text-slate-700">全不选</button>
-              <button onClick={() => setImportRows(rows => rows.map(r => ({ ...r, selected: !r.isDuplicate })))} className="text-slate-500 hover:text-slate-700">仅选非重复</button>
+              <Button onClick={() => toggleAll(false)} type="text" size="small">全不选</Button>
+              <Button onClick={() => setImportRows(rows => rows.map(r => ({ ...r, selected: !r.isDuplicate })))} type="text" size="small">仅选非重复</Button>
               {dupCount > 0 && (
                 <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
                   <AlertTriangle className="w-3.5 h-3.5" /> {dupCount} 条已存在于词库中
@@ -494,10 +490,10 @@ export default function WordBookWords() {
             </div>
 
             <div className="flex justify-end gap-3 p-5 border-t border-slate-200 dark:border-slate-700">
-              <button onClick={() => setShowImportModal(false)} className="px-4 py-2 text-sm border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700">取消</button>
-              <button onClick={confirmImport} disabled={importing || selectedCount === 0} className="px-5 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
+              <Button onClick={() => setShowImportModal(false)}>取消</Button>
+              <Button onClick={confirmImport} disabled={importing || selectedCount === 0} type="primary" loading={importing}>
                 {importing ? '导入中...' : `确认导入 ${selectedCount} 条`}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -509,7 +505,7 @@ export default function WordBookWords() {
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col">
             <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shrink-0">
               <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{editing ? '编辑单词' : '添加单词'}</h2>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 text-xl leading-none">×</button>
+              <Button onClick={() => setShowModal(false)} type="text">×</Button>
             </div>
             <div className="flex-1 overflow-y-auto p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -715,8 +711,8 @@ export default function WordBookWords() {
               </div>
             </div>
             <div className="flex justify-end gap-3 p-6 border-t border-slate-200 dark:border-slate-700 shrink-0 bg-white dark:bg-slate-800">
-              <button onClick={() => setShowModal(false)} className="px-4 py-2 text-sm border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700">取消</button>
-              <button onClick={handleSave} disabled={saving} className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">{saving ? '保存中...' : '保存'}</button>
+              <Button onClick={() => setShowModal(false)}>取消</Button>
+              <Button onClick={handleSave} disabled={saving} type="primary" loading={saving}>{saving ? '保存中...' : '保存'}</Button>
             </div>
           </div>
         </div>

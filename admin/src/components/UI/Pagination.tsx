@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react'
 import { cn } from '@/utils/cn'
-import Button from './Button'
+import { Button } from 'antd'
 
 interface PaginationProps {
   currentPage: number
@@ -115,20 +115,19 @@ const Pagination = ({
 
         <div className="flex items-center gap-1">
           <Button
-            variant="outline"
-            size="sm"
+            type="default"
+            size="small"
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
             className="px-2"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </Button>
+            icon={<ChevronLeft className="w-4 h-4" />}
+          />
 
           {getPageNumbers().map((page, index) => (
             <Button
               key={index}
-              variant={page === currentPage ? 'default' : 'outline'}
-              size="sm"
+              type={page === currentPage ? 'primary' : 'default'}
+              size="small"
               onClick={() => typeof page === 'number' && onPageChange(page)}
               disabled={page === '...'}
               className="min-w-[32px] px-2"
@@ -138,14 +137,13 @@ const Pagination = ({
           ))}
 
           <Button
-            variant="outline"
-            size="sm"
+            type="default"
+            size="small"
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
             className="px-2"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </Button>
+            icon={<ChevronRight className="w-4 h-4" />}
+          />
         </div>
       </div>
     </div>

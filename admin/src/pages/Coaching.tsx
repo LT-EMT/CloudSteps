@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Calendar, Plus, RefreshCw, Trash2, Save } from 'lucide-react'
+import { Button, Card, Input, Select } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Card from '@/components/UI/Card'
-import Button from '@/components/UI/Button'
-import Input from '@/components/UI/Input'
 import { showAlert } from '@/utils/notification'
 import { get, post, put, del } from '@/utils/request'
 import { getApiBaseURL } from '@/config/apiConfig'
@@ -360,65 +358,52 @@ export default function Coaching() {
 
         <div className="flex gap-2 border-b border-slate-200 dark:border-slate-700 pb-2">
           {tabs.map((t) => (
-            <button
+            <Button
               key={t.id}
-              type="button"
+              type={tab === t.id ? 'default' : 'text'}
               onClick={() => setTab(t.id)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                tab === t.id
-                  ? 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-200'
-                  : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'
-              }`}
+              className={tab === t.id ? 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-200' : ''}
             >
               {t.label}
-            </button>
+            </Button>
           ))}
         </div>
 
         {tab === 'quota' && (
-          <Card className="p-6 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+          <Card>
+            <div className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
               <div>
                 <label className="text-xs text-slate-500 block mb-1">老师</label>
-                <select
-                  className="w-full border rounded-lg px-3 py-2 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700"
-                  value={qTeacher}
-                  onChange={(e) => setQTeacher(e.target.value)}
-                >
-                  <option value="">选择</option>
-                  {teachers.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {userLabel(u)} ({u.role})
-                    </option>
-                  ))}
-                </select>
+                <Select
+                  className="w-full"
+                  value={qTeacher || undefined}
+                  onChange={(value) => setQTeacher(value || '')}
+                  placeholder="选择"
+                  options={[{ label: '选择', value: '' }, ...teachers.map(u => ({ label: `${userLabel(u)} (${u.role})`, value: u.id }))]}
+                />
               </div>
               <div>
                 <label className="text-xs text-slate-500 block mb-1">学员</label>
-                <select
-                  className="w-full border rounded-lg px-3 py-2 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700"
-                  value={qStudent}
-                  onChange={(e) => setQStudent(e.target.value)}
-                >
-                  <option value="">选择</option>
-                  {students.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {userLabel(u)}
-                    </option>
-                  ))}
-                </select>
+                <Select
+                  className="w-full"
+                  value={qStudent || undefined}
+                  onChange={(value) => setQStudent(value || '')}
+                  placeholder="选择"
+                  options={[{ label: '选择', value: '' }, ...students.map(u => ({ label: userLabel(u), value: u.id }))]}
+                />
               </div>
               <div>
                 <label className="text-xs text-slate-500 block mb-1">剩余时间（小时）</label>
                 <Input value={qMin} onChange={(e) => setQMin(e.target.value)} type="number" min={0} />
               </div>
-              <Button leftIcon={<Save className="w-4 h-4" />} onClick={() => void saveQuota()}>
+              <Button icon={<Save className="w-4 h-4" />} onClick={() => void saveQuota()}>
                 保存额度
               </Button>
             </div>
 
             <div className="flex justify-end">
-              <Button variant="outline" leftIcon={<RefreshCw className="w-4 h-4" />} onClick={() => void loadQuotas()}>
+              <Button type="default" icon={<RefreshCw className="w-4 h-4" />} onClick={() => void loadQuotas()}>
                 刷新
               </Button>
             </div>
@@ -457,28 +442,25 @@ export default function Coaching() {
                 </tbody>
               </table>
             </div>
+            </div>
           </Card>
         )}
 
         {tab === 'usage' && (
-          <Card className="p-6 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+          <Card>
+            <div className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
               <div className="lg:col-span-2">
                 <label className="text-xs text-slate-500 block mb-1">老师</label>
-                <select
-                  className="w-full border rounded-lg px-3 py-2 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700"
-                  value={usageTeacher}
-                  onChange={(e) => setUsageTeacher(e.target.value)}
-                >
-                  <option value="">选择后加载历史周期</option>
-                  {teachers.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {userLabel(u)}
-                    </option>
-                  ))}
-                </select>
+                <Select
+                  className="w-full"
+                  value={usageTeacher || undefined}
+                  onChange={(value) => setUsageTeacher(value || '')}
+                  placeholder="选择后加载历史周期"
+                  options={[{ label: '选择后加载历史周期', value: '' }, ...teachers.map(u => ({ label: userLabel(u), value: u.id }))]}
+                />
               </div>
-              <Button variant="outline" leftIcon={<RefreshCw className="w-4 h-4" />} onClick={() => void loadUsage()}>
+              <Button type="default" icon={<RefreshCw className="w-4 h-4" />} onClick={() => void loadUsage()}>
                 刷新列表
               </Button>
             </div>
@@ -498,7 +480,7 @@ export default function Coaching() {
                   <label className="text-xs text-slate-500 block mb-1">已用 used（小时）</label>
                   <Input value={usageUsed} onChange={(e) => setUsageUsed(e.target.value)} type="number" min={0} />
                 </div>
-                <Button leftIcon={<Save className="w-4 h-4" />} onClick={() => void saveUsagePeriod()}>
+                <Button icon={<Save className="w-4 h-4" />} onClick={() => void saveUsagePeriod()}>
                   保存该月
                 </Button>
               </div>
@@ -544,12 +526,14 @@ export default function Coaching() {
                 </tbody>
               </table>
             </div>
+            </div>
           </Card>
         )}
 
         {tab === 'audit' && (
-          <Card className="p-6 space-y-6">
-            <div className="flex flex-wrap gap-4 items-end">
+          <Card>
+            <div className="p-6 space-y-6">
+              <div className="flex flex-wrap gap-4 items-end">
               <div>
                 <label className="text-xs text-slate-500 block mb-1">action 筛选（可选）</label>
                 <Input
@@ -559,8 +543,8 @@ export default function Coaching() {
                 />
               </div>
               <Button
-                variant="outline"
-                leftIcon={<RefreshCw className="w-4 h-4" />}
+                type="default"
+                icon={<RefreshCw className="w-4 h-4" />}
                 onClick={() => {
                   setAuditPage(1)
                   setAuditQueryNonce((n) => n + 1)
@@ -622,14 +606,14 @@ export default function Coaching() {
               </span>
               <div className="flex gap-2">
                 <Button
-                  variant="outline"
+                  type="default"
                   disabled={auditPage <= 1 || auditLoading}
                   onClick={() => setAuditPage((p) => Math.max(1, p - 1))}
                 >
                   上一页
                 </Button>
                 <Button
-                  variant="outline"
+                  type="default"
                   disabled={auditPage * auditPageSize >= auditTotal || auditLoading}
                   onClick={() => setAuditPage((p) => p + 1)}
                 >
@@ -637,12 +621,14 @@ export default function Coaching() {
                 </Button>
               </div>
             </div>
+            </div>
           </Card>
         )}
 
         {tab === 'appt' && (
-          <Card className="p-6 space-y-6">
-            <div className="flex flex-wrap gap-4 items-end">
+          <Card>
+            <div className="p-6 space-y-6">
+              <div className="flex flex-wrap gap-4 items-end">
               <div>
                 <label className="text-xs text-slate-500 block mb-1">周范围 from</label>
                 <Input type="date" value={range.from} onChange={(e) => setRange((r) => ({ ...r, from: e.target.value }))} />
@@ -651,7 +637,7 @@ export default function Coaching() {
                 <label className="text-xs text-slate-500 block mb-1">to</label>
                 <Input type="date" value={range.to} onChange={(e) => setRange((r) => ({ ...r, to: e.target.value }))} />
               </div>
-              <Button variant="outline" leftIcon={<RefreshCw className="w-4 h-4" />} onClick={() => void loadAppts()}>
+              <Button type="default" icon={<RefreshCw className="w-4 h-4" />} onClick={() => void loadAppts()}>
                 刷新列表
               </Button>
             </div>
@@ -659,33 +645,23 @@ export default function Coaching() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 border-t border-slate-100 dark:border-slate-800 pt-6">
               <div>
                 <label className="text-xs text-slate-500 block mb-1">老师</label>
-                <select
-                  className="w-full border rounded-lg px-3 py-2 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700"
-                  value={aTeacher}
-                  onChange={(e) => setATeacher(e.target.value)}
-                >
-                  <option value="">选择</option>
-                  {teachers.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {userLabel(u)}
-                    </option>
-                  ))}
-                </select>
+                <Select
+                  className="w-full"
+                  value={aTeacher || undefined}
+                  onChange={(value) => setATeacher(value || '')}
+                  placeholder="选择"
+                  options={[{ label: '选择', value: '' }, ...teachers.map(u => ({ label: userLabel(u), value: u.id }))]}
+                />
               </div>
               <div>
                 <label className="text-xs text-slate-500 block mb-1">学员</label>
-                <select
-                  className="w-full border rounded-lg px-3 py-2 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700"
-                  value={aStudent}
-                  onChange={(e) => setAStudent(e.target.value)}
-                >
-                  <option value="">选择</option>
-                  {students.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {userLabel(u)}
-                    </option>
-                  ))}
-                </select>
+                <Select
+                  className="w-full"
+                  value={aStudent || undefined}
+                  onChange={(value) => setAStudent(value || '')}
+                  placeholder="选择"
+                  options={[{ label: '选择', value: '' }, ...students.map(u => ({ label: userLabel(u), value: u.id }))]}
+                />
               </div>
               <div>
                 <label className="text-xs text-slate-500 block mb-1">日期</label>
@@ -693,18 +669,18 @@ export default function Coaching() {
               </div>
               <div>
                 <label className="text-xs text-slate-500 block mb-1">开始</label>
-                <Input value={aStart} onChange={(e) => setAStart(e.target.value)} placeholder="09:00" />
+                <Input type="time" value={aStart} onChange={(e) => setAStart(e.target.value)} />
               </div>
               <div>
                 <label className="text-xs text-slate-500 block mb-1">结束</label>
-                <Input value={aEnd} onChange={(e) => setAEnd(e.target.value)} placeholder="10:00" />
+                <Input type="time" value={aEnd} onChange={(e) => setAEnd(e.target.value)} />
               </div>
               <div>
                 <label className="text-xs text-slate-500 block mb-1">标题（可选）</label>
                 <Input value={aTitle} onChange={(e) => setATitle(e.target.value)} />
               </div>
               <div className="flex items-end">
-                <Button leftIcon={<Plus className="w-4 h-4" />} onClick={() => void createAppt()}>
+                <Button icon={<Plus className="w-4 h-4" />} onClick={() => void createAppt()}>
                   新建排课
                 </Button>
               </div>
@@ -729,18 +705,21 @@ export default function Coaching() {
                       </td>
                       <td className="p-2">{a.status}</td>
                       <td className="p-2">
-                        <button
-                          type="button"
-                          className="text-red-600 hover:underline text-xs flex items-center gap-1"
+                        <Button
+                          type="link"
+                          danger
+                          size="small"
                           onClick={() => void removeAppt(a.id)}
+                          icon={<Trash2 className="w-3 h-3" />}
                         >
-                          <Trash2 className="w-3 h-3" /> 删
-                        </button>
+                          删
+                        </Button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
             </div>
           </Card>
         )}

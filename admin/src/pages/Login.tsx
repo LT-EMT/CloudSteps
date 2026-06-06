@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { User, Eye, EyeOff, LogIn, Lock as LockIcon, Shield } from 'lucide-react'
-import Button from '@/components/UI/Button'
-import Input from '@/components/UI/Input'
-import Modal from '@/components/UI/Modal'
+import { User, LogIn, Lock as LockIcon, Shield } from 'lucide-react'
+import { Button, Modal, Input } from 'antd'
 import Captcha from '@/components/Auth/Captcha'
 import { useAuthStore } from '@/stores/authStore'
 import { showAlert } from '@/utils/notification'
@@ -15,7 +13,6 @@ import faviconUrl from '/favicon.png'
 const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
 
   // 验证码状态
@@ -164,38 +161,31 @@ const Login = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <Input
-              type="text"
-              label="用户名"
-              placeholder="请输入用户名"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              leftIcon={<User className="w-4 h-4" />}
-              size="lg"
-              required
-              disabled={loading}
-            />
+            <div>
+              <label className="block text-sm font-medium mb-2">用户名</label>
+              <Input
+                placeholder="请输入用户名"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                prefix={<User className="w-4 h-4" />}
+                size="large"
+                required
+                disabled={loading}
+              />
+            </div>
 
-            <Input
-              type={showPassword ? 'text' : 'password'}
-              label="密码"
-              placeholder="请输入密码"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              leftIcon={<LockIcon className="w-4 h-4" />}
-              rightIcon={
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              }
-              size="lg"
-              required
-              disabled={loading}
-            />
+            <div>
+              <label className="block text-sm font-medium mb-2">密码</label>
+              <Input.Password
+                placeholder="请输入密码"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                prefix={<LockIcon className="w-4 h-4" />}
+                size="large"
+                required
+                disabled={loading}
+              />
+            </div>
 
             {requiresTwoFactor && (
               <div className="space-y-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
@@ -203,28 +193,29 @@ const Login = () => {
                   <Shield className="w-5 h-5" />
                   <p className="text-sm font-medium">两步验证</p>
                 </div>
-                <Input
-                  type="text"
-                  label="验证码"
-                  placeholder="请输入6位验证码"
-                  value={twoFactorCode}
-                  onChange={(e) => setTwoFactorCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  leftIcon={<Shield className="w-4 h-4" />}
-                  size="lg"
-                  required
-                  disabled={loading}
-                  maxLength={6}
-                />
+                <div>
+                  <label className="block text-sm font-medium mb-2">验证码</label>
+                  <Input
+                    placeholder="请输入6位验证码"
+                    value={twoFactorCode}
+                    onChange={(e) => setTwoFactorCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    prefix={<Shield className="w-4 h-4" />}
+                    size="large"
+                    required
+                    disabled={loading}
+                    maxLength={6}
+                  />
+                </div>
               </div>
             )}
 
             <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              fullWidth
+              htmlType="submit"
+              type="primary"
+              size="large"
+              block
               loading={loading}
-              leftIcon={<LogIn className="w-4 h-4" />}
+              icon={<LogIn className="w-4 h-4" />}
               className="mt-6"
             >
               {loading ? '登录中...' : requiresTwoFactor ? '验证并登录' : '登录'}
@@ -235,11 +226,13 @@ const Login = () => {
 
       {/* 验证码弹窗 */}
       <Modal
-        isOpen={showCaptchaModal}
-        onClose={() => setShowCaptchaModal(false)}
+        open={showCaptchaModal}
+        onCancel={() => setShowCaptchaModal(false)}
         title="安全验证"
-        size="md"
-        closeOnOverlayClick={false}
+        width={600}
+        footer={null}
+        closable={false}
+        maskClosable={false}
       >
         <Captcha
           onVerify={handleCaptchaVerify}

@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Save, User, Mail, Phone, MapPin, Calendar, Edit2, Lock } from 'lucide-react'
+import { Button, Card, Input } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Card from '@/components/UI/Card'
-import Button from '@/components/UI/Button'
-import Input from '@/components/UI/Input'
 import { useAuthStore } from '@/stores/authStore'
 import { getCurrentUser, updateProfile, changePassword, ProfileUpdateRequest, ChangePasswordRequest } from '@/services/adminApi'
 import { showAlert } from '@/utils/notification'
@@ -117,15 +115,15 @@ const Profile = () => {
       actions={
         isEditing ? (
           <div className="flex gap-2">
-            <Button variant="outline" onClick={handleCancel} disabled={loading}>
+            <Button type="default" onClick={handleCancel} disabled={loading}>
               取消
             </Button>
-            <Button variant="primary" leftIcon={<Save className="w-4 h-4" />} onClick={handleSave} disabled={loading}>
+            <Button type="primary" icon={<Save className="w-4 h-4" />} onClick={handleSave} disabled={loading}>
               {loading ? '保存中...' : '保存'}
             </Button>
           </div>
         ) : (
-          <Button variant="primary" leftIcon={<Edit2 className="w-4 h-4" />} onClick={() => setIsEditing(true)}>
+          <Button type="primary" icon={<Edit2 className="w-4 h-4" />} onClick={() => setIsEditing(true)}>
             编辑资料
           </Button>
         )
@@ -133,8 +131,8 @@ const Profile = () => {
     >
       <div className="space-y-6">
         {/* 用户信息卡片 */}
-        <Card className="p-6">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+        <Card>
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6">
             <div className="flex-1 text-center sm:text-left">
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                 {formData.displayName || currentUser.email || '管理员'}
@@ -157,10 +155,11 @@ const Profile = () => {
         </Card>
 
         {/* 个人信息 */}
-        <Card className="p-6">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">
-            个人信息
-          </h3>
+        <Card>
+          <div className="p-6">
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">
+              个人信息
+            </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
@@ -170,7 +169,7 @@ const Profile = () => {
                 <Input
                   value={formData.displayName || ''}
                   onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
-                  leftIcon={<User className="w-4 h-4" />}
+                  prefix={<User className="w-4 h-4" />}
                   placeholder="请输入显示名称"
                 />
               ) : (
@@ -189,7 +188,7 @@ const Profile = () => {
                   type="email"
                   value={formData.email || ''}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  leftIcon={<Mail className="w-4 h-4" />}
+                  prefix={<Mail className="w-4 h-4" />}
                   placeholder="请输入邮箱"
                 />
               ) : (
@@ -208,7 +207,7 @@ const Profile = () => {
                   type="tel"
                   value={formData.phone || ''}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  leftIcon={<Phone className="w-4 h-4" />}
+                  prefix={<Phone className="w-4 h-4" />}
                   placeholder="请输入手机号"
                 />
               ) : (
@@ -254,13 +253,15 @@ const Profile = () => {
               </p>
             )}
           </div>
+          </div>
         </Card>
 
         {/* 账户安全 */}
-        <Card className="p-6">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">
-            账户安全
-          </h3>
+        <Card>
+          <div className="p-6">
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">
+              账户安全
+            </h3>
           <div className="space-y-4">
             <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-800">
               <div className="flex items-center justify-between mb-4">
@@ -268,9 +269,9 @@ const Profile = () => {
                   <p className="font-medium text-slate-900 dark:text-white">修改密码</p>
                   <p className="text-sm text-slate-500 dark:text-slate-400">定期更新密码以保护账户安全</p>
                 </div>
-                <Button 
-                  variant="outline" 
-                  size="sm"
+                <Button
+                  type="default"
+                  size="small"
                   onClick={() => setIsChangingPassword(!isChangingPassword)}
                 >
                   {isChangingPassword ? '取消' : '修改'}
@@ -286,7 +287,7 @@ const Profile = () => {
                       type="password"
                       value={passwordForm.oldPassword}
                       onChange={(e) => setPasswordForm({ ...passwordForm, oldPassword: e.target.value })}
-                      leftIcon={<Lock className="w-4 h-4" />}
+                      prefix={<Lock className="w-4 h-4" />}
                       placeholder="请输入当前密码"
                     />
                   </div>
@@ -298,7 +299,7 @@ const Profile = () => {
                       type="password"
                       value={passwordForm.newPassword}
                       onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-                      leftIcon={<Lock className="w-4 h-4" />}
+                      prefix={<Lock className="w-4 h-4" />}
                       placeholder="请输入新密码（至少6位）"
                     />
                   </div>
@@ -310,21 +311,22 @@ const Profile = () => {
                       type="password"
                       value={passwordForm.confirmPassword}
                       onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-                      leftIcon={<Lock className="w-4 h-4" />}
+                      prefix={<Lock className="w-4 h-4" />}
                       placeholder="请再次输入新密码"
                     />
                   </div>
-                  <Button 
-                    variant="primary" 
+                  <Button
+                    type="primary"
                     onClick={handleChangePassword}
                     disabled={loading}
-                    className="w-full"
+                    block
                   >
                     {loading ? '修改中...' : '确认修改'}
                   </Button>
                 </div>
               )}
             </div>
+          </div>
           </div>
         </Card>
       </div>

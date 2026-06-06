@@ -10,14 +10,12 @@ import {
   ChevronRight,
   User as UserIcon,
   Users,
-  Sliders,
-  History,
   FileText,
-  Lock,
   Library,
   FlaskConical,
   Brain,
   CalendarDays,
+  MessageSquare,
 } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
 import { useSidebar } from '@/contexts/SidebarContext'
@@ -75,16 +73,8 @@ const AdminSidebar = () => {
         { name: '测试记录', href: '/vocab-records', icon: FileText },
       ],
     },
+    { name: '场景对话管理', href: '/scenario-dialogues', icon: MessageSquare },
     { name: '一对一陪练', href: '/coaching', icon: CalendarDays },
-    {
-      name: '安全管理',
-      href: '/security',
-      icon: Lock,
-      children: [
-        { name: '操作日志', href: '/operation-logs', icon: FileText },
-        { name: '登录历史', href: '/login-history', icon: History },
-      ],
-    },
     { name: '系统设置', href: '/settings', icon: Settings },
   ]
 

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { Button, Select } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import { get, del } from '@/utils/request'
 import { getApiBaseURL } from '@/config/apiConfig'
@@ -76,13 +77,12 @@ export default function VocabTestRecords() {
 
         {/* 筛选栏 */}
         <div className="flex gap-3 flex-wrap">
-          <select
-            value={level}
-            onChange={e => { setLevel(e.target.value); setPage(1) }}
-            className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-700 dark:text-slate-300"
-          >
-            {LEVELS.map(l => <option key={l} value={l}>{l || '全部等级'}</option>)}
-          </select>
+          <Select
+            value={level || undefined}
+            onChange={(value) => { setLevel(value || ''); setPage(1) }}
+            className="w-32"
+            options={LEVELS.map(l => ({ label: l || '全部等级', value: l }))}
+          />
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
@@ -144,12 +144,8 @@ export default function VocabTestRecords() {
                   <td className="px-4 py-3 text-slate-500 text-xs">{fmtDate(r.completedAt || r.createdAt)}</td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => setDetail(r)} className="p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500">
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <button onClick={() => handleDelete(r.id)} className="p-1.5 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      <Button onClick={() => setDetail(r)} type="text" size="small" icon={<Eye className="w-4 h-4" />} />
+                      <Button onClick={() => handleDelete(r.id)} type="text" size="small" danger icon={<Trash2 className="w-4 h-4" />} />
                     </div>
                   </td>
                 </tr>
@@ -163,11 +159,9 @@ export default function VocabTestRecords() {
           <div className="flex items-center justify-between text-sm text-slate-500">
             <span>共 {total} 条</span>
             <div className="flex gap-2">
-              <button disabled={page <= 1} onClick={() => setPage(p => p - 1)}
-                className="px-3 py-1 rounded border border-slate-200 dark:border-slate-700 disabled:opacity-40">上一页</button>
+              <Button disabled={page <= 1} onClick={() => setPage(p => p - 1)} size="small">上一页</Button>
               <span className="px-3 py-1">{page} / {totalPages}</span>
-              <button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)}
-                className="px-3 py-1 rounded border border-slate-200 dark:border-slate-700 disabled:opacity-40">下一页</button>
+              <Button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)} size="small">下一页</Button>
             </div>
           </div>
         )}
@@ -195,7 +189,7 @@ function RecordDetailModal({ record, onClose }: { record: VocabRecord; onClose: 
             <h2 className="font-semibold text-slate-900 dark:text-slate-100">测试记录详情</h2>
             <p className="text-xs text-slate-500 mt-0.5">{record.userDisplayName || record.userEmail}</p>
           </div>
-          <button onClick={onClose}><X className="w-5 h-5 text-slate-400" /></button>
+          <Button onClick={onClose} type="text" icon={<X className="w-5 h-5 text-slate-400" />} />
         </div>
 
         <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 shrink-0">
@@ -244,10 +238,7 @@ function RecordDetailModal({ record, onClose }: { record: VocabRecord; onClose: 
         )}
 
         <div className="flex justify-end px-6 py-4 border-t border-slate-200 dark:border-slate-800 shrink-0">
-          <button onClick={onClose}
-            className="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-400">
-            关闭
-          </button>
+          <Button onClick={onClose}>关闭</Button>
         </div>
       </div>
     </div>

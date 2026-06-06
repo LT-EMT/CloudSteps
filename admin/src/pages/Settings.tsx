@@ -1,18 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Shield, QrCode, Key } from 'lucide-react'
+import { Button, Card, Input } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Card from '@/components/UI/Card'
-import Button from '@/components/UI/Button'
-import Input from '@/components/UI/Input'
 import { getTwoFactorStatus, setupTwoFactor, enableTwoFactor, disableTwoFactor } from '@/services/adminApi'
 import { showAlert } from '@/utils/notification'
 
 const Settings = () => {
-  const [settings, setSettings] = useState({
-    emailNotifications: true,
-    twoFactorAuth: false,
-  })
-  
   // 2FA states
   const [twoFactorStatus, setTwoFactorStatus] = useState<{
     enabled: boolean
@@ -32,7 +25,6 @@ const Settings = () => {
       try {
         const status = await getTwoFactorStatus()
         setTwoFactorStatus(status)
-        setSettings(prev => ({ ...prev, twoFactorAuth: status.enabled }))
       } catch (error) {
         console.error('加载2FA状态失败:', error)
       }
@@ -65,7 +57,6 @@ const Settings = () => {
       await enableTwoFactor(twoFactorCode)
       showAlert('2FA已启用', 'success')
       setTwoFactorStatus(prev => prev ? { ...prev, enabled: true } : { enabled: true, hasSecret: true })
-      setSettings(prev => ({ ...prev, twoFactorAuth: true }))
       setTwoFactorSetup(null)
       setTwoFactorCode('')
     } catch (error: any) {
@@ -86,7 +77,6 @@ const Settings = () => {
       await disableTwoFactor(twoFactorCode)
       showAlert('2FA已禁用', 'success')
       setTwoFactorStatus(prev => prev ? { ...prev, enabled: false, hasSecret: false } : { enabled: false, hasSecret: false })
-      setSettings(prev => ({ ...prev, twoFactorAuth: false }))
       setTwoFactorSetup(null)
       setTwoFactorCode('')
     } catch (error: any) {
@@ -103,8 +93,9 @@ const Settings = () => {
     >
       <div className="space-y-6">
         {/* 安全设置 */}
-        <Card className="p-6">
-          <div className="flex items-center gap-3 mb-6">
+        <Card>
+          <div className="p-6">
+            <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
               <Shield className="w-5 h-5 text-red-600 dark:text-red-400" />
             </div>
@@ -135,11 +126,11 @@ const Settings = () => {
                   双因素认证未启用。点击下方按钮开始设置。
                 </p>
                 <Button
-                  variant="primary"
-                  size="sm"
+                  type="primary"
+                  size="small"
                   onClick={handleSetup2FA}
                   disabled={loading2FA}
-                  leftIcon={<Key className="w-4 h-4" />}
+                  icon={<Key className="w-4 h-4" />}
                 >
                   {loading2FA ? '设置中...' : '设置2FA'}
                 </Button>
@@ -168,8 +159,8 @@ const Settings = () => {
                     </p>
                   </div>
                   <div>
+                    <label className="block text-sm font-medium mb-2">验证码</label>
                     <Input
-                      label="验证码"
                       value={twoFactorCode}
                       onChange={(e) => setTwoFactorCode(e.target.value)}
                       placeholder="输入6位验证码"
@@ -181,16 +172,16 @@ const Settings = () => {
                   </div>
                   <div className="flex gap-2">
                     <Button
-                      variant="primary"
-                      size="sm"
+                      type="primary"
+                      size="small"
                       onClick={handleEnable2FA}
                       disabled={loading2FA || !twoFactorCode}
                     >
                       {loading2FA ? '启用中...' : '启用2FA'}
                     </Button>
                     <Button
-                      variant="outline"
-                      size="sm"
+                      type="default"
+                      size="small"
                       onClick={() => {
                         setTwoFactorSetup(null)
                         setTwoFactorCode('')
@@ -213,16 +204,19 @@ const Settings = () => {
                   </p>
                 </div>
                 <div className="space-y-3">
-                  <Input
-                    label="验证码（用于禁用2FA）"
-                    value={twoFactorCode}
-                    onChange={(e) => setTwoFactorCode(e.target.value)}
-                    placeholder="输入6位验证码"
-                    maxLength={6}
-                  />
+                  <div>
+                    <label className="block text-sm font-medium mb-2">验证码（用于禁用2FA）</label>
+                    <Input
+                      value={twoFactorCode}
+                      onChange={(e) => setTwoFactorCode(e.target.value)}
+                      placeholder="输入6位验证码"
+                      maxLength={6}
+                    />
+                  </div>
                   <Button
-                    variant="destructive"
-                    size="sm"
+                    type="primary"
+                    danger
+                    size="small"
                     onClick={handleDisable2FA}
                     disabled={loading2FA || !twoFactorCode}
                   >
@@ -231,6 +225,7 @@ const Settings = () => {
                 </div>
               </div>
             )}
+          </div>
           </div>
         </Card>
       </div>

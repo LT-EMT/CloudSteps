@@ -128,12 +128,49 @@ func RunInitSQL(db *gorm.DB, sqlFilePath string) error {
 	return scanner.Err()
 }
 
+// fixScenarioDialogueCharset ensures emoji/special chars work on MySQL (CynosDB defaults to utf8mb3).
+func fixScenarioDialogueCharset(db *gorm.DB) error {
+	if config.GlobalConfig.Database.Driver != "mysql" {
+		return nil
+	}
+	tables := []string{
+		"scenario_dialogue_scenarios",
+		"scenario_dialogue_sessions",
+		"scenario_dialogue_turns",
+	}
+	for _, table := range tables {
+		// 先转换表的字符集
+		stmt := "ALTER TABLE `" + table + "` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+		if err := db.Exec(stmt).Error; err != nil {
+			return err
+		}
+		
+		// 然后转换所有文本列的字符集
+		if table == "scenario_dialogue_sessions" {
+			// 修复 review_summary 和 review_detail 列
+			if err := db.Exec("ALTER TABLE `" + table + "` MODIFY COLUMN `review_summary` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci").Error; err != nil {
+				// 忽略列不存在的错误
+				if !strings.Contains(err.Error(), "Unknown column") {
+					return err
+				}
+			}
+			if err := db.Exec("ALTER TABLE `" + table + "` MODIFY COLUMN `review_detail` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci").Error; err != nil {
+				// 忽略列不存在的错误
+				if !strings.Contains(err.Error(), "Unknown column") {
+					return err
+				}
+			}
+		}
+	}
+	return nil
+}
+
 // RunMigrations executes entity migration
 func RunMigrations(db *gorm.DB) error {
 	if db == nil {
 		return errors.New("db is nil")
 	}
-	return utils.MakeMigrates(db, []any{
+	if err := utils.MakeMigrates(db, []any{
 		&utils.Config{},
 		&models.AccountLock{},
 		&models.UserDevice{},
@@ -155,5 +192,11 @@ func RunMigrations(db *gorm.DB) error {
 		&models.CoachingAppointment{},
 		&models.CoachingSessionRecord{},
 		&models.CoachingAuditLog{},
-	})
+		&models.ScenarioDialogueScenario{},
+		&models.ScenarioDialogueSession{},
+		&models.ScenarioDialogueTurn{},
+	}); err != nil {
+		return err
+	}
+	return fixScenarioDialogueCharset(db)
 }

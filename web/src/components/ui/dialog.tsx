@@ -47,8 +47,12 @@ function DialogTitle({ className, ...props }: React.ComponentProps<"h2">) {
   return <h2 className={cn("text-lg font-semibold text-slate-900", className)} {...props} />;
 }
 
-function DialogDescription({ className, ...props }: React.ComponentProps<"p">) {
-  return <p className={cn("text-sm text-slate-500", className)} {...props} />;
+function DialogDescription({
+  className,
+  asChild: _asChild,
+  ...props
+}: React.ComponentProps<"div"> & { asChild?: boolean }) {
+  return <div className={cn("text-sm text-slate-500", className)} {...props} />;
 }
 
 export {

@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Save, User, Mail, Phone, MapPin, Calendar, Edit2, Lock } from 'lucide-react'
-import { Button, Card } from 'antd'
+import { Button, Card, Input } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Input from '@/components/UI/Input'
 import { useAuthStore } from '@/stores/authStore'
 import { getCurrentUser, updateProfile, changePassword, ProfileUpdateRequest, ChangePasswordRequest } from '@/services/adminApi'
 import { showAlert } from '@/utils/notification'
@@ -170,7 +169,7 @@ const Profile = () => {
                 <Input
                   value={formData.displayName || ''}
                   onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
-                  leftIcon={<User className="w-4 h-4" />}
+                  prefix={<User className="w-4 h-4" />}
                   placeholder="请输入显示名称"
                 />
               ) : (
@@ -189,7 +188,7 @@ const Profile = () => {
                   type="email"
                   value={formData.email || ''}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  leftIcon={<Mail className="w-4 h-4" />}
+                  prefix={<Mail className="w-4 h-4" />}
                   placeholder="请输入邮箱"
                 />
               ) : (
@@ -208,7 +207,7 @@ const Profile = () => {
                   type="tel"
                   value={formData.phone || ''}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  leftIcon={<Phone className="w-4 h-4" />}
+                  prefix={<Phone className="w-4 h-4" />}
                   placeholder="请输入手机号"
                 />
               ) : (
@@ -288,7 +287,7 @@ const Profile = () => {
                       type="password"
                       value={passwordForm.oldPassword}
                       onChange={(e) => setPasswordForm({ ...passwordForm, oldPassword: e.target.value })}
-                      leftIcon={<Lock className="w-4 h-4" />}
+                      prefix={<Lock className="w-4 h-4" />}
                       placeholder="请输入当前密码"
                     />
                   </div>
@@ -300,7 +299,7 @@ const Profile = () => {
                       type="password"
                       value={passwordForm.newPassword}
                       onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-                      leftIcon={<Lock className="w-4 h-4" />}
+                      prefix={<Lock className="w-4 h-4" />}
                       placeholder="请输入新密码（至少6位）"
                     />
                   </div>
@@ -312,7 +311,7 @@ const Profile = () => {
                       type="password"
                       value={passwordForm.confirmPassword}
                       onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-                      leftIcon={<Lock className="w-4 h-4" />}
+                      prefix={<Lock className="w-4 h-4" />}
                       placeholder="请再次输入新密码"
                     />
                   </div>

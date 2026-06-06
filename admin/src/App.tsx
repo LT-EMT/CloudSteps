@@ -15,8 +15,6 @@ const Settings = lazy(() => import('@/pages/Settings'))
 const Profile = lazy(() => import('@/pages/Profile'))
 const Notifications = lazy(() => import('@/pages/Notifications'))
 const Users = lazy(() => import('@/pages/Users'))
-const OperationLogs = lazy(() => import('@/pages/OperationLogs'))
-const LoginHistory = lazy(() => import('@/pages/LoginHistory'))
 const WordBooks = lazy(() => import('@/pages/WordBooks'))
 const WordBookWords = lazy(() => import('@/pages/WordBookWords'))
 const VocabQuestions = lazy(() => import('@/pages/VocabQuestions'))
@@ -81,22 +79,6 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Users />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/operation-logs"
-              element={
-                <ProtectedRoute>
-                  <OperationLogs />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/login-history"
-              element={
-                <ProtectedRoute>
-                  <LoginHistory />
                 </ProtectedRoute>
               }
             />

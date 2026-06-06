@@ -11,6 +11,7 @@ export default function AIInterview() {
   const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [ending, setEnding] = useState(false);
   const [connectError, setConnectError] = useState("");
@@ -191,7 +192,7 @@ export default function AIInterview() {
             <span className="text-sm font-medium text-[#718096]">AI 数字人</span>
           </div>
           <div className="flex justify-center">
-            <Live2DModel width={300} height={300} message={voice.assistantText} />
+            <Live2DModel width={300} height={300} message={voice.assistantText} audioElement={audioRef.current} />
           </div>
         </div>
 
@@ -277,6 +278,9 @@ export default function AIInterview() {
           {ending ? "正在结束..." : "点击红色按钮结束对话"}
         </p>
       </div>
+
+      {/* 隐藏的音频元素用于播放 TTS */}
+      <audio ref={audioRef} crossOrigin="anonymous" />
     </div>
   )
 }

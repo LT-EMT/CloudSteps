@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Button } from 'antd'
+import { Button, Select } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import { get, post, put, del } from '@/utils/request'
 import { getApiBaseURL } from '@/config/apiConfig'
@@ -101,13 +101,12 @@ export default function SelfTestWords() {
 
         {/* 筛选栏 */}
         <div className="flex gap-3 flex-wrap">
-          <select
-            value={difficulty}
-            onChange={e => { setDifficulty(e.target.value); setPage(1) }}
-            className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-700 dark:text-slate-300"
-          >
-            {DIFFICULTIES.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
-          </select>
+          <Select
+            value={difficulty || undefined}
+            onChange={(value) => { setDifficulty(value || ''); setPage(1) }}
+            className="w-32"
+            options={DIFFICULTIES.map(d => ({ label: d.label, value: d.value }))}
+          />
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
@@ -194,11 +193,15 @@ export default function SelfTestWords() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">难度</label>
-                <select value={form.difficulty || 'easy'} onChange={e => setForm(f => ({ ...f, difficulty: e.target.value as 'easy' | 'hard' }))}
-                  className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm">
-                  <option value="easy">简单</option>
-                  <option value="hard">困难</option>
-                </select>
+                <Select
+                  value={form.difficulty || 'easy'}
+                  onChange={(value) => setForm(f => ({ ...f, difficulty: value as 'easy' | 'hard' }))}
+                  className="w-full"
+                  options={[
+                    { label: '简单', value: 'easy' },
+                    { label: '困难', value: 'hard' }
+                  ]}
+                />
               </div>
             </div>
             <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-200 dark:border-slate-800">

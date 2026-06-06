@@ -18,6 +18,10 @@ import ConfirmDialog from '@/components/UI/ConfirmDialog'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/UI/Select'
 import { Switch } from '@/components/UI/Switch'
 import { showAlert } from '@/utils/notification'
+import { get, post, put, del, patch } from '@/utils/request'
+import { getApiBaseURL } from '@/config/apiConfig'
+
+const BACKEND_BASE = getApiBaseURL()
 
 interface Scenario {
   id: number
@@ -62,20 +66,14 @@ const ScenarioDialogues = () => {
   const fetchScenarios = async () => {
     setLoading(true)
     try {
-      const token = localStorage.getItem('auth_token')
-      const res = await fetch('/api/admin/scenarios', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      })
-      const data = await res.json()
-      if (data.code === 200) {
-        setScenarios(data.data || [])
+      const res = await get(`${BACKEND_BASE}/admin/scenarios`)
+      if (res.code === 200) {
+        setScenarios(res.data || [])
       } else {
-        showAlert(data.msg || '获取场景列表失败', 'error')
+        showAlert(res.msg || '获取场景列表失败', 'error')
       }
-    } catch (error) {
-      showAlert('获取场景列表失败', 'error')
+    } catch (error: any) {
+      showAlert(error.msg || '获取场景列表失败', 'error')
     } finally {
       setLoading(false)
     }
@@ -125,22 +123,15 @@ const ScenarioDialogues = () => {
   const confirmDelete = async () => {
     if (!deletingScenario) return
     try {
-      const token = localStorage.getItem('auth_token')
-      const res = await fetch(`/api/admin/scenarios/${deletingScenario.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      })
-      const data = await res.json()
-      if (data.code === 200) {
+      const res = await del(`${BACKEND_BASE}/admin/scenarios/${deletingScenario.id}`)
+      if (res.code === 200) {
         showAlert('删除成功', 'success')
         fetchScenarios()
       } else {
-        showAlert(data.msg || '删除失败', 'error')
+        showAlert(res.msg || '删除失败', 'error')
       }
-    } catch (error) {
-      showAlert('删除失败', 'error')
+    } catch (error: any) {
+      showAlert(error.msg || '删除失败', 'error')
     } finally {
       setDeleteDialogOpen(false)
       setDeletingScenario(null)
@@ -149,51 +140,35 @@ const ScenarioDialogues = () => {
 
   const handleToggle = async (scenario: Scenario) => {
     try {
-      const token = localStorage.getItem('auth_token')
-      const res = await fetch(`/api/admin/scenarios/${scenario.id}/toggle`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      })
-      const data = await res.json()
-      if (data.code === 200) {
+      const res = await patch(`${BACKEND_BASE}/admin/scenarios/${scenario.id}/toggle`)
+      if (res.code === 200) {
         showAlert('更新成功', 'success')
         fetchScenarios()
       } else {
-        showAlert(data.msg || '更新失败', 'error')
+        showAlert(res.msg || '更新失败', 'error')
       }
-    } catch (error) {
-      showAlert('更新失败', 'error')
+    } catch (error: any) {
+      showAlert(error.msg || '更新失败', 'error')
     }
   }
 
   const handleSubmit = async () => {
     try {
-      const token = localStorage.getItem('auth_token')
       const url = editingScenario
-        ? `/api/admin/scenarios/${editingScenario.id}`
-        : '/api/admin/scenarios'
-      const method = editingScenario ? 'PUT' : 'POST'
-
-      const res = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      })
-      const data = await res.json()
-      if (data.code === 200) {
+        ? `${BACKEND_BASE}/admin/scenarios/${editingScenario.id}`
+        : `${BACKEND_BASE}/admin/scenarios`
+      const res = editingScenario
+        ? await put(url, formData)
+        : await post(url, formData)
+      if (res.code === 200) {
         showAlert(editingScenario ? '更新成功' : '创建成功', 'success')
         setModalOpen(false)
         fetchScenarios()
       } else {
-        showAlert(data.msg || '操作失败', 'error')
+        showAlert(res.msg || '操作失败', 'error')
       }
-    } catch (error) {
-      showAlert('操作失败', 'error')
+    } catch (error: any) {
+      showAlert(error.msg || '操作失败', 'error')
     }
   }
 

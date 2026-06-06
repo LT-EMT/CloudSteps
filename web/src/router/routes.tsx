@@ -27,10 +27,6 @@ import ProfileEdit from "@/pages/ProfileEdit";
 import About from "@/pages/About";
 import Terms from "@/pages/Terms";
 import Privacy from "@/pages/Privacy";
-import ScenarioSelection from "@/pages/ScenarioSelection";
-import ScenarioDialogue from "@/pages/ScenarioDialogue";
-import ScenarioReview from "@/pages/ScenarioReview";
-import ScenarioHistory from "@/pages/ScenarioHistory";
 import { RouteErrorBoundary } from "@/components/RouteErrorBoundary";
 import { PublicOnly, RequireAuth, RequireRole } from "@/components/AuthGuard";
 import MyStudents from "@/pages/MyStudents";
@@ -71,8 +67,6 @@ export const router = createBrowserRouter([
       { path: "lighthouse-words", element: <LighthouseWords /> },
       { path: "anti-forgetting", element: <AntiForgetting /> },
       { path: "coach-center", element: <CoachCenter /> },
-      { path: "scenario-dialogues", element: <ScenarioSelection /> },
-      { path: "scenario-dialogues/history", element: <ScenarioHistory /> },
       { path: "profile/edit", element: <ProfileEdit /> },
       { path: "notifications", element: <Notifications /> },
     ],
@@ -242,38 +236,6 @@ export const router = createBrowserRouter([
     element: (
       <RequireAuth>
         <CreateAntiForgetting />
-      </RequireAuth>
-    ),
-  },
-  {
-    path: "/scenario-selection",
-    element: (
-      <RequireAuth>
-        <Navigate to="/scenario-dialogues" replace />
-      </RequireAuth>
-    ),
-  },
-  {
-    path: "/scenario-dialogue",
-    element: (
-      <RequireAuth>
-        <ScenarioDialogue />
-      </RequireAuth>
-    ),
-  },
-  {
-    path: "/scenario-review/:sessionId",
-    element: (
-      <RequireAuth>
-        <ScenarioReview />
-      </RequireAuth>
-    ),
-  },
-  {
-    path: "/scenario-history",
-    element: (
-      <RequireAuth>
-        <Navigate to="/scenario-dialogues/history" replace />
       </RequireAuth>
     ),
   },

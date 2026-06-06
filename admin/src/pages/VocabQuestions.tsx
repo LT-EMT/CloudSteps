@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { Button } from 'antd'
+import { Button, Select } from 'antd'
 import * as XLSX from 'xlsx'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import { get, post, put, del } from '@/utils/request'
@@ -305,10 +305,12 @@ export default function VocabQuestions() {
 
         {/* 筛选栏 */}
         <div className="flex gap-3 flex-wrap">
-          <select value={level} onChange={e => { setLevel(e.target.value); setPage(1) }}
-            className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-700 dark:text-slate-300">
-            {LEVELS.map(l => <option key={l} value={l}>{l || '全部等级'}</option>)}
-          </select>
+          <Select
+            value={level || undefined}
+            onChange={(value) => { setLevel(value || ''); setPage(1) }}
+            className="w-32"
+            options={LEVELS.map(l => ({ label: l || '全部等级', value: l }))}
+          />
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input value={keyword} onChange={e => { setKeyword(e.target.value); setPage(1) }} placeholder="搜索单词..."
@@ -445,10 +447,12 @@ export default function VocabQuestions() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">等级 *</label>
-                  <select value={form.level || 'A1'} onChange={e => setForm(f => ({ ...f, level: e.target.value }))}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm">
-                    {LEVELS.filter(Boolean).map(l => <option key={l} value={l}>{l}</option>)}
-                  </select>
+                  <Select
+                    value={form.level || 'A1'}
+                    onChange={(value) => setForm(f => ({ ...f, level: value }))}
+                    className="w-full"
+                    options={LEVELS.filter(Boolean).map(l => ({ label: l, value: l }))}
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">难度分值</label>

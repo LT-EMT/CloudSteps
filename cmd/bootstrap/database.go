@@ -128,12 +128,31 @@ func RunInitSQL(db *gorm.DB, sqlFilePath string) error {
 	return scanner.Err()
 }
 
+// fixScenarioDialogueCharset ensures emoji/special chars work on MySQL (CynosDB defaults to utf8mb3).
+func fixScenarioDialogueCharset(db *gorm.DB) error {
+	if config.GlobalConfig.Database.Driver != "mysql" {
+		return nil
+	}
+	tables := []string{
+		"scenario_dialogue_scenarios",
+		"scenario_dialogue_sessions",
+		"scenario_dialogue_turns",
+	}
+	for _, table := range tables {
+		stmt := "ALTER TABLE `" + table + "` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+		if err := db.Exec(stmt).Error; err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // RunMigrations executes entity migration
 func RunMigrations(db *gorm.DB) error {
 	if db == nil {
 		return errors.New("db is nil")
 	}
-	return utils.MakeMigrates(db, []any{
+	if err := utils.MakeMigrates(db, []any{
 		&utils.Config{},
 		&models.AccountLock{},
 		&models.UserDevice{},
@@ -155,5 +174,11 @@ func RunMigrations(db *gorm.DB) error {
 		&models.CoachingAppointment{},
 		&models.CoachingSessionRecord{},
 		&models.CoachingAuditLog{},
-	})
+		&models.ScenarioDialogueScenario{},
+		&models.ScenarioDialogueSession{},
+		&models.ScenarioDialogueTurn{},
+	}); err != nil {
+		return err
+	}
+	return fixScenarioDialogueCharset(db)
 }

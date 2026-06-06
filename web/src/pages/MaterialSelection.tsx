@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 const materials = [
   { id: 1, name: "词汇测试", enabled: true },
   { id: 2, name: "单词练习", enabled: true },
-  { id: 3, name: "解析语法", enabled: false },
+  { id: 3, name: "场景对话", enabled: true },
   { id: 4, name: "阅读理解", enabled: false },
   { id: 5, name: "完形填空", enabled: false },
   { id: 6, name: "多维听力", enabled: false },
@@ -22,6 +22,8 @@ export default function MaterialSelection() {
       navigate("/vocabulary-test");
     } else if (material.name === "单词练习") {
       navigate("/word-training");
+    } else if (material.name === "场景对话") {
+      navigate("/scenario-selection");
     }
   };
 

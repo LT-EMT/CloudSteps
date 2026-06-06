@@ -34,6 +34,9 @@ import StudentTrainingRecords from "@/pages/StudentTrainingRecords";
 import WordBooks from "@/pages/WordBooks";
 import WordBookWords from "@/pages/WordBookWords";
 import LighthouseWords from "@/pages/LighthouseWords";
+import ScenarioSelection from "@/pages/ScenarioSelection";
+import ScenarioDialogue from "@/pages/ScenarioDialogue";
+import ScenarioReview from "@/pages/ScenarioReview";
 
 export const router = createBrowserRouter([
   {
@@ -236,6 +239,30 @@ export const router = createBrowserRouter([
     element: (
       <RequireAuth>
         <CreateAntiForgetting />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/scenario-selection",
+    element: (
+      <RequireAuth>
+        <ScenarioSelection />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/scenario-dialogue",
+    element: (
+      <RequireAuth>
+        <ScenarioDialogue />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/scenario-review/:sessionId",
+    element: (
+      <RequireAuth>
+        <ScenarioReview />
       </RequireAuth>
     ),
   },

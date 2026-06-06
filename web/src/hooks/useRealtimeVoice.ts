@@ -32,6 +32,7 @@ export function useRealtimeVoice(options: UseRealtimeVoiceOptions) {
   const nextPlayTimeRef = useRef(0)
   const playbackSourcesRef = useRef<AudioBufferSourceNode[]>([])
   const lastExpressionDataRef = useRef('')
+  const callIdRef = useRef<string>('')
 
   const downsample = (input: Float32Array, fromRate: number, toRate: number) => {
     if (fromRate === toRate) return input
@@ -140,6 +141,10 @@ export function useRealtimeVoice(options: UseRealtimeVoiceOptions) {
       case 'hello': {
         const ap = (msg.audio_params as Record<string, number>) || {}
         if (ap.sample_rate > 0) playbackRateRef.current = ap.sample_rate
+        // 提取 callID（如果服务器返回）
+        if (msg.call_id) {
+          callIdRef.current = String(msg.call_id)
+        }
         setStatus('connected')
         sendJSON({ type: 'listen', state: 'start', mode: 'auto' })
         listeningRef.current = true
@@ -172,21 +177,57 @@ export function useRealtimeVoice(options: UseRealtimeVoiceOptions) {
 
   // Send expression data to backend when it changes
   useEffect(() => {
-    if (expressionData && expressionData !== lastExpressionDataRef.current && wsRef.current?.readyState === WebSocket.OPEN) {
-      sendJSON({ type: 'expression', data: expressionData })
+    if (expressionData && expressionData !== lastExpressionDataRef.current && callIdRef.current) {
+      // 通过 HTTP POST 发送表情数据
+      fetch('/api/ai-interview/expression', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          callId: callIdRef.current,
+          expressions: expressionData
+        })
+      }).catch(err => console.warn('Failed to send expression:', err))
+      
       lastExpressionDataRef.current = expressionData
     }
-  }, [expressionData, sendJSON])
+  }, [expressionData])
 
   const connect = useCallback(async () => {
     if (!wsUrl) return
     setStatus('connecting')
     cleanup(false)
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true, channelCount: 1 },
-        video: false,
-      })
+      // 请求麦克风权限
+      let stream: MediaStream
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: { 
+            echoCancellation: true, 
+            noiseSuppression: true, 
+            channelCount: 1,
+            autoGainControl: true
+          },
+          video: false,
+        })
+      } catch (permErr: unknown) {
+        const err = permErr as DOMException
+        if (err.name === 'NotAllowedError') {
+          setStatus('error')
+          onError?.('麦克风权限被拒绝。请在浏览器设置中允许访问麦克风。')
+          return
+        } else if (err.name === 'NotFoundError') {
+          setStatus('error')
+          onError?.('未找到麦克风设备。请检查硬件连接。')
+          return
+        } else if (err.name === 'NotReadableError') {
+          setStatus('error')
+          onError?.('麦克风被其他应用占用。请关闭其他使用麦克风的应用。')
+          return
+        } else {
+          throw err
+        }
+      }
+      
       micStreamRef.current = stream
       const ctx = new AudioContext({ sampleRate: SAMPLE_RATE })
       captureCtxRef.current = ctx
@@ -238,7 +279,8 @@ export function useRealtimeVoice(options: UseRealtimeVoiceOptions) {
       }
     } catch (err: unknown) {
       setStatus('error')
-      onError?.(err instanceof Error ? err.message : '麦克风权限获取失败')
+      const errorMsg = err instanceof Error ? err.message : '连接失败'
+      onError?.(errorMsg)
       cleanup(false)
     }
   }, [appendPCM, cleanup, handleText, onError, playPCM, sendJSON, wsUrl])

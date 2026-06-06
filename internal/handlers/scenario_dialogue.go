@@ -50,6 +50,9 @@ func (h *Handlers) registerScenarioDialogueRoutes(r *gin.RouterGroup) {
 
 	// AI interview realtime WebSocket (no AuthRequired)
 	r.GET("/ws/realtime/ai-interview", h.handleAIInterviewWS)
+	
+	// AI interview expression update (no AuthRequired)
+	r.POST("/ai-interview/expression", h.handleAIInterviewExpression)
 }
 
 func (h *Handlers) ensureRealtimeFactory() *voice.RealtimeFactory {
@@ -666,4 +669,37 @@ func (h *Handlers) handleAdminToggleScenario(c *gin.Context) {
 	}
 
 	response.Success(c, "更新成功", scenario)
+}
+
+// handleAIInterviewExpression 处理 AI 面试的表情更新
+func (h *Handlers) handleAIInterviewExpression(c *gin.Context) {
+	var req struct {
+		CallID      string `json:"callId" binding:"required"`
+		Expressions string `json:"expressions" binding:"required"`
+	}
+	
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.Fail(c, "请求参数错误", nil)
+		return
+	}
+	
+	// 获取工厂
+	factory := h.ensureRealtimeFactory()
+	
+	// 查找会话并更新表情
+	sessionCtx := factory.GetSessionByCallID(req.CallID)
+	if sessionCtx != nil {
+		sessionCtx.UpdateExpressions(req.Expressions)
+		logger.Lg.Info("expression updated",
+			zap.String("callID", req.CallID),
+			zap.Uint("sessionID", sessionCtx.SessionID),
+			zap.String("expressions", req.Expressions))
+		response.Success(c, "表情数据已更新", nil)
+		return
+	}
+	
+	// 如果没有找到会话，返回错误
+	logger.Lg.Warn("expression update failed: session not found",
+		zap.String("callID", req.CallID))
+	response.Fail(c, "会话不存在", nil)
 }

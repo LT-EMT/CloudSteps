@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { agentGetDefault, agentCreateConversation, agentStream, ttsInfer, asrInfer } from '@/api/digitalHuman';
 
 export default function DigitalHuman() {
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [isConnected, setIsConnected] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -37,7 +35,7 @@ export default function DigitalHuman() {
   };
 
   const handleBack = () => {
-    navigate(-1);
+    window.history.back();
   };
 
   const handleConnect = () => {

@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { Button } from 'antd'
 import * as XLSX from 'xlsx'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import { get, post, put, del } from '@/utils/request'
 import { getApiBaseURL } from '@/config/apiConfig'
 import { showAlert } from '@/utils/notification'
 import { Plus, Pencil, Trash2, Search, X, Upload, Download, AlertTriangle, Wand2, Volume2 } from 'lucide-react'
-import LingechoTTS from '@/components/UI/LingechoTTS'
 import { fetchTTS, sleep, TTS_WORD_GAP_MS } from '@/utils/lingechoTts'
 
 interface VocabQuestion {
@@ -287,23 +287,19 @@ export default function VocabQuestions() {
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">词汇测评题库</h1>
           <div className="flex items-center gap-2">
-            <button onClick={handleBatchAudioGeneration} disabled={loading}
-              className="flex items-center gap-2 px-3 py-2 border border-purple-300 dark:border-purple-600 text-purple-600 dark:text-purple-300 rounded-lg text-sm hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors disabled:opacity-50">
-              <Wand2 className="w-4 h-4" /> 批量生成音频
-            </button>
-            <button onClick={downloadTemplate}
-              className="flex items-center gap-2 px-3 py-2 border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 rounded-lg text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-              <Download className="w-4 h-4" /> 下载模板
-            </button>
-            <button onClick={() => fileInputRef.current?.click()} disabled={parsing}
-              className="flex items-center gap-2 px-3 py-2 border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 rounded-lg text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-50">
-              <Upload className="w-4 h-4" /> {parsing ? '解析中...' : 'Excel 导入'}
-            </button>
+            <Button onClick={handleBatchAudioGeneration} disabled={loading} icon={<Wand2 className="w-4 h-4" />}>
+              批量生成音频
+            </Button>
+            <Button onClick={downloadTemplate} icon={<Download className="w-4 h-4" />}>
+              下载模板
+            </Button>
+            <Button onClick={() => fileInputRef.current?.click()} disabled={parsing} icon={<Upload className="w-4 h-4" />}>
+              {parsing ? '解析中...' : 'Excel 导入'}
+            </Button>
             <input ref={fileInputRef} type="file" accept=".xlsx,.xls" className="hidden" onChange={handleFileChange} />
-            <button onClick={openCreate}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-colors">
-              <Plus className="w-4 h-4" /> 新增题目
-            </button>
+            <Button onClick={openCreate} type="primary" icon={<Plus className="w-4 h-4" />}>
+              新增题目
+            </Button>
           </div>
         </div>
 
@@ -368,12 +364,8 @@ export default function VocabQuestions() {
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button onClick={() => openEdit(q)} className="p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500">
-                          <Pencil className="w-4 h-4" />
-                        </button>
-                        <button onClick={() => handleDelete(q.id)} className="p-1.5 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        <Button onClick={() => openEdit(q)} type="text" size="small" icon={<Pencil className="w-4 h-4" />} />
+                        <Button onClick={() => handleDelete(q.id)} type="text" size="small" danger icon={<Trash2 className="w-4 h-4" />} />
                       </div>
                     </td>
                   </tr>
@@ -388,11 +380,9 @@ export default function VocabQuestions() {
           <div className="flex items-center justify-between text-sm text-slate-500">
             <span>共 {total} 条</span>
             <div className="flex gap-2">
-              <button disabled={page <= 1} onClick={() => setPage(p => p - 1)}
-                className="px-3 py-1 rounded border border-slate-200 dark:border-slate-700 disabled:opacity-40">上一页</button>
+              <Button disabled={page <= 1} onClick={() => setPage(p => p - 1)} size="small">上一页</Button>
               <span className="px-3 py-1">{page} / {totalPages}</span>
-              <button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)}
-                className="px-3 py-1 rounded border border-slate-200 dark:border-slate-700 disabled:opacity-40">下一页</button>
+              <Button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)} size="small">下一页</Button>
             </div>
           </div>
         )}
@@ -404,7 +394,7 @@ export default function VocabQuestions() {
           <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl w-full max-w-lg">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800">
               <h2 className="font-semibold text-slate-900 dark:text-slate-100">{editing ? '编辑题目' : '新增题目'}</h2>
-              <button onClick={() => setModalOpen(false)}><X className="w-5 h-5 text-slate-400" /></button>
+              <Button onClick={() => setModalOpen(false)} type="text" icon={<X className="w-5 h-5 text-slate-400" />} />
             </div>
             <div className="px-6 py-4 space-y-4 max-h-[70vh] overflow-y-auto">
               <div>
@@ -412,15 +402,13 @@ export default function VocabQuestions() {
                 <div className="flex gap-2">
                   <input value={form.word || ''} onChange={e => setForm(f => ({ ...f, word: e.target.value }))}
                     className="flex-1 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm" />
-                  <button
-                    type="button"
+                  <Button
                     onClick={handleGenerateAudio}
                     disabled={generatingAudio || !form.word?.trim()}
-                    className="px-3 py-2 rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                    icon={<Wand2 className="w-4 h-4" />}
                   >
-                    <Wand2 className="w-4 h-4" />
                     {generatingAudio ? '生成中...' : '生成音频'}
-                  </button>
+                  </Button>
                 </div>
               </div>
               <div>
@@ -434,18 +422,15 @@ export default function VocabQuestions() {
                   <div className="flex gap-2">
                     <input value={form.audioUrl || ''} onChange={e => setForm(f => ({ ...f, audioUrl: e.target.value }))}
                       className="flex-1 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-xs" readOnly />
-                    <button
-                      type="button"
+                    <Button
                       onClick={() => {
                         if (form.audioUrl) {
                           const audio = new Audio(form.audioUrl)
                           audio.play()
                         }
                       }}
-                      className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
-                    >
-                      <Volume2 className="w-4 h-4" />
-                    </button>
+                      icon={<Volume2 className="w-4 h-4" />}
+                    />
                   </div>
                 </div>
               )}
@@ -474,12 +459,10 @@ export default function VocabQuestions() {
               </div>
             </div>
             <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-200 dark:border-slate-800">
-              <button onClick={() => setModalOpen(false)}
-                className="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-400">取消</button>
-              <button onClick={handleSave} disabled={saving}
-                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm disabled:opacity-50">
+              <Button onClick={() => setModalOpen(false)}>取消</Button>
+              <Button onClick={handleSave} disabled={saving} type="primary" loading={saving}>
                 {saving ? '保存中...' : '保存'}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -497,14 +480,13 @@ export default function VocabQuestions() {
                   {dupCount > 0 && <span className="ml-2 text-amber-500 flex items-center gap-1 inline-flex"><AlertTriangle className="w-3 h-3" />{dupCount} 条重复</span>}
                 </p>
               </div>
-              <button onClick={() => setShowImportModal(false)}><X className="w-5 h-5 text-slate-400" /></button>
+              <Button onClick={() => setShowImportModal(false)} type="text" icon={<X className="w-5 h-5 text-slate-400" />} />
             </div>
 
             <div className="px-6 py-3 border-b border-slate-100 dark:border-slate-800 shrink-0 flex gap-3">
-              <button onClick={() => toggleAll(true)} className="text-xs text-blue-600 hover:underline">全选</button>
-              <button onClick={() => toggleAll(false)} className="text-xs text-slate-500 hover:underline">全不选</button>
-              <button onClick={() => setImportRows(rows => rows.map(r => ({ ...r, selected: !r.isDuplicate })))}
-                className="text-xs text-slate-500 hover:underline">仅选非重复</button>
+              <Button onClick={() => toggleAll(true)} type="link" size="small">全选</Button>
+              <Button onClick={() => toggleAll(false)} type="link" size="small">全不选</Button>
+              <Button onClick={() => setImportRows(rows => rows.map(r => ({ ...r, selected: !r.isDuplicate })))} type="link" size="small">仅选非重复</Button>
             </div>
 
             <div className="overflow-auto flex-1">
@@ -544,12 +526,10 @@ export default function VocabQuestions() {
             </div>
 
             <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-200 dark:border-slate-800 shrink-0">
-              <button onClick={() => setShowImportModal(false)}
-                className="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-400">取消</button>
-              <button onClick={confirmImport} disabled={importing || selectedCount === 0}
-                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm disabled:opacity-50">
+              <Button onClick={() => setShowImportModal(false)}>取消</Button>
+              <Button onClick={confirmImport} disabled={importing || selectedCount === 0} type="primary" loading={importing}>
                 {importing ? '导入中...' : `导入 ${selectedCount} 条`}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -566,12 +546,12 @@ export default function VocabQuestions() {
                   共 {list.filter(q => !q.audioUrl).length} 条无音频题目，已选 {selectedForBatch.size} 条
                 </p>
               </div>
-              <button onClick={() => setShowBatchAudioModal(false)}><X className="w-5 h-5 text-slate-400" /></button>
+              <Button onClick={() => setShowBatchAudioModal(false)} type="text" icon={<X className="w-5 h-5 text-slate-400" />} />
             </div>
 
             <div className="px-6 py-3 border-b border-slate-100 dark:border-slate-800 shrink-0 flex gap-3">
-              <button onClick={() => setSelectedForBatch(new Set(list.filter(q => !q.audioUrl).map(q => q.id)))} className="text-xs text-purple-600 hover:underline">全选</button>
-              <button onClick={() => setSelectedForBatch(new Set())} className="text-xs text-slate-500 hover:underline">全不选</button>
+              <Button onClick={() => setSelectedForBatch(new Set(list.filter(q => !q.audioUrl).map(q => q.id)))} type="link" size="small">全选</Button>
+              <Button onClick={() => setSelectedForBatch(new Set())} type="link" size="small">全不选</Button>
             </div>
 
             <div className="overflow-auto flex-1">
@@ -585,7 +565,7 @@ export default function VocabQuestions() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {list.filter(q => !q.audioUrl).map((q, i) => (
+                  {list.filter(q => !q.audioUrl).map((q) => (
                     <tr key={q.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                       <td className="px-4 py-2">
                         <input type="checkbox" checked={selectedForBatch.has(q.id)} onChange={() => {
@@ -612,12 +592,10 @@ export default function VocabQuestions() {
             </div>
 
             <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-200 dark:border-slate-800 shrink-0">
-              <button onClick={() => setShowBatchAudioModal(false)}
-                className="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-400">取消</button>
-              <button onClick={handleBatchGenerateAudio} disabled={batchGenerating || selectedForBatch.size === 0}
-                className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-sm disabled:opacity-50">
+              <Button onClick={() => setShowBatchAudioModal(false)}>取消</Button>
+              <Button onClick={handleBatchGenerateAudio} disabled={batchGenerating || selectedForBatch.size === 0} type="primary" loading={batchGenerating}>
                 {batchGenerating ? '生成中...' : `生成 ${selectedForBatch.size} 个音频`}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

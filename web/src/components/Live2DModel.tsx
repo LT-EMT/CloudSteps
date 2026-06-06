@@ -15,6 +15,36 @@ export default function Live2DModel({ modelUrl, width = 300, height = 300, messa
   useEffect(() => {
     if (!containerRef.current) return
 
+    // Add CSS to hide default Live2D widget tips
+    const style = document.createElement('style')
+    style.textContent = `
+      .waifu-tips {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+      }
+      .waifu-tool {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+      }
+      .live2d-widget-dialogue {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+      }
+    `
+    document.head.appendChild(style)
+
+    // Configure Live2D widget to hide default tips
+    // @ts-ignore
+    window.live2d_settings = {
+      showHitokoto: false,
+      showF12Status: false,
+      showCopyMessage: false,
+      showWelcomeMessage: false,
+    }
+
     // Use a simpler Live2D implementation without webpack dependency
     const script = document.createElement('script')
     script.src = 'https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js'
@@ -22,6 +52,23 @@ export default function Live2DModel({ modelUrl, width = 300, height = 300, messa
     script.onload = () => {
       try {
         setLoading(false)
+        
+        // Continuously remove dialogue elements
+        const removeDialogues = () => {
+          const elements = document.querySelectorAll('.waifu-tips, .waifu-tool, .live2d-widget-dialogue')
+          elements.forEach(el => {
+            el.remove()
+          })
+        }
+        
+        // Remove immediately
+        removeDialogues()
+        
+        // Set up interval to keep removing them
+        const interval = setInterval(removeDialogues, 100)
+        
+        // Clean up interval on unmount
+        return () => clearInterval(interval)
       } catch (err) {
         console.error('Failed to load Live2D:', err)
         setError('模型加载失败')
@@ -35,6 +82,7 @@ export default function Live2DModel({ modelUrl, width = 300, height = 300, messa
     document.head.appendChild(script)
 
     return () => {
+      document.head.removeChild(style)
       document.head.removeChild(script)
     }
   }, [])

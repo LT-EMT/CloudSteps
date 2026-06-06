@@ -22,10 +22,15 @@ export default function DigitalHuman() {
     try {
       // 获取默认 Agent 配置
       const defaultAgent = await agentGetDefault();
-      if (defaultAgent.engine) {
+      console.log('Default Agent:', defaultAgent);
+      if (defaultAgent && defaultAgent.name) {
         // 创建对话会话
-        const conversationId = await agentCreateConversation(defaultAgent.engine, {});
+        const conversationId = await agentCreateConversation(defaultAgent.name, {});
         conversationIdRef.current = conversationId;
+        console.log('Conversation ID:', conversationId);
+        setLoading(false);
+      } else {
+        console.error('Default agent not found');
         setLoading(false);
       }
     } catch (error) {

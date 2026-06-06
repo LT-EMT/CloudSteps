@@ -311,7 +311,8 @@ func (h *Handlers) handleScenarioDialogueStats(c *gin.Context) {
 	}
 
 	var sessions []models.ScenarioDialogueSession
-	db.Where("user_id = ? AND status = ?", user.ID, models.ScenarioSessionStatusCompleted).
+	db.Preload("Scenario").
+		Where("user_id = ? AND status = ?", user.ID, models.ScenarioSessionStatusCompleted).
 		Order("ended_at desc").Limit(20).Find(&sessions)
 
 	type agg struct {

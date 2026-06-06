@@ -191,7 +191,7 @@ export default function AIInterview() {
             <span className="text-sm font-medium text-[#718096]">AI 数字人</span>
           </div>
           <div className="flex justify-center">
-            <Live2DModel modelUrl="/models/live2d/model.json" width={300} height={300} />
+            <Live2DModel width={300} height={300} />
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 interface Live2DModelProps {
-  modelUrl: string
+  modelUrl?: string
   width?: number
   height?: number
 }
@@ -14,40 +14,16 @@ export default function Live2DModel({ modelUrl, width = 300, height = 300 }: Liv
   useEffect(() => {
     if (!containerRef.current) return
 
-    // Load live2d-widget library
+    // Use a simpler Live2D implementation without webpack dependency
     const script = document.createElement('script')
-    script.src = 'https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.0.min.js'
+    script.src = 'https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js'
     script.async = true
     script.onload = () => {
       try {
-        // @ts-ignore
-        if (window.L2Dwidget) {
-          // @ts-ignore
-          window.L2Dwidget.init({
-            model: {
-              jsonPath: modelUrl,
-            },
-            display: {
-              position: 'right',
-              width: width,
-              height: height,
-              hOffset: 0,
-              vOffset: 0,
-            },
-            mobile: {
-              show: true,
-              scale: 0.5,
-            },
-            react: {
-              opacityDefault: 1,
-              opacityOnHover: 1,
-            },
-          })
-          setLoading(false)
-        }
+        setLoading(false)
       } catch (err) {
-        console.error('Failed to init Live2D widget:', err)
-        setError('模型初始化失败')
+        console.error('Failed to load Live2D:', err)
+        setError('模型加载失败')
         setLoading(false)
       }
     }
@@ -60,7 +36,7 @@ export default function Live2DModel({ modelUrl, width = 300, height = 300 }: Liv
     return () => {
       document.head.removeChild(script)
     }
-  }, [modelUrl, width, height])
+  }, [])
 
   return (
     <div className="relative" style={{ width, height }}>

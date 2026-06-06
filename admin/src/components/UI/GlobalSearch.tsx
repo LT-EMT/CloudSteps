@@ -17,7 +17,7 @@ import {
 } from 'lucide-react'
 import { useSearchStore, type SearchResult } from '@/stores/searchStore.ts'
 import { useNavigate } from 'react-router-dom'
-import Card, { CardContent } from '@/components/UI/Card.tsx'
+import { Card } from 'antd'
 
 const GlobalSearch = () => {
   const navigate = useNavigate()
@@ -198,7 +198,7 @@ const GlobalSearch = () => {
               className="w-full max-w-2xl"
             >
               <Card className="border-0 shadow-2xl bg-card">
-                <CardContent className="p-0">
+                <div className="p-0">
                   {/* 搜索输入框 */}
                   <div className="flex items-center px-4 py-3 border-b border-border">
                     <Search className="w-5 h-5 text-muted-foreground mr-3" />
@@ -344,7 +344,7 @@ const GlobalSearch = () => {
                       </div>
                     </div>
                   )}
-                </CardContent>
+                </div>
               </Card>
             </motion.div>
           </div>

@@ -262,7 +262,7 @@ func (h *Handlers) handleCompleteScenarioSession(c *gin.Context) {
 	sess.UserWordCount = metrics.UserWordCount
 	sess.CorrectionCount = metrics.CorrectionCount
 	sess.PronunciationHints = metrics.PronunciationHints
-	sess.ReviewSummary = metrics.ReviewSummary
+	sess.ReviewSummary = cleanSpecialChars(metrics.ReviewSummary)
 	sess.ReviewDetail = voice.MarshalReviewDetail(metrics.Detail)
 
 	if err := db.Save(&sess).Error; err != nil {
@@ -452,4 +452,53 @@ func appendScenarioTurn(db *gorm.DB, sessionID uint, role, content string) error
 		HasPronunciation: hasPron,
 		TurnIndex:        maxIdx + 1,
 	}).Error
+}
+
+// cleanSpecialChars removes problematic UTF-8 characters that cause MySQL charset issues
+func cleanSpecialChars(s string) string {
+	if s == "" {
+		return s
+	}
+	
+	// 定义需要过滤的特殊字符
+	replacements := map[rune]string{
+		'…': "...",      // 中文省略号
+		'–': "-",        // 长破折号
+		'—': "-",        // 破折号
+		'\u2018': "'",   // 左单引号
+		'\u2019': "'",   // 右单引号
+		'\u201C': "\"",  // 左双引号
+		'\u201D': "\"",  // 右双引号
+		'·': "·",        // 中点
+		'×': "x",        // 乘号
+		'÷': "/",        // 除号
+	}
+	
+	result := make([]rune, 0, len([]rune(s)))
+	for _, r := range s {
+		if replacement, ok := replacements[r]; ok {
+			result = append(result, []rune(replacement)...)
+		} else if r >= 0x20 && r != 0x7F && (r < 0x80 || r >= 0xA0) {
+			// 保留可打印的ASCII字符和有效的UTF-8字符
+			result = append(result, r)
+		} else if r >= 0x4E00 && r <= 0x9FFF {
+			// 保留中文字符
+			result = append(result, r)
+		} else if r >= 0x3040 && r <= 0x309F {
+			// 保留日文平假名
+			result = append(result, r)
+		} else if r >= 0x30A0 && r <= 0x30FF {
+			// 保留日文片假名
+			result = append(result, r)
+		} else if r >= 0xAC00 && r <= 0xD7AF {
+			// 保留韩文
+			result = append(result, r)
+		} else if r == '\n' || r == '\r' || r == '\t' || r == ' ' {
+			// 保留空白字符
+			result = append(result, r)
+		}
+		// 其他控制字符和无效字符被过滤掉
+	}
+	
+	return string(result)
 }

@@ -139,9 +139,27 @@ func fixScenarioDialogueCharset(db *gorm.DB) error {
 		"scenario_dialogue_turns",
 	}
 	for _, table := range tables {
+		// 先转换表的字符集
 		stmt := "ALTER TABLE `" + table + "` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
 		if err := db.Exec(stmt).Error; err != nil {
 			return err
+		}
+		
+		// 然后转换所有文本列的字符集
+		if table == "scenario_dialogue_sessions" {
+			// 修复 review_summary 和 review_detail 列
+			if err := db.Exec("ALTER TABLE `" + table + "` MODIFY COLUMN `review_summary` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci").Error; err != nil {
+				// 忽略列不存在的错误
+				if !strings.Contains(err.Error(), "Unknown column") {
+					return err
+				}
+			}
+			if err := db.Exec("ALTER TABLE `" + table + "` MODIFY COLUMN `review_detail` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci").Error; err != nil {
+				// 忽略列不存在的错误
+				if !strings.Contains(err.Error(), "Unknown column") {
+					return err
+				}
+			}
 		}
 	}
 	return nil

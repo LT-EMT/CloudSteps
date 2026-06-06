@@ -84,8 +84,8 @@ type ScenarioDialogueSession struct {
 	CorrectionCount    int `json:"correctionCount" gorm:"default:0"`
 	PronunciationHints int `json:"pronunciationHints" gorm:"default:0"`
 
-	ReviewSummary string `json:"reviewSummary" gorm:"type:longtext;charset:utf8mb4;collate:utf8mb4_unicode_ci"`
-	ReviewDetail  string `json:"reviewDetail" gorm:"type:longtext;charset:utf8mb4;collate:utf8mb4_unicode_ci"`
+	ReviewSummary string `json:"reviewSummary" gorm:"type:mediumtext;charset:utf8mb4;collate:utf8mb4_unicode_ci"`
+	ReviewDetail  string `json:"reviewDetail" gorm:"type:mediumtext;charset:utf8mb4;collate:utf8mb4_unicode_ci"`
 
 	Scenario *ScenarioDialogueScenario `json:"scenario,omitempty" gorm:"foreignKey:ScenarioID"`
 	Turns    []ScenarioDialogueTurn    `json:"turns,omitempty" gorm:"foreignKey:SessionID"`

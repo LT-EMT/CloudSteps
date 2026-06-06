@@ -15,9 +15,17 @@ export default function Live2DModel({ modelUrl, width = 300, height = 300, messa
   useEffect(() => {
     if (!containerRef.current) return
 
-    // Add CSS to hide default Live2D widget tips
+    // Add CSS to customize Live2D widget position and hide default dialogue
     const style = document.createElement('style')
     style.textContent = `
+      #live2d-widget {
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        top: auto !important;
+        transform: none !important;
+      }
       .waifu-tips {
         display: none !important;
         visibility: hidden !important;
@@ -36,7 +44,7 @@ export default function Live2DModel({ modelUrl, width = 300, height = 300, messa
     `
     document.head.appendChild(style)
 
-    // Configure Live2D widget to hide default tips
+    // Configure Live2D widget
     // @ts-ignore
     window.live2d_settings = {
       showHitokoto: false,
@@ -45,7 +53,7 @@ export default function Live2DModel({ modelUrl, width = 300, height = 300, messa
       showWelcomeMessage: false,
     }
 
-    // Use a simpler Live2D implementation without webpack dependency
+    // Use Live2D widget
     const script = document.createElement('script')
     script.src = 'https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js'
     script.async = true
@@ -53,19 +61,19 @@ export default function Live2DModel({ modelUrl, width = 300, height = 300, messa
       try {
         setLoading(false)
         
-        // Continuously remove dialogue elements
-        const removeDialogues = () => {
-          const elements = document.querySelectorAll('.waifu-tips, .waifu-tool, .live2d-widget-dialogue')
-          elements.forEach(el => {
-            el.remove()
-          })
+        // Move Live2D widget to our container
+        const moveWidget = () => {
+          const widget = document.querySelector('#live2d-widget')
+          if (widget && containerRef.current) {
+            containerRef.current.appendChild(widget)
+          }
         }
         
-        // Remove immediately
-        removeDialogues()
+        // Try to move immediately
+        moveWidget()
         
-        // Set up interval to keep removing them
-        const interval = setInterval(removeDialogues, 100)
+        // Set up interval to keep trying
+        const interval = setInterval(moveWidget, 100)
         
         // Clean up interval on unmount
         return () => clearInterval(interval)
@@ -88,13 +96,13 @@ export default function Live2DModel({ modelUrl, width = 300, height = 300, messa
   }, [])
 
   return (
-    <div className="relative" style={{ width, height }}>
-      <div ref={containerRef} style={{ width, height }} />
+    <div className="relative flex flex-col items-center justify-center" style={{ width, height }}>
+      <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
       
       {/* 对话气泡 */}
       {message && (
-        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white border-2 border-gray-200 rounded-2xl px-4 py-2 shadow-lg max-w-[200px]">
-          <div className="text-sm text-gray-800">{message}</div>
+        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-4 bg-white border-2 border-[#4ECDC4] rounded-2xl px-4 py-3 shadow-lg max-w-[250px] z-10">
+          <div className="text-sm text-gray-800 leading-relaxed">{message}</div>
           {/* 气泡小三角 */}
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-white"></div>
         </div>

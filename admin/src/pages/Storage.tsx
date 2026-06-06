@@ -18,16 +18,14 @@ import {
   List,
   Image as ImageIcon,
 } from 'lucide-react'
+import { Button, Select, Modal } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import Card from '@/components/UI/Card'
-import Button from '@/components/UI/Button'
 import Input from '@/components/UI/Input'
 import Badge from '@/components/UI/Badge'
 import EmptyState from '@/components/UI/EmptyState'
-import Modal from '@/components/UI/Modal'
 import ConfirmDialog from '@/components/UI/ConfirmDialog'
 import InputDialog from '@/components/UI/InputDialog'
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/UI/Select'
 import { showAlert } from '@/utils/notification'
 import {
   getStorageInfo,
@@ -499,8 +497,8 @@ const Storage = () => {
                       {storageInfo.supported.map((kind) => (
                         <Button
                           key={kind}
-                          variant={storageInfo.storageKind === kind ? "default" : "outline"}
-                          size="sm"
+                          type={storageInfo.storageKind === kind ? "primary" : "default"}
+                          size="small"
                           onClick={() => handleSwitchStorageType(kind)}
                           disabled={storageInfo.storageKind === kind || loading}
                           className="text-xs h-6 px-2"
@@ -521,10 +519,11 @@ const Storage = () => {
           <Card className="lg:col-span-1 max-h-[77vh] h-[77vh]">
             <div className="border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
               <h2 className="font-semibold text-slate-900 dark:text-slate-100">存储桶列表</h2>
-              <Button 
-                size="sm"
-                onClick={() => setShowCreateBucket(true)} 
-                leftIcon={<Plus className="w-4 h-4" />}
+              <Button
+                size="small"
+                type="primary"
+                onClick={() => setShowCreateBucket(true)}
+                icon={<Plus className="w-4 h-4" />}
               >
                 新建
               </Button>
@@ -569,16 +568,15 @@ const Storage = () => {
                           </span>
                         </div>
                         <Button
-                          variant="ghost"
-                          size="sm"
+                          type="text"
+                          size="small"
+                          danger
                           onClick={(e: React.MouseEvent) => {
                             e.stopPropagation()
                             handleDeleteBucket(bucket)
                           }}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                          icon={<Trash2 className="w-4 h-4" />}
+                        />
                       </div>
                     </motion.div>
                   ))}
@@ -603,11 +601,11 @@ const Storage = () => {
                 <div className="p-4 border-b border-slate-200 dark:border-slate-700 space-y-4 flex-shrink-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     {currentPrefix && (
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
+                      <Button
+                        type="text"
+                        size="small"
                         onClick={handleGoBack}
-                        leftIcon={<ChevronRight className="w-4 h-4 rotate-180" />}
+                        icon={<ChevronRight className="w-4 h-4 rotate-180" />}
                       >
                         返回
                       </Button>
@@ -620,10 +618,9 @@ const Storage = () => {
                         onKeyPress={(e: React.KeyboardEvent) => e.key === 'Enter' && handleSearch()}
                         className="flex-1"
                       />
-                      <Button 
-                        onClick={handleSearch} 
-                        size="sm"
-                        leftIcon={<Search className="w-4 h-4" />}
+                      <Button
+                        onClick={handleSearch}
+                        icon={<Search className="w-4 h-4" />}
                       >
                         <span className="hidden sm:inline">搜索</span>
                       </Button>
@@ -638,11 +635,10 @@ const Storage = () => {
                           onChange={handleUploadFile}
                           disabled={Object.keys(uploadProgress).length > 0}
                         />
-                        <Button 
-                          disabled={Object.keys(uploadProgress).length > 0} 
-                          type="button"
+                        <Button
+                          disabled={Object.keys(uploadProgress).length > 0}
                           onClick={() => document.getElementById('file-upload')?.click()}
-                          leftIcon={Object.keys(uploadProgress).length > 0 ? (
+                          icon={Object.keys(uploadProgress).length > 0 ? (
                             <RefreshCw className="w-4 h-4 animate-spin" />
                           ) : (
                             <Upload className="w-4 h-4" />
@@ -682,26 +678,26 @@ const Storage = () => {
                       </div>
                     </div>
                     <Button
-                      variant="ghost"
-                      size="sm"
+                      type="text"
+                      size="small"
                       onClick={() => fetchFiles(selectedBucket, currentPrefix)}
-                      leftIcon={<RefreshCw className="w-4 h-4" />}
+                      icon={<RefreshCw className="w-4 h-4" />}
                     >
                       <span className="hidden sm:inline">刷新</span>
                     </Button>
                     <div className="flex items-center gap-1 border border-slate-200 dark:border-slate-700 rounded-lg p-1">
                       <Button
-                        variant={viewMode === 'list' ? 'default' : 'ghost'}
-                        size="sm"
+                        type={viewMode === 'list' ? 'primary' : 'text'}
+                        size="small"
                         onClick={() => setViewMode('list')}
-                        leftIcon={<List className="w-4 h-4" />}
+                        icon={<List className="w-4 h-4" />}
                         className="h-8"
                       />
                       <Button
-                        variant={viewMode === 'grid' ? 'default' : 'ghost'}
-                        size="sm"
+                        type={viewMode === 'grid' ? 'primary' : 'text'}
+                        size="small"
                         onClick={() => setViewMode('grid')}
-                        leftIcon={<Grid3x3 className="w-4 h-4" />}
+                        icon={<Grid3x3 className="w-4 h-4" />}
                         className="h-8"
                       />
                     </div>
@@ -792,51 +788,52 @@ const Storage = () => {
                               </div>
                               <div className="flex items-center gap-2 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
                                 <Button
-                                  variant="ghost"
-                                  size="sm"
+                                  type="text"
+                                  size="small"
                                   onClick={() => handleViewFileDetail(file)}
                                   title="查看详情"
-                                  leftIcon={<Eye className="w-4 h-4" />}
+                                  icon={<Eye className="w-4 h-4" />}
                                 />
                                 {file.publicURL && (
                                   <Button
-                                    variant="ghost"
-                                    size="sm"
+                                    type="text"
+                                    size="small"
                                     onClick={() => window.open(file.publicURL, '_blank')}
                                     title="在新窗口打开"
-                                    leftIcon={<ExternalLink className="w-4 h-4" />}
+                                    icon={<ExternalLink className="w-4 h-4" />}
                                   />
                                 )}
                                 {isImageFile(file) && (
                                   <Button
-                                    variant="ghost"
-                                    size="sm"
+                                    type="text"
+                                    size="small"
                                     onClick={() => handleOpenImageProcess(file)}
                                     title="图片操作"
-                                    leftIcon={<ImageIcon className="w-4 h-4" />}
+                                    icon={<ImageIcon className="w-4 h-4" />}
                                   />
                                 )}
                                 <Button
-                                  variant="ghost"
-                                  size="sm"
+                                  type="text"
+                                  size="small"
                                   onClick={() => handleCopyFile(file.key)}
                                   title="复制"
-                                  leftIcon={<Copy className="w-4 h-4" />}
+                                  icon={<Copy className="w-4 h-4" />}
                                 />
                                 <Button
-                                  variant="ghost"
-                                  size="sm"
+                                  type="text"
+                                  size="small"
                                   onClick={() => handleMoveFile(file.key)}
                                   title="移动"
-                                  leftIcon={<Move className="w-4 h-4" />}
+                                  icon={<Move className="w-4 h-4" />}
                                 />
                                 <Button
-                                  variant="ghost"
-                                  size="sm"
+                                  type="text"
+                                  size="small"
+                                  danger
                                   onClick={() => handleDeleteFile(file.key)}
                                   className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
                                   title="删除"
-                                  leftIcon={<Trash2 className="w-4 h-4" />}
+                                  icon={<Trash2 className="w-4 h-4" />}
                                 />
                               </div>
                               </motion.div>
@@ -901,35 +898,36 @@ const Storage = () => {
                               </div>
                               <div className="flex items-center justify-center gap-1 flex-wrap" onClick={(e) => e.stopPropagation()}>
                                 <Button
-                                  variant="ghost"
-                                  size="sm"
+                                  type="text"
+                                  size="small"
                                   onClick={() => handleViewFileDetail(file)}
                                   title="查看详情"
-                                  leftIcon={<Eye className="w-3 h-3" />}
+                                  icon={<Eye className="w-3 h-3" />}
                                 />
                                 {isImageFile(file) && (
                                   <Button
-                                    variant="ghost"
-                                    size="sm"
+                                    type="text"
+                                    size="small"
                                     onClick={() => handleOpenImageProcess(file)}
                                     title="图片操作"
-                                    leftIcon={<ImageIcon className="w-3 h-3" />}
+                                    icon={<ImageIcon className="w-3 h-3" />}
                                   />
                                 )}
                                 <Button
-                                  variant="ghost"
-                                  size="sm"
+                                  type="text"
+                                  size="small"
                                   onClick={() => handleCopyFile(file.key)}
                                   title="复制"
-                                  leftIcon={<Copy className="w-3 h-3" />}
+                                  icon={<Copy className="w-3 h-3" />}
                                 />
                                 <Button
-                                  variant="ghost"
-                                  size="sm"
+                                  type="text"
+                                  size="small"
+                                  danger
                                   onClick={() => handleDeleteFile(file.key)}
                                   className="text-red-600 hover:text-red-700"
                                   title="删除"
-                                  leftIcon={<Trash2 className="w-3 h-3" />}
+                                  icon={<Trash2 className="w-3 h-3" />}
                                 />
                               </div>
                               </motion.div>
@@ -946,8 +944,8 @@ const Storage = () => {
                           </div>
                           <div className="flex items-center gap-2">
                             <Button
-                              variant="outline"
-                              size="sm"
+                              type="default"
+                              size="small"
                               onClick={() => handlePageChange(currentPage - 1)}
                               disabled={currentPage === 1}
                             >
@@ -968,8 +966,8 @@ const Storage = () => {
                                 return (
                                   <Button
                                     key={pageNum}
-                                    variant={currentPage === pageNum ? 'default' : 'outline'}
-                                    size="sm"
+                                    type={currentPage === pageNum ? 'primary' : 'default'}
+                                    size="small"
                                     onClick={() => handlePageChange(pageNum)}
                                     className="min-w-[2.5rem]"
                                   >
@@ -979,8 +977,8 @@ const Storage = () => {
                               })}
                             </div>
                             <Button
-                              variant="outline"
-                              size="sm"
+                              type="default"
+                              size="small"
                               onClick={() => handlePageChange(currentPage + 1)}
                               disabled={currentPage === totalPages}
                             >
@@ -994,10 +992,10 @@ const Storage = () => {
                       {isTruncated && (
                         <div className="text-center pt-4">
                           <Button
-                            variant="outline"
+                            type="default"
                             onClick={() => fetchFiles(selectedBucket, currentPrefix, marker)}
                             disabled={loading}
-                            leftIcon={loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : undefined}
+                            icon={loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : undefined}
                           >
                             {loading ? '加载中...' : '加载更多'}
                           </Button>
@@ -1013,9 +1011,11 @@ const Storage = () => {
 
         {/* 创建存储桶对话框 */}
         <Modal
-          isOpen={showCreateBucket}
-          onClose={() => setShowCreateBucket(false)}
+          open={showCreateBucket}
+          onCancel={() => setShowCreateBucket(false)}
           title="创建存储桶"
+          width={600}
+          footer={null}
         >
           <div className="space-y-4">
             <div>
@@ -1032,25 +1032,19 @@ const Storage = () => {
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 区域 (Region)
               </label>
-              <Select value={newBucketRegion} onValueChange={setNewBucketRegion}>
-                <SelectTrigger>
-                  <SelectValue placeholder="选择区域" />
-                </SelectTrigger>
-                <SelectContent>
-                  {REGIONS.map((region) => (
-                    <SelectItem key={region.value} value={region.value}>
-                      {region.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Select
+                value={newBucketRegion}
+                onChange={setNewBucketRegion}
+                placeholder="选择区域"
+                options={REGIONS.map(region => ({ label: region.label, value: region.value }))}
+              />
             </div>
           </div>
           <div className="flex justify-end gap-2 mt-6">
-            <Button variant="outline" onClick={() => setShowCreateBucket(false)}>
+            <Button type="default" onClick={() => setShowCreateBucket(false)}>
               取消
             </Button>
-            <Button onClick={handleCreateBucket} disabled={loading}>
+            <Button type="primary" onClick={handleCreateBucket} disabled={loading}>
               {loading ? '创建中...' : '创建'}
             </Button>
           </div>
@@ -1058,10 +1052,11 @@ const Storage = () => {
 
         {/* 文件详情对话框 */}
         <Modal
-          isOpen={showFileDetail}
-          onClose={() => setShowFileDetail(false)}
+          open={showFileDetail}
+          onCancel={() => setShowFileDetail(false)}
           title="文件详情"
-          size="xl"
+          width={900}
+          footer={null}
         >
           {selectedFile && (
             <div className="space-y-4">
@@ -1114,9 +1109,9 @@ const Storage = () => {
                     ) : (
                       <div className="text-center py-8">
                         <p className="text-slate-500 dark:text-slate-400 mb-4">不支持预览此文件类型</p>
-                        <Button 
+                        <Button
                           onClick={() => window.open(previewUrl, '_blank')}
-                          leftIcon={<ExternalLink className="w-4 h-4" />}
+                          icon={<ExternalLink className="w-4 h-4" />}
                         >
                           在新窗口打开
                         </Button>
@@ -1526,52 +1521,49 @@ const ImageEditor = ({ file, bucketName, onSave, onClose }: ImageEditorProps) =>
       rotate: () => (
         <div>
           <label className="block text-sm font-medium mb-2">旋转角度</label>
-          <Select value={operationParams.angle?.toString() || '90'} onValueChange={(v) => setOperationParams({ ...operationParams, angle: parseInt(v) })}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="90">90度</SelectItem>
-              <SelectItem value="180">180度</SelectItem>
-              <SelectItem value="270">270度</SelectItem>
-            </SelectContent>
-          </Select>
+          <Select
+            value={operationParams.angle?.toString() || '90'}
+            onChange={(v) => setOperationParams({ ...operationParams, angle: parseInt(v) })}
+            options={[
+              { label: '90度', value: '90' },
+              { label: '180度', value: '180' },
+              { label: '270度', value: '270' }
+            ]}
+          />
         </div>
       ),
       flip: () => (
         <div>
           <label className="block text-sm font-medium mb-2">翻转方向</label>
-          <Select value={operationParams.direction || 'horizontal'} onValueChange={(v) => setOperationParams({ ...operationParams, direction: v })}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="horizontal">水平翻转</SelectItem>
-              <SelectItem value="vertical">垂直翻转</SelectItem>
-            </SelectContent>
-          </Select>
+          <Select
+            value={operationParams.direction || 'horizontal'}
+            onChange={(v) => setOperationParams({ ...operationParams, direction: v })}
+            options={[
+              { label: '水平翻转', value: 'horizontal' },
+              { label: '垂直翻转', value: 'vertical' }
+            ]}
+          />
         </div>
       ),
       filter: () => (
         <div>
           <label className="block text-sm font-medium mb-2">滤镜类型</label>
-          <Select value={operationParams.filterType || 'grayscale'} onValueChange={(v) => setOperationParams({ ...operationParams, filterType: v })}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="grayscale">灰度</SelectItem>
-              <SelectItem value="sepia">怀旧</SelectItem>
-              <SelectItem value="invert">反色</SelectItem>
-              <SelectItem value="blur">模糊</SelectItem>
-              <SelectItem value="sharpen">锐化</SelectItem>
-              <SelectItem value="emboss">浮雕</SelectItem>
-              <SelectItem value="edge">边缘检测</SelectItem>
-              <SelectItem value="vintage">复古</SelectItem>
-              <SelectItem value="cool">冷色调</SelectItem>
-              <SelectItem value="warm">暖色调</SelectItem>
-            </SelectContent>
-          </Select>
+          <Select
+            value={operationParams.filterType || 'grayscale'}
+            onChange={(v) => setOperationParams({ ...operationParams, filterType: v })}
+            options={[
+              { label: '灰度', value: 'grayscale' },
+              { label: '怀旧', value: 'sepia' },
+              { label: '反色', value: 'invert' },
+              { label: '模糊', value: 'blur' },
+              { label: '锐化', value: 'sharpen' },
+              { label: '浮雕', value: 'emboss' },
+              { label: '边缘检测', value: 'edge' },
+              { label: '复古', value: 'vintage' },
+              { label: '冷色调', value: 'cool' },
+              { label: '暖色调', value: 'warm' }
+            ]}
+          />
         </div>
       ),
       adjust: () => (
@@ -1617,18 +1609,17 @@ const ImageEditor = ({ file, bucketName, onSave, onClose }: ImageEditorProps) =>
           </div>
           <div>
             <label className="block text-sm font-medium mb-2">位置</label>
-            <Select value={operationParams.position || 'bottom-right'} onValueChange={(v) => setOperationParams({ ...operationParams, position: v })}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="top-left">左上</SelectItem>
-                <SelectItem value="top-right">右上</SelectItem>
-                <SelectItem value="bottom-left">左下</SelectItem>
-                <SelectItem value="bottom-right">右下</SelectItem>
-                <SelectItem value="center">居中</SelectItem>
-              </SelectContent>
-            </Select>
+            <Select
+              value={operationParams.position || 'bottom-right'}
+              onChange={(v) => setOperationParams({ ...operationParams, position: v })}
+              options={[
+                { label: '左上', value: 'top-left' },
+                { label: '右上', value: 'top-right' },
+                { label: '左下', value: 'bottom-left' },
+                { label: '右下', value: 'bottom-right' },
+                { label: '居中', value: 'center' }
+              ]}
+            />
           </div>
         </div>
       ),
@@ -1673,7 +1664,7 @@ const ImageEditor = ({ file, bucketName, onSave, onClose }: ImageEditorProps) =>
         {/* 头部 */}
         <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
           <h2 className="text-lg font-semibold">图片编辑器 - {file.key.split('/').pop()}</h2>
-          <Button variant="ghost" size="sm" onClick={onClose}>
+          <Button type="text" size="small" onClick={onClose}>
             ✕
           </Button>
         </div>
@@ -1684,8 +1675,8 @@ const ImageEditor = ({ file, bucketName, onSave, onClose }: ImageEditorProps) =>
           <div className="w-64 border-r border-slate-200 dark:border-slate-700 p-4 overflow-y-auto">
             <div className="space-y-2 mb-4">
               <Button
-                variant={currentOperation === 'crop' ? 'default' : 'outline'}
-                size="sm"
+                type={currentOperation === 'crop' ? 'primary' : 'default'}
+                size="small"
                 className="w-full justify-start"
                 onClick={() => {
                   setCurrentOperation('crop')
@@ -1695,64 +1686,64 @@ const ImageEditor = ({ file, bucketName, onSave, onClose }: ImageEditorProps) =>
                 裁剪
               </Button>
               <Button
-                variant={currentOperation === 'compress' ? 'default' : 'outline'}
-                size="sm"
+                type={currentOperation === 'compress' ? 'primary' : 'default'}
+                size="small"
                 className="w-full justify-start"
                 onClick={() => setCurrentOperation('compress')}
               >
                 压缩质量
               </Button>
               <Button
-                variant={currentOperation === 'rotate' ? 'default' : 'outline'}
-                size="sm"
+                type={currentOperation === 'rotate' ? 'primary' : 'default'}
+                size="small"
                 className="w-full justify-start"
                 onClick={() => setCurrentOperation('rotate')}
               >
                 旋转
               </Button>
               <Button
-                variant={currentOperation === 'flip' ? 'default' : 'outline'}
-                size="sm"
+                type={currentOperation === 'flip' ? 'primary' : 'default'}
+                size="small"
                 className="w-full justify-start"
                 onClick={() => setCurrentOperation('flip')}
               >
                 翻转
               </Button>
               <Button
-                variant={currentOperation === 'filter' ? 'default' : 'outline'}
-                size="sm"
+                type={currentOperation === 'filter' ? 'primary' : 'default'}
+                size="small"
                 className="w-full justify-start"
                 onClick={() => setCurrentOperation('filter')}
               >
                 滤镜
               </Button>
               <Button
-                variant={currentOperation === 'adjust' ? 'default' : 'outline'}
-                size="sm"
+                type={currentOperation === 'adjust' ? 'primary' : 'default'}
+                size="small"
                 className="w-full justify-start"
                 onClick={() => setCurrentOperation('adjust')}
               >
                 调整
               </Button>
               <Button
-                variant={currentOperation === 'watermark' ? 'default' : 'outline'}
-                size="sm"
+                type={currentOperation === 'watermark' ? 'primary' : 'default'}
+                size="small"
                 className="w-full justify-start"
                 onClick={() => setCurrentOperation('watermark')}
               >
                 水印
               </Button>
               <Button
-                variant={currentOperation === 'border' ? 'default' : 'outline'}
-                size="sm"
+                type={currentOperation === 'border' ? 'primary' : 'default'}
+                size="small"
                 className="w-full justify-start"
                 onClick={() => setCurrentOperation('border')}
               >
                 边框
               </Button>
               <Button
-                variant={currentOperation === 'roundCorners' ? 'default' : 'outline'}
-                size="sm"
+                type={currentOperation === 'roundCorners' ? 'primary' : 'default'}
+                size="small"
                 className="w-full justify-start"
                 onClick={() => setCurrentOperation('roundCorners')}
               >
@@ -1765,6 +1756,7 @@ const ImageEditor = ({ file, bucketName, onSave, onClose }: ImageEditorProps) =>
               <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
                 {renderOperationPanel()}
                 <Button
+                  type="primary"
                   className="w-full mt-4"
                   onClick={handleApplyOperation}
                   disabled={loading}
@@ -1786,8 +1778,8 @@ const ImageEditor = ({ file, bucketName, onSave, onClose }: ImageEditorProps) =>
                   ))}
                 </div>
                 <Button
-                  variant="outline"
-                  size="sm"
+                  type="default"
+                  size="small"
                   className="w-full mt-2"
                   onClick={handleUndo}
                 >
@@ -1878,17 +1870,18 @@ const ImageEditor = ({ file, bucketName, onSave, onClose }: ImageEditorProps) =>
             {operations.length > 0 ? `已应用 ${operations.length} 个操作` : '未应用任何操作'}
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={onClose}>
+            <Button type="default" onClick={onClose}>
               取消
             </Button>
             <Button
-              variant="outline"
+              type="default"
               onClick={() => setShowSaveDialog(true)}
               disabled={operations.length === 0}
             >
               另存为
             </Button>
             <Button
+              type="primary"
               onClick={() => handleSave(true)}
               disabled={operations.length === 0}
             >
@@ -1901,9 +1894,11 @@ const ImageEditor = ({ file, bucketName, onSave, onClose }: ImageEditorProps) =>
       {/* 另存为对话框 */}
       {showSaveDialog && (
         <Modal
-          isOpen={showSaveDialog}
-          onClose={() => setShowSaveDialog(false)}
+          open={showSaveDialog}
+          onCancel={() => setShowSaveDialog(false)}
           title="另存为"
+          width={600}
+          footer={null}
         >
           <div className="space-y-4">
             <div>
@@ -1915,10 +1910,10 @@ const ImageEditor = ({ file, bucketName, onSave, onClose }: ImageEditorProps) =>
               />
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowSaveDialog(false)}>
+              <Button type="default" onClick={() => setShowSaveDialog(false)}>
                 取消
               </Button>
-              <Button onClick={async () => {
+              <Button type="primary" onClick={async () => {
                 await handleSave(false)
                 setShowSaveDialog(false)
               }}>

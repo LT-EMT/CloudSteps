@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { History, CheckCircle2, XCircle, AlertTriangle, Search, RefreshCw } from 'lucide-react'
+import { Button, Select } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import Card from '@/components/UI/Card'
-import Button from '@/components/UI/Button'
 import Input from '@/components/UI/Input'
 import Badge from '@/components/UI/Badge'
 import EmptyState from '@/components/UI/EmptyState'
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/UI/Select'
 import { getLoginHistory, type LoginHistory } from '@/services/adminApi'
 import { showAlert } from '@/utils/notification'
 import { cn } from '@/utils/cn'
@@ -77,35 +76,33 @@ const LoginHistoryPage = () => {
                 className="pl-10"
               />
             </div>
-            <Select value={successFilter} onValueChange={setSuccessFilter}>
-              <SelectTrigger className="w-full sm:w-[180px]">
-                <SelectValue placeholder="登录状态">
-                  {successFilter === '' ? '登录状态: 全部' : successFilter === 'true' ? '登录状态: 成功' : '登录状态: 失败'}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">全部</SelectItem>
-                <SelectItem value="true">成功</SelectItem>
-                <SelectItem value="false">失败</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={suspiciousFilter} onValueChange={setSuspiciousFilter}>
-              <SelectTrigger className="w-full sm:w-[180px]">
-                <SelectValue placeholder="可疑登录">
-                  {suspiciousFilter === '' ? '可疑登录: 全部' : suspiciousFilter === 'true' ? '可疑登录: 是' : '可疑登录: 否'}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">全部</SelectItem>
-                <SelectItem value="true">是</SelectItem>
-                <SelectItem value="false">否</SelectItem>
-              </SelectContent>
-            </Select>
+            <Select
+              value={successFilter || undefined}
+              onChange={setSuccessFilter}
+              placeholder="登录状态"
+              className="w-full sm:w-[180px]"
+              options={[
+                { label: '全部', value: '' },
+                { label: '成功', value: 'true' },
+                { label: '失败', value: 'false' }
+              ]}
+            />
+            <Select
+              value={suspiciousFilter || undefined}
+              onChange={setSuspiciousFilter}
+              placeholder="可疑登录"
+              className="w-full sm:w-[180px]"
+              options={[
+                { label: '全部', value: '' },
+                { label: '是', value: 'true' },
+                { label: '否', value: 'false' }
+              ]}
+            />
             <Button
-              variant="outline"
+              type="default"
               onClick={fetchHistory}
               disabled={loading}
-              leftIcon={<RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />}
+              icon={<RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />}
             >
               刷新
             </Button>
@@ -153,7 +150,7 @@ const LoginHistoryPage = () => {
                           ) : (
                             <XCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
                           )}
-                          <Badge variant={history.success ? 'default' : 'destructive'}>
+                          <Badge variant={history.success ? 'default' : 'error'}>
                             {history.success ? '成功' : '失败'}
                           </Badge>
                         </div>
@@ -210,16 +207,16 @@ const LoginHistoryPage = () => {
               </div>
               <div className="flex gap-2">
                 <Button
-                  variant="outline"
-                  size="sm"
+                  type="default"
+                  size="small"
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
                 >
                   上一页
                 </Button>
                 <Button
-                  variant="outline"
-                  size="sm"
+                  type="default"
+                  size="small"
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
                 >

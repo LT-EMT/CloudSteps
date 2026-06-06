@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { 
-  CheckCircle, 
-  Copy, 
+import {
+  CheckCircle,
+  Copy,
   Check,
   ChevronDown,
   ChevronRight,
@@ -19,8 +19,8 @@ import {
   Code,
   GitBranch
 } from 'lucide-react'
+import { Button } from 'antd'
 import Card, { CardContent } from '@/components/UI/Card'
-import Button from '@/components/UI/Button'
 import Badge from '@/components/UI/Badge'
 
 interface DocumentRendererProps {
@@ -130,22 +130,13 @@ const DocumentRenderer = ({ content }: DocumentRendererProps) => {
                 <code>{item.content}</code>
               </pre>
               <Button
-                size="sm"
-                variant="outline"
+                size="small"
+                type="default"
                 className="absolute top-2 right-2 flex items-center gap-1"
                 onClick={() => copyToClipboard(item.content, codeId)}
+                icon={copiedCode === codeId ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
               >
-                {copiedCode === codeId ? (
-                  <>
-                    <Check className="w-3 h-3" />
-                    <span className="text-xs">已复制</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-3 h-3" />
-                    <span className="text-xs">复制</span>
-                  </>
-                )}
+                {copiedCode === codeId ? '已复制' : '复制'}
               </Button>
             </div>
           </div>
@@ -271,8 +262,8 @@ const DocumentRenderer = ({ content }: DocumentRendererProps) => {
                             </code>
                           </pre>
                           <Button
-                            size="sm"
-                            variant="outline"
+                            size="small"
+                            type="default"
                             className="absolute top-2 right-2 flex items-center gap-1"
                             onClick={() => copyToClipboard(
                               typeof item.requestBody === 'string' 
@@ -280,18 +271,9 @@ const DocumentRenderer = ({ content }: DocumentRendererProps) => {
                                 : formatJSON(item.requestBody),
                               `${endpointId}-request`
                             )}
+                            icon={copiedCode === `${endpointId}-request` ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
                           >
-                            {copiedCode === `${endpointId}-request` ? (
-                              <>
-                                <Check className="w-3 h-3" />
-                                <span className="text-xs">已复制</span>
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="w-3 h-3" />
-                                <span className="text-xs">复制</span>
-                              </>
-                            )}
+                            {copiedCode === `${endpointId}-request` ? '已复制' : '复制'}
                           </Button>
                         </div>
                       </div>
@@ -306,25 +288,16 @@ const DocumentRenderer = ({ content }: DocumentRendererProps) => {
                             <code>{formatJSON(item.response)}</code>
                           </pre>
                           <Button
-                            size="sm"
-                            variant="outline"
+                            size="small"
+                            type="default"
                             className="absolute top-2 right-2 flex items-center gap-1"
                             onClick={() => copyToClipboard(
                               formatJSON(item.response),
                               `${endpointId}-response`
                             )}
+                            icon={copiedCode === `${endpointId}-response` ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
                           >
-                            {copiedCode === `${endpointId}-response` ? (
-                              <>
-                                <Check className="w-3 h-3" />
-                                <span className="text-xs">已复制</span>
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="w-3 h-3" />
-                                <span className="text-xs">复制</span>
-                              </>
-                            )}
+                            {copiedCode === `${endpointId}-response` ? '已复制' : '复制'}
                           </Button>
                         </div>
                       </div>

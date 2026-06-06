@@ -1,5 +1,5 @@
 import { LucideIcon } from 'lucide-react'
-import Button from './Button'
+import { Button } from 'antd'
 import { cn } from '@/utils/cn.ts'
 
 // 优化的空状态组件

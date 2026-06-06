@@ -1,12 +1,11 @@
 import { useState, useEffect, useMemo } from 'react'
 import { CheckCheck, Trash2, Search, CheckCircle2, AlertCircle, Info, XCircle, Eye } from 'lucide-react'
+import { Button, Modal } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import Card from '@/components/UI/Card'
-import Button from '@/components/UI/Button'
 import Input from '@/components/UI/Input'
 import ConfirmDialog from '@/components/UI/ConfirmDialog'
 import Badge from '@/components/UI/Badge'
-import Modal from '@/components/UI/Modal'
 import DataTable from '@/components/Data/DataTable'
 import { cn } from '@/utils/cn'
 import { getNotifications, markAllNotificationsRead, deleteNotification, Notification } from '@/services/adminApi'
@@ -195,9 +194,9 @@ const Notifications = () => {
       render: (_: any, record: Notification) => (
         <div className="flex items-center gap-2">
           <Button
-            variant="ghost"
-            size="sm"
-            leftIcon={<Eye className="w-4 h-4" />}
+            type="text"
+            size="small"
+            icon={<Eye className="w-4 h-4" />}
             onClick={(e) => {
               e.stopPropagation()
               handleRowClick(record)
@@ -206,10 +205,10 @@ const Notifications = () => {
             详情
           </Button>
           <Button
-            variant="ghost"
-            size="sm"
-            leftIcon={<Trash2 className="w-4 h-4" />}
-            className="text-red-600 hover:text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20"
+            type="text"
+            size="small"
+            danger
+            icon={<Trash2 className="w-4 h-4" />}
             onClick={(e) => {
               e.stopPropagation()
               handleDelete(record.id)
@@ -230,9 +229,9 @@ const Notifications = () => {
       description={`您有 ${unreadCount} 条未读消息`}
       actions={
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            leftIcon={<CheckCheck className="w-4 h-4" />}
+          <Button
+            type="default"
+            icon={<CheckCheck className="w-4 h-4" />}
             onClick={handleMarkAllRead}
           >
             <span>全部已读</span>
@@ -258,8 +257,8 @@ const Notifications = () => {
             </div>
             <div className="flex gap-2">
               <Button
-                variant={filter === 'all' ? 'primary' : 'outline'}
-                size="sm"
+                type={filter === 'all' ? 'primary' : 'default'}
+                size="small"
                 onClick={() => {
                   setFilter('all')
                   setCurrentPage(1)
@@ -268,8 +267,8 @@ const Notifications = () => {
                 <span>全部</span>
               </Button>
               <Button
-                variant={filter === 'unread' ? 'primary' : 'outline'}
-                size="sm"
+                type={filter === 'unread' ? 'primary' : 'default'}
+                size="small"
                 onClick={() => {
                   setFilter('unread')
                   setCurrentPage(1)
@@ -278,8 +277,8 @@ const Notifications = () => {
                 <span>未读</span>
               </Button>
               <Button
-                variant={filter === 'read' ? 'primary' : 'outline'}
-                size="sm"
+                type={filter === 'read' ? 'primary' : 'default'}
+                size="small"
                 onClick={() => {
                   setFilter('read')
                   setCurrentPage(1)
@@ -312,8 +311,8 @@ const Notifications = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Button
-                  variant="outline"
-                  size="sm"
+                  type="default"
+                  size="small"
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
                 >
@@ -327,8 +326,8 @@ const Notifications = () => {
                       return (
                         <Button
                           key={page}
-                          variant={currentPage === page ? 'primary' : 'outline'}
-                          size="sm"
+                          type={currentPage === page ? 'primary' : 'default'}
+                          size="small"
                           onClick={() => setCurrentPage(page)}
                           className="w-8 h-8 p-0"
                         >
@@ -343,8 +342,8 @@ const Notifications = () => {
                       return (
                         <Button
                           key={page}
-                          variant={currentPage === page ? 'primary' : 'outline'}
-                          size="sm"
+                          type={currentPage === page ? 'primary' : 'default'}
+                          size="small"
                           onClick={() => setCurrentPage(page)}
                           className="w-8 h-8 p-0"
                         >
@@ -356,8 +355,8 @@ const Notifications = () => {
                   })}
                 </div>
                 <Button
-                  variant="outline"
-                  size="sm"
+                  type="default"
+                  size="small"
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(total / pageSize)))}
                   disabled={currentPage >= Math.ceil(total / pageSize)}
                 >
@@ -371,13 +370,14 @@ const Notifications = () => {
 
       {/* 详情模态框 */}
       <Modal
-        isOpen={showDetailModal}
-        onClose={() => {
+        open={showDetailModal}
+        onCancel={() => {
           setShowDetailModal(false)
           setSelectedNotification(null)
         }}
         title="通知详情"
-        size="lg"
+        width={800}
+        footer={null}
       >
         {selectedNotification && (
           <div className="space-y-4">

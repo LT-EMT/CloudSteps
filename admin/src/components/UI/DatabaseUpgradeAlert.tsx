@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { AlertTriangle, X, ExternalLink } from 'lucide-react'
-import Button from './Button'
+import { Button } from 'antd'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 
 interface DatabaseUpgradeAlertProps {
@@ -83,16 +83,16 @@ const DatabaseUpgradeAlert = ({ shouldShow, className = '' }: DatabaseUpgradeAle
               </a>
               <div className="flex gap-2">
                 <Button
-                  variant="ghost"
-                  size="xs"
+                  type="text"
+                  size="small"
                   onClick={handleNeverShow}
                   className="text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/30"
                 >
                   不再提醒
                 </Button>
                 <Button
-                  variant="outline"
-                  size="xs"
+                  type="default"
+                  size="small"
                   onClick={handleDismiss}
                   className="border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/30"
                 >

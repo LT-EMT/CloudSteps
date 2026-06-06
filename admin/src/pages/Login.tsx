@@ -2,9 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { User, Eye, EyeOff, LogIn, Lock as LockIcon, Shield } from 'lucide-react'
-import Button from '@/components/UI/Button'
+import { Button, Modal } from 'antd'
 import Input from '@/components/UI/Input'
-import Modal from '@/components/UI/Modal'
 import Captcha from '@/components/Auth/Captcha'
 import { useAuthStore } from '@/stores/authStore'
 import { showAlert } from '@/utils/notification'
@@ -219,12 +218,12 @@ const Login = () => {
             )}
 
             <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              fullWidth
+              htmlType="submit"
+              type="primary"
+              size="large"
+              block
               loading={loading}
-              leftIcon={<LogIn className="w-4 h-4" />}
+              icon={<LogIn className="w-4 h-4" />}
               className="mt-6"
             >
               {loading ? '登录中...' : requiresTwoFactor ? '验证并登录' : '登录'}
@@ -235,11 +234,13 @@ const Login = () => {
 
       {/* 验证码弹窗 */}
       <Modal
-        isOpen={showCaptchaModal}
-        onClose={() => setShowCaptchaModal(false)}
+        open={showCaptchaModal}
+        onCancel={() => setShowCaptchaModal(false)}
         title="安全验证"
-        size="md"
-        closeOnOverlayClick={false}
+        width={600}
+        footer={null}
+        closable={false}
+        maskClosable={false}
       >
         <Captcha
           onVerify={handleCaptchaVerify}

@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import AdminSidebar from './AdminSidebar'
 import { Bell, Moon, Sun, Settings } from 'lucide-react'
+import { Button } from 'antd'
 import { useThemeStore } from '@/stores/themeStore'
 import { useSidebar } from '@/contexts/SidebarContext'
-import Button from '../UI/Button'
 
 interface AdminLayoutProps {
   children: ReactNode
@@ -83,10 +83,10 @@ const AdminLayout = ({ children, title, description, actions }: AdminLayoutProps
               <div className="flex items-center gap-2">
                 {/* 通知按钮 */}
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  type="text"
+                  size="small"
                   className="relative"
-                  leftIcon={<Bell className="w-4 h-4" />}
+                  icon={<Bell className="w-4 h-4" />}
                   onClick={() => navigate('/notifications')}
                 >
                   <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
@@ -94,17 +94,17 @@ const AdminLayout = ({ children, title, description, actions }: AdminLayoutProps
 
                 {/* 主题切换 */}
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  type="text"
+                  size="small"
                   onClick={toggleMode}
-                  leftIcon={isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                  icon={isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                 />
 
                 {/* 设置按钮 */}
                 <Button
-                  variant="ghost"
-                  size="sm"
-                  leftIcon={<Settings className="w-4 h-4" />}
+                  type="text"
+                  size="small"
+                  icon={<Settings className="w-4 h-4" />}
                   onClick={() => navigate('/settings')}
                 />
 

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
-import Button from './Button'
+import { Button, Modal } from 'antd'
 import Input from './Input'
-import Modal from './Modal'
 
 interface InputDialogProps {
   isOpen: boolean
@@ -59,16 +58,15 @@ const InputDialog = ({
 
   return (
     <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      size="sm"
-      closeOnOverlayClick={!loading}
-      closeOnEscape={!loading}
+      open={isOpen}
+      onCancel={onClose}
+      title={title}
+      width={500}
+      footer={null}
+      closable={!loading}
+      maskClosable={!loading}
     >
-      <div className="p-6">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
-          {title}
-        </h3>
+      <div className="p-2">
         <div className="mb-6">
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
             {label}
@@ -91,13 +89,13 @@ const InputDialog = ({
         </div>
         <div className="flex items-center justify-end gap-3">
           <Button
-            variant="outline"
             onClick={onClose}
             disabled={loading}
           >
             {cancelText}
           </Button>
           <Button
+            type="primary"
             onClick={handleConfirm}
             loading={loading}
           >

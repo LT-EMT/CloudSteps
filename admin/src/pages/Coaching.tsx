@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Calendar, Plus, RefreshCw, Trash2, Save } from 'lucide-react'
+import { Button } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import Card from '@/components/UI/Card'
-import Button from '@/components/UI/Button'
 import Input from '@/components/UI/Input'
 import { showAlert } from '@/utils/notification'
 import { get, post, put, del } from '@/utils/request'
@@ -412,13 +412,13 @@ export default function Coaching() {
                 <label className="text-xs text-slate-500 block mb-1">剩余时间（小时）</label>
                 <Input value={qMin} onChange={(e) => setQMin(e.target.value)} type="number" min={0} />
               </div>
-              <Button leftIcon={<Save className="w-4 h-4" />} onClick={() => void saveQuota()}>
+              <Button icon={<Save className="w-4 h-4" />} onClick={() => void saveQuota()}>
                 保存额度
               </Button>
             </div>
 
             <div className="flex justify-end">
-              <Button variant="outline" leftIcon={<RefreshCw className="w-4 h-4" />} onClick={() => void loadQuotas()}>
+              <Button type="default" icon={<RefreshCw className="w-4 h-4" />} onClick={() => void loadQuotas()}>
                 刷新
               </Button>
             </div>
@@ -478,7 +478,7 @@ export default function Coaching() {
                   ))}
                 </select>
               </div>
-              <Button variant="outline" leftIcon={<RefreshCw className="w-4 h-4" />} onClick={() => void loadUsage()}>
+              <Button type="default" icon={<RefreshCw className="w-4 h-4" />} onClick={() => void loadUsage()}>
                 刷新列表
               </Button>
             </div>
@@ -498,7 +498,7 @@ export default function Coaching() {
                   <label className="text-xs text-slate-500 block mb-1">已用 used（小时）</label>
                   <Input value={usageUsed} onChange={(e) => setUsageUsed(e.target.value)} type="number" min={0} />
                 </div>
-                <Button leftIcon={<Save className="w-4 h-4" />} onClick={() => void saveUsagePeriod()}>
+                <Button icon={<Save className="w-4 h-4" />} onClick={() => void saveUsagePeriod()}>
                   保存该月
                 </Button>
               </div>
@@ -559,8 +559,8 @@ export default function Coaching() {
                 />
               </div>
               <Button
-                variant="outline"
-                leftIcon={<RefreshCw className="w-4 h-4" />}
+                type="default"
+                icon={<RefreshCw className="w-4 h-4" />}
                 onClick={() => {
                   setAuditPage(1)
                   setAuditQueryNonce((n) => n + 1)
@@ -622,14 +622,14 @@ export default function Coaching() {
               </span>
               <div className="flex gap-2">
                 <Button
-                  variant="outline"
+                  type="default"
                   disabled={auditPage <= 1 || auditLoading}
                   onClick={() => setAuditPage((p) => Math.max(1, p - 1))}
                 >
                   上一页
                 </Button>
                 <Button
-                  variant="outline"
+                  type="default"
                   disabled={auditPage * auditPageSize >= auditTotal || auditLoading}
                   onClick={() => setAuditPage((p) => p + 1)}
                 >
@@ -651,7 +651,7 @@ export default function Coaching() {
                 <label className="text-xs text-slate-500 block mb-1">to</label>
                 <Input type="date" value={range.to} onChange={(e) => setRange((r) => ({ ...r, to: e.target.value }))} />
               </div>
-              <Button variant="outline" leftIcon={<RefreshCw className="w-4 h-4" />} onClick={() => void loadAppts()}>
+              <Button type="default" icon={<RefreshCw className="w-4 h-4" />} onClick={() => void loadAppts()}>
                 刷新列表
               </Button>
             </div>
@@ -704,7 +704,7 @@ export default function Coaching() {
                 <Input value={aTitle} onChange={(e) => setATitle(e.target.value)} />
               </div>
               <div className="flex items-end">
-                <Button leftIcon={<Plus className="w-4 h-4" />} onClick={() => void createAppt()}>
+                <Button icon={<Plus className="w-4 h-4" />} onClick={() => void createAppt()}>
                   新建排课
                 </Button>
               </div>

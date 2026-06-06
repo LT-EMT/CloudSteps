@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Save, User, Mail, Phone, MapPin, Calendar, Edit2, Lock } from 'lucide-react'
+import { Button } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import Card from '@/components/UI/Card'
-import Button from '@/components/UI/Button'
 import Input from '@/components/UI/Input'
 import { useAuthStore } from '@/stores/authStore'
 import { getCurrentUser, updateProfile, changePassword, ProfileUpdateRequest, ChangePasswordRequest } from '@/services/adminApi'
@@ -117,15 +117,15 @@ const Profile = () => {
       actions={
         isEditing ? (
           <div className="flex gap-2">
-            <Button variant="outline" onClick={handleCancel} disabled={loading}>
+            <Button type="default" onClick={handleCancel} disabled={loading}>
               取消
             </Button>
-            <Button variant="primary" leftIcon={<Save className="w-4 h-4" />} onClick={handleSave} disabled={loading}>
+            <Button type="primary" icon={<Save className="w-4 h-4" />} onClick={handleSave} disabled={loading}>
               {loading ? '保存中...' : '保存'}
             </Button>
           </div>
         ) : (
-          <Button variant="primary" leftIcon={<Edit2 className="w-4 h-4" />} onClick={() => setIsEditing(true)}>
+          <Button type="primary" icon={<Edit2 className="w-4 h-4" />} onClick={() => setIsEditing(true)}>
             编辑资料
           </Button>
         )
@@ -268,9 +268,9 @@ const Profile = () => {
                   <p className="font-medium text-slate-900 dark:text-white">修改密码</p>
                   <p className="text-sm text-slate-500 dark:text-slate-400">定期更新密码以保护账户安全</p>
                 </div>
-                <Button 
-                  variant="outline" 
-                  size="sm"
+                <Button
+                  type="default"
+                  size="small"
                   onClick={() => setIsChangingPassword(!isChangingPassword)}
                 >
                   {isChangingPassword ? '取消' : '修改'}
@@ -314,11 +314,11 @@ const Profile = () => {
                       placeholder="请再次输入新密码"
                     />
                   </div>
-                  <Button 
-                    variant="primary" 
+                  <Button
+                    type="primary"
                     onClick={handleChangePassword}
                     disabled={loading}
-                    className="w-full"
+                    block
                   >
                     {loading ? '修改中...' : '确认修改'}
                   </Button>

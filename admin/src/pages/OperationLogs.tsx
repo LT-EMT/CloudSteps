@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Search, FileText, Calendar, User, Globe, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react'
+import { Button } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import Card from '@/components/UI/Card'
-import Button from '@/components/UI/Button'
 import Input from '@/components/UI/Input'
 import { getOperationLogs, type OperationLog } from '@/services/adminApi'
 import { showAlert } from '@/utils/notification'
@@ -76,8 +76,8 @@ const OperationLogs = () => {
               />
             </div>
             <div className="flex gap-2 shrink-0">
-              <Button onClick={handleSearch} leftIcon={<Search className="w-4 h-4" />}>搜索</Button>
-              <Button variant="outline" onClick={fetchLogs} leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}>刷新</Button>
+              <Button onClick={handleSearch} icon={<Search className="w-4 h-4" />}>搜索</Button>
+              <Button type="default" onClick={fetchLogs} icon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}>刷新</Button>
             </div>
           </div>
         </Card>
@@ -147,9 +147,9 @@ const OperationLogs = () => {
             <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
               <span className="text-sm text-slate-500">共 {total} 条</span>
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => setPage(p => p - 1)} disabled={page === 1}>上一页</Button>
+                <Button type="default" size="small" onClick={() => setPage(p => p - 1)} disabled={page === 1}>上一页</Button>
                 <span className="text-sm text-slate-500">第 {page} / {totalPages} 页</span>
-                <Button variant="outline" size="sm" onClick={() => setPage(p => p + 1)} disabled={page >= totalPages}>下一页</Button>
+                <Button type="default" size="small" onClick={() => setPage(p => p + 1)} disabled={page >= totalPages}>下一页</Button>
               </div>
             </div>
           )}

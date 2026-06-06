@@ -7,16 +7,13 @@ import {
   Trash2,
   RefreshCw,
 } from 'lucide-react'
+import { Button, Select, Switch, Modal } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import Card from '@/components/UI/Card'
-import Button from '@/components/UI/Button'
 import Input from '@/components/UI/Input'
 import Badge from '@/components/UI/Badge'
 import EmptyState from '@/components/UI/EmptyState'
-import Modal from '@/components/UI/Modal'
 import ConfirmDialog from '@/components/UI/ConfirmDialog'
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/UI/Select'
-import { Switch } from '@/components/UI/Switch'
 import { showAlert } from '@/utils/notification'
 import { get, post, put, del, patch } from '@/utils/request'
 import { getApiBaseURL } from '@/config/apiConfig'
@@ -197,16 +194,15 @@ const ScenarioDialogues = () => {
             </div>
             <div className="flex gap-3">
               <Button
-                variant="outline"
-                size="sm"
+                type="default"
+                size="small"
                 onClick={fetchScenarios}
                 disabled={loading}
+                icon={<RefreshCw size={16} className={loading ? 'animate-spin' : ''} />}
               >
-                <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
                 刷新
               </Button>
-              <Button size="sm" onClick={handleCreate}>
-                <Plus size={16} />
+              <Button type="primary" size="small" onClick={handleCreate} icon={<Plus size={16} />}>
                 新建场景
               </Button>
             </div>
@@ -246,25 +242,24 @@ const ScenarioDialogues = () => {
                         <td className="py-3 px-4">
                           <Switch
                             checked={scenario.enabled}
-                            onCheckedChange={() => handleToggle(scenario)}
+                            onChange={() => handleToggle(scenario)}
                           />
                         </td>
                         <td className="py-3 px-4">
                           <div className="flex gap-2">
                             <Button
-                              variant="ghost"
-                              size="sm"
+                              type="text"
+                              size="small"
                               onClick={() => handleEdit(scenario)}
-                            >
-                              <Edit size={16} />
-                            </Button>
+                              icon={<Edit size={16} />}
+                            />
                             <Button
-                              variant="ghost"
-                              size="sm"
+                              type="text"
+                              size="small"
+                              danger
                               onClick={() => handleDelete(scenario)}
-                            >
-                              <Trash2 size={16} />
-                            </Button>
+                              icon={<Trash2 size={16} />}
+                            />
                           </div>
                         </td>
                       </tr>
@@ -278,10 +273,11 @@ const ScenarioDialogues = () => {
       </div>
 
       <Modal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        open={modalOpen}
+        onCancel={() => setModalOpen(false)}
         title={editingScenario ? '编辑场景' : '新建场景'}
-        size="lg"
+        width={800}
+        footer={null}
       >
         <div className="space-y-4">
           <div>
@@ -326,19 +322,9 @@ const ScenarioDialogues = () => {
             <label className="block text-sm font-medium text-slate-700 mb-1">难度</label>
             <Select
               value={formData.difficulty}
-              onValueChange={(value) => setFormData({ ...formData, difficulty: value })}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {DIFFICULTY_OPTIONS.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onChange={(value) => setFormData({ ...formData, difficulty: value })}
+              options={DIFFICULTY_OPTIONS.map(opt => ({ label: opt.label, value: opt.value }))}
+            />
           </div>
 
           <div>
@@ -376,16 +362,16 @@ const ScenarioDialogues = () => {
           <div className="flex items-center gap-2">
             <Switch
               checked={formData.enabled}
-              onCheckedChange={(checked) => setFormData({ ...formData, enabled: checked })}
+              onChange={(checked) => setFormData({ ...formData, enabled: checked })}
             />
             <label className="text-sm font-medium text-slate-700">启用</label>
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-6 pt-4 border-t">
-          <Button variant="outline" onClick={() => setModalOpen(false)}>
+          <Button type="default" onClick={() => setModalOpen(false)}>
             取消
           </Button>
-          <Button onClick={handleSubmit}>
+          <Button type="primary" onClick={handleSubmit}>
             保存
           </Button>
         </div>

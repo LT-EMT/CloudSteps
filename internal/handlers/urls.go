@@ -43,6 +43,7 @@ func (h *Handlers) Register(engine *gin.Engine) {
 	h.registerNotificationRoutes(r)
 	h.registerCoachingRoutes(r)
 	h.registerScenarioDialogueRoutes(r)
+	h.registerVideoGenerationRoutes(r)
 }
 
 func (h *Handlers) requireAdmin(c *gin.Context) {

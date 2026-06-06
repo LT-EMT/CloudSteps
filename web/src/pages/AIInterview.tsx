@@ -5,7 +5,7 @@ import { useRealtimeVoice } from "@/hooks/useRealtimeVoice";
 import { FaceMesh } from '@mediapipe/face_mesh'
 import { Camera as CameraUtils } from '@mediapipe/camera_utils'
 import { getWebSocketBaseURL } from "@/config/apiConfig";
-import Live2DModel from "@/components/Live2DModel";
+import AIVideoPlayer from "@/components/AIVideoPlayer";
 
 export default function AIInterview() {
   const navigate = useNavigate();
@@ -185,14 +185,14 @@ export default function AIInterview() {
           </div>
         )}
 
-        {/* Live2D 数字人区域 */}
+        {/* AI 视频区域 */}
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E2E8F0]">
           <div className="flex items-center gap-2 mb-2">
             <MessageSquare size={16} className="text-[#66BB6A]" />
-            <span className="text-sm font-medium text-[#718096]">AI 数字人</span>
+            <span className="text-sm font-medium text-[#718096]">AI 视频</span>
           </div>
           <div className="flex justify-center">
-            <Live2DModel width={300} height={300} message={voice.assistantText} audioElement={audioRef.current} />
+            <AIVideoPlayer message={voice.assistantText} />
           </div>
         </div>
 

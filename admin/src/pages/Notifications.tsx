@@ -1,8 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { CheckCheck, Trash2, Search, CheckCircle2, AlertCircle, Info, XCircle, Eye } from 'lucide-react'
-import { Button, Modal, Card } from 'antd'
+import { Button, Modal, Card, Input } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Input from '@/components/UI/Input'
 import ConfirmDialog from '@/components/UI/ConfirmDialog'
 import Badge from '@/components/UI/Badge'
 import DataTable from '@/components/Data/DataTable'
@@ -250,7 +249,7 @@ const Notifications = () => {
                   setSearchQuery(e.target.value)
                   setCurrentPage(1)
                 }}
-                leftIcon={<Search className="w-4 h-4" />}
+                prefix={<Search className="w-4 h-4" />}
                 className="w-full"
               />
             </div>

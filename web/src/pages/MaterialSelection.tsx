@@ -5,7 +5,7 @@ const materials = [
   { id: 1, name: "词汇测试", enabled: true },
   { id: 2, name: "单词练习", enabled: true },
   { id: 3, name: "场景对话", enabled: true },
-  { id: 4, name: "阅读理解", enabled: false },
+  { id: 4, name: "一对一场景聊天", enabled: true },
   { id: 5, name: "完形填空", enabled: false },
   { id: 6, name: "多维听力", enabled: false },
   { id: 7, name: "流利口语", enabled: false },
@@ -24,6 +24,8 @@ export default function MaterialSelection() {
       navigate("/word-training");
     } else if (material.name === "场景对话") {
       navigate("/scenario-dialogues");
+    } else if (material.name === "一对一场景聊天") {
+      navigate("/ai-interview");
     }
   };
 

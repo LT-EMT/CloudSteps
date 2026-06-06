@@ -38,6 +38,7 @@ import StudentTrainingRecords from "@/pages/StudentTrainingRecords";
 import WordBooks from "@/pages/WordBooks";
 import WordBookWords from "@/pages/WordBookWords";
 import LighthouseWords from "@/pages/LighthouseWords";
+import AIInterview from "@/pages/AIInterview";
 
 export const router = createBrowserRouter([
   {
@@ -272,6 +273,14 @@ export const router = createBrowserRouter([
     element: (
       <RequireAuth>
         <CreateAntiForgetting />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/ai-interview",
+    element: (
+      <RequireAuth>
+        <AIInterview />
       </RequireAuth>
     ),
   },

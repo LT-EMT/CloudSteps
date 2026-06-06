@@ -27,6 +27,7 @@ import ProfileEdit from "@/pages/ProfileEdit";
 import About from "@/pages/About";
 import Terms from "@/pages/Terms";
 import Privacy from "@/pages/Privacy";
+import DigitalHuman from "@/pages/DigitalHuman";
 import { RouteErrorBoundary } from "@/components/RouteErrorBoundary";
 import { PublicOnly, RequireAuth, RequireRole } from "@/components/AuthGuard";
 import MyStudents from "@/pages/MyStudents";
@@ -133,6 +134,14 @@ export const router = createBrowserRouter([
     element: (
       <RequireAuth>
         <ScenarioReview />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/digital-human",
+    element: (
+      <RequireAuth>
+        <DigitalHuman />
       </RequireAuth>
     ),
   },

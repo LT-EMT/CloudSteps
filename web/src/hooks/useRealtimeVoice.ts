@@ -13,10 +13,24 @@ interface UseRealtimeVoiceOptions {
   onError?: (message: string) => void
   onConnected?: () => void
   expressionData?: string
+  onLatencyUpdate?: (latency: LatencyMetrics) => void
+}
+
+export interface LatencyMetrics {
+  // 用户说话到 AI 开始回应的延迟
+  userToAILatency?: number
+  // 最近的网络延迟（毫秒）
+  networkLatency?: number
+  // 音频播放延迟
+  audioPlaybackLatency?: number
+  // 总端到端延迟
+  totalLatency?: number
+  // 样本数量（用于计算平均值）
+  sampleCount?: number
 }
 
 export function useRealtimeVoice(options: UseRealtimeVoiceOptions) {
-  const { wsUrl, onUserText, onAssistantText, onError, onConnected, expressionData } = options
+  const { wsUrl, onUserText, onAssistantText, onError, onConnected, expressionData, onLatencyUpdate } = options
   const [status, setStatus] = useState<VoiceStatus>('idle')
   const [userText, setUserText] = useState('')
   const [assistantText, setAssistantText] = useState('')
@@ -33,6 +47,13 @@ export function useRealtimeVoice(options: UseRealtimeVoiceOptions) {
   const playbackSourcesRef = useRef<AudioBufferSourceNode[]>([])
   const lastExpressionDataRef = useRef('')
   const callIdRef = useRef<string>('')
+  
+  // 延迟监测 - 单次轮次延迟
+  const latencyMetricsRef = useRef<LatencyMetrics>({})
+  const turnStartTimeRef = useRef<number>(0)  // 用户开始说话的时间
+  const aiFirstResponseTimeRef = useRef<number>(0)  // AI 首次回应的时间
+  const audioPlayStartTimeRef = useRef<number>(0)  // 音频开始播放的时间
+  const networkLatencySamplesRef = useRef<number[]>([])
 
   const downsample = (input: Float32Array, fromRate: number, toRate: number) => {
     if (fromRate === toRate) return input
@@ -134,6 +155,31 @@ export function useRealtimeVoice(options: UseRealtimeVoiceOptions) {
     }
   }, [sendJSON, stopMic, stopPlayback])
 
+  // 计算和报告延迟指标（单次轮次）
+  const updateLatencyMetrics = useCallback(() => {
+    const metrics: LatencyMetrics = {}
+    
+    // 计算用户→AI 延迟（用户说话到 AI 首次回应）
+    if (turnStartTimeRef.current > 0 && aiFirstResponseTimeRef.current > 0) {
+      metrics.userToAILatency = aiFirstResponseTimeRef.current - turnStartTimeRef.current
+    }
+    
+    // 计算网络延迟（平均值）
+    if (networkLatencySamplesRef.current.length > 0) {
+      const sum = networkLatencySamplesRef.current.reduce((a, b) => a + b, 0)
+      metrics.networkLatency = Math.round(sum / networkLatencySamplesRef.current.length)
+      metrics.sampleCount = networkLatencySamplesRef.current.length
+    }
+    
+    // 计算总端到端延迟（用户说话到音频开始播放）
+    if (turnStartTimeRef.current > 0 && audioPlayStartTimeRef.current > 0) {
+      metrics.totalLatency = audioPlayStartTimeRef.current - turnStartTimeRef.current
+    }
+    
+    latencyMetricsRef.current = metrics
+    onLatencyUpdate?.(metrics)
+  }, [onLatencyUpdate])
+
   const handleText = useCallback((raw: string) => {
     let msg: Record<string, unknown>
     try { msg = JSON.parse(raw) } catch { return }
@@ -153,18 +199,38 @@ export function useRealtimeVoice(options: UseRealtimeVoiceOptions) {
       }
       case 'stt': {
         const text = String(msg.text || '')
+        // 用户开始说话时记录时间（仅第一次）
+        if (text && turnStartTimeRef.current === 0) {
+          // 重置上一轮的延迟数据
+          aiFirstResponseTimeRef.current = 0
+          audioPlayStartTimeRef.current = 0
+          // 记录新轮次的开始时间
+          turnStartTimeRef.current = Date.now()
+        }
         setUserText(text)
         onUserText?.(text)
         break
       }
       case 'llm_response': {
         const text = String(msg.text || '')
+        // AI 首次回应时记录时间（仅第一次）
+        if (text && aiFirstResponseTimeRef.current === 0) {
+          aiFirstResponseTimeRef.current = Date.now()
+          updateLatencyMetrics()
+        }
         setAssistantText(text)
         onAssistantText?.(text)
         break
       }
       case 'tts':
-        if (msg.state === 'start') stopPlayback()
+        if (msg.state === 'start') {
+          stopPlayback()
+          // 音频开始播放时记录时间
+          if (audioPlayStartTimeRef.current === 0) {
+            audioPlayStartTimeRef.current = Date.now()
+            updateLatencyMetrics()
+          }
+        }
         break
       case 'error': {
         const message = String(msg.message || 'unknown error')
@@ -173,7 +239,7 @@ export function useRealtimeVoice(options: UseRealtimeVoiceOptions) {
         break
       }
     }
-  }, [onAssistantText, onConnected, onError, onUserText, sendJSON, stopPlayback])
+  }, [onAssistantText, onConnected, onError, onUserText, sendJSON, stopPlayback, updateLatencyMetrics])
 
   // Send expression data to backend when it changes
   useEffect(() => {
@@ -252,6 +318,9 @@ export function useRealtimeVoice(options: UseRealtimeVoiceOptions) {
       wsRef.current = ws
 
       ws.onopen = () => {
+        // 重置延迟指标（不在这里重置，而是在每次轮次开始时重置）
+        networkLatencySamplesRef.current = []
+        
         sendJSON({
           type: 'hello',
           version: 1,
@@ -263,11 +332,30 @@ export function useRealtimeVoice(options: UseRealtimeVoiceOptions) {
             frame_duration: FRAME_MS,
             bit_depth: 16,
           },
+          timestamp: Date.now(),
         })
       }
       ws.onmessage = (ev) => {
-        if (typeof ev.data === 'string') handleText(ev.data)
-        else if (ev.data instanceof ArrayBuffer) playPCM(new Uint8Array(ev.data))
+        // 测量网络延迟（基于消息接收时间）
+        const receiveTime = Date.now()
+        if (typeof ev.data === 'string') {
+          try {
+            const msg = JSON.parse(ev.data)
+            if (msg.timestamp) {
+              const latency = receiveTime - msg.timestamp
+              networkLatencySamplesRef.current.push(latency)
+              // 保留最近 20 个样本
+              if (networkLatencySamplesRef.current.length > 20) {
+                networkLatencySamplesRef.current.shift()
+              }
+            }
+          } catch {
+            // 忽略解析错误
+          }
+          handleText(ev.data)
+        } else if (ev.data instanceof ArrayBuffer) {
+          playPCM(new Uint8Array(ev.data))
+        }
       }
       ws.onerror = () => {
         setStatus('error')
@@ -303,5 +391,6 @@ export function useRealtimeVoice(options: UseRealtimeVoiceOptions) {
     disconnect,
     interrupt,
     isConnected: status === 'connected',
+    latencyMetrics: latencyMetricsRef.current,
   }
 }

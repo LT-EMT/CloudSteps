@@ -15,89 +15,73 @@ export default function Live2DModel({ modelUrl, width = 300, height = 300, messa
   useEffect(() => {
     if (!containerRef.current) return
 
-    // Add CSS to customize Live2D widget position and hide default dialogue
-    const style = document.createElement('style')
-    style.textContent = `
-      #live2d-widget {
-        position: relative !important;
-        left: auto !important;
-        right: auto !important;
-        bottom: auto !important;
-        top: auto !important;
-        transform: none !important;
-      }
-      .waifu-tips {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-      }
-      .waifu-tool {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-      }
-      .live2d-widget-dialogue {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-      }
-    `
-    document.head.appendChild(style)
-
-    // Configure Live2D widget
-    // @ts-ignore
-    window.live2d_settings = {
-      showHitokoto: false,
-      showF12Status: false,
-      showCopyMessage: false,
-      showWelcomeMessage: false,
-    }
-
-    // Use Live2D widget
+    // Load Live2D library with Cubism runtime included
     const script = document.createElement('script')
-    script.src = 'https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js'
+    script.src = 'https://cdn.jsdelivr.net/npm/pixi.js@7.2.4/dist/pixi.min.js'
     script.async = true
     script.onload = () => {
-      try {
-        setLoading(false)
-        
-        // Move Live2D widget to our container
-        const moveWidget = () => {
-          const widget = document.querySelector('#live2d-widget')
-          if (widget && containerRef.current) {
-            containerRef.current.appendChild(widget)
+      // Load live2d-cubism core
+      const cubismScript = document.createElement('script')
+      cubismScript.src = 'https://cdn.jsdelivr.net/npm/live2d-cubism-core@latest/live2dcubismcore.min.js'
+      cubismScript.async = true
+      cubismScript.onload = () => {
+        // Load pixi-live2d-display
+        const live2dScript = document.createElement('script')
+        live2dScript.src = 'https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.3.1/dist/index.min.js'
+        live2dScript.async = true
+        live2dScript.onload = () => {
+          try {
+            // @ts-ignore
+            const { Application } = window.PIXI
+            // @ts-ignore
+            const { Live2DModel } = window.PIXI
+
+            const app = new Application({
+              view: containerRef.current?.querySelector('canvas') as HTMLCanvasElement,
+              width,
+              height,
+              backgroundAlpha: 0,
+              antialias: true,
+            })
+
+            // Use a public Live2D model
+            const modelUrl = 'https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.3.1/test/assets/shizuku/shizuku.model.json'
+
+            Live2DModel.from(modelUrl).then((model: any) => {
+              if (model) {
+                model.scale.set(width / 2, height / 2)
+                model.position.set(width / 2, height / 2)
+                app.stage.addChild(model)
+              }
+              setLoading(false)
+            }).catch((err: any) => {
+              console.error('Failed to load Live2D model:', err)
+              setError('模型加载失败')
+              setLoading(false)
+            })
+          } catch (err) {
+            console.error('Failed to initialize Live2D:', err)
+            setError('Live2D 初始化失败')
+            setLoading(false)
           }
         }
-        
-        // Try to move immediately
-        moveWidget()
-        
-        // Set up interval to keep trying
-        const interval = setInterval(moveWidget, 100)
-        
-        // Clean up interval on unmount
-        return () => clearInterval(interval)
-      } catch (err) {
-        console.error('Failed to load Live2D:', err)
-        setError('模型加载失败')
-        setLoading(false)
+        document.head.appendChild(live2dScript)
       }
-    }
-    script.onerror = () => {
-      setError('Live2D 库加载失败')
-      setLoading(false)
+      document.head.appendChild(cubismScript)
     }
     document.head.appendChild(script)
 
     return () => {
-      document.head.removeChild(style)
-      document.head.removeChild(script)
+      document.head.querySelectorAll('script[src*="pixi"]').forEach(el => el.remove())
+      document.head.querySelectorAll('script[src*="live2d"]').forEach(el => el.remove())
     }
-  }, [])
+  }, [width, height])
 
   return (
     <div className="relative flex flex-col items-center justify-center" style={{ width, height }}>
-      <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
+      <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
+        <canvas width={width} height={height} />
+      </div>
       
       {/* 对话气泡 */}
       {message && (

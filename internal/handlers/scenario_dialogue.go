@@ -34,6 +34,17 @@ func (h *Handlers) registerScenarioDialogueRoutes(r *gin.RouterGroup) {
 		sd.GET("/voice/ready", h.handleVoiceReady)
 	}
 
+	// Admin scenario management routes
+	admin := r.Group("admin/scenarios")
+	admin.Use(models.AuthRequired, h.requireAdmin)
+	{
+		admin.GET("", h.handleAdminListScenarios)
+		admin.POST("", h.handleAdminCreateScenario)
+		admin.PUT("/:id", h.handleAdminUpdateScenario)
+		admin.DELETE("/:id", h.handleAdminDeleteScenario)
+		admin.PATCH("/:id/toggle", h.handleAdminToggleScenario)
+	}
+
 	// xiaozhi realtime WebSocket (no AuthRequired — validated via device-id)
 	r.GET("/voice/CloudStepsGo/v1/", h.handleScenarioVoiceWS)
 }
@@ -502,4 +513,133 @@ func cleanSpecialChars(s string) string {
 	}
 	
 	return string(result)
+}
+
+// Admin scenario management handlers
+
+func (h *Handlers) handleAdminListScenarios(c *gin.Context) {
+	db := c.MustGet(constants.DbField).(*gorm.DB)
+	var scenarios []models.ScenarioDialogueScenario
+	if err := db.Order("sort_order asc, id asc").Find(&scenarios).Error; err != nil {
+		response.Fail(c, "获取场景列表失败", nil)
+		return
+	}
+	response.Success(c, "ok", scenarios)
+}
+
+type adminCreateScenarioReq struct {
+	Slug        string `json:"slug" binding:"required"`
+	Name        string `json:"name" binding:"required"`
+	Description string `json:"description"`
+	Icon        string `json:"icon"`
+	Difficulty  string `json:"difficulty"`
+	AIRole      string `json:"aiRole"`
+	Prompt      string `json:"prompt"`
+	Enabled     bool   `json:"enabled"`
+	SortOrder   int    `json:"sortOrder"`
+}
+
+func (h *Handlers) handleAdminCreateScenario(c *gin.Context) {
+	db := c.MustGet(constants.DbField).(*gorm.DB)
+	var req adminCreateScenarioReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.Fail(c, "参数错误", nil)
+		return
+	}
+
+	scenario := models.ScenarioDialogueScenario{
+		Slug:        req.Slug,
+		Name:        req.Name,
+		Description: req.Description,
+		Icon:        req.Icon,
+		Difficulty:  req.Difficulty,
+		AIRole:      req.AIRole,
+		Prompt:      req.Prompt,
+		Enabled:     req.Enabled,
+		SortOrder:   req.SortOrder,
+	}
+
+	if err := db.Create(&scenario).Error; err != nil {
+		response.Fail(c, "创建场景失败", nil)
+		return
+	}
+
+	response.Success(c, "创建成功", scenario)
+}
+
+func (h *Handlers) handleAdminUpdateScenario(c *gin.Context) {
+	db := c.MustGet(constants.DbField).(*gorm.DB)
+	id, _ := strconv.Atoi(c.Param("id"))
+	if id == 0 {
+		response.Fail(c, "无效的场景ID", nil)
+		return
+	}
+
+	var req adminCreateScenarioReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.Fail(c, "参数错误", nil)
+		return
+	}
+
+	var scenario models.ScenarioDialogueScenario
+	if err := db.Where("id = ?", id).First(&scenario).Error; err != nil {
+		response.Fail(c, "场景不存在", nil)
+		return
+	}
+
+	scenario.Slug = req.Slug
+	scenario.Name = req.Name
+	scenario.Description = req.Description
+	scenario.Icon = req.Icon
+	scenario.Difficulty = req.Difficulty
+	scenario.AIRole = req.AIRole
+	scenario.Prompt = req.Prompt
+	scenario.Enabled = req.Enabled
+	scenario.SortOrder = req.SortOrder
+
+	if err := db.Save(&scenario).Error; err != nil {
+		response.Fail(c, "更新场景失败", nil)
+		return
+	}
+
+	response.Success(c, "更新成功", scenario)
+}
+
+func (h *Handlers) handleAdminDeleteScenario(c *gin.Context) {
+	db := c.MustGet(constants.DbField).(*gorm.DB)
+	id, _ := strconv.Atoi(c.Param("id"))
+	if id == 0 {
+		response.Fail(c, "无效的场景ID", nil)
+		return
+	}
+
+	if err := db.Delete(&models.ScenarioDialogueScenario{}, id).Error; err != nil {
+		response.Fail(c, "删除场景失败", nil)
+		return
+	}
+
+	response.Success(c, "删除成功", nil)
+}
+
+func (h *Handlers) handleAdminToggleScenario(c *gin.Context) {
+	db := c.MustGet(constants.DbField).(*gorm.DB)
+	id, _ := strconv.Atoi(c.Param("id"))
+	if id == 0 {
+		response.Fail(c, "无效的场景ID", nil)
+		return
+	}
+
+	var scenario models.ScenarioDialogueScenario
+	if err := db.Where("id = ?", id).First(&scenario).Error; err != nil {
+		response.Fail(c, "场景不存在", nil)
+		return
+	}
+
+	scenario.Enabled = !scenario.Enabled
+	if err := db.Save(&scenario).Error; err != nil {
+		response.Fail(c, "更新场景失败", nil)
+		return
+	}
+
+	response.Success(c, "更新成功", scenario)
 }

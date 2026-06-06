@@ -150,6 +150,11 @@ export default function ScenarioHistory() {
                   </span>
                   <span>{session.turnCount}轮对话</span>
                 </div>
+                {session.reviewSummary && (
+                  <div className="mt-2 text-xs text-[#718096] line-clamp-2">
+                    {session.reviewSummary}
+                  </div>
+                )}
               </button>
             ))}
           </div>

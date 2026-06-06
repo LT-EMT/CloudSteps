@@ -27,7 +27,6 @@ import ProfileEdit from "@/pages/ProfileEdit";
 import About from "@/pages/About";
 import Terms from "@/pages/Terms";
 import Privacy from "@/pages/Privacy";
-import DigitalHuman from "@/pages/DigitalHuman";
 import ScenarioSelection from "@/pages/ScenarioSelection";
 import ScenarioHistory from "@/pages/ScenarioHistory";
 import ScenarioDialogue from "@/pages/ScenarioDialogue";
@@ -138,14 +137,6 @@ export const router = createBrowserRouter([
     element: (
       <RequireAuth>
         <ScenarioReview />
-      </RequireAuth>
-    ),
-  },
-  {
-    path: "/digital-human",
-    element: (
-      <RequireAuth>
-        <DigitalHuman />
       </RequireAuth>
     ),
   },

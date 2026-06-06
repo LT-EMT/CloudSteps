@@ -13,9 +13,8 @@ import {
   UserCheck,
   UserX,
 } from 'lucide-react'
-import { Button, Select, Modal, Card } from 'antd'
+import { Button, Select, Modal, Card, Input } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Input from '@/components/UI/Input'
 import Badge from '@/components/UI/Badge'
 import EmptyState from '@/components/UI/EmptyState'
 import ConfirmDialog from '@/components/UI/ConfirmDialog'
@@ -226,7 +225,7 @@ const Users = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full sm:w-64"
-                leftIcon={<Search className="w-4 h-4" />}
+                prefix={<Search className="w-4 h-4" />}
               />
               <Select
                 value={roleFilter || undefined}
@@ -414,29 +413,37 @@ const Users = () => {
           footer={null}
         >
           <div className="space-y-4">
-            <Input
-              label="邮箱 *"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              type="email"
-              required
-            />
-            <Input
-              label="显示名称"
-              value={formData.displayName}
-              onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
-            />
+            <div>
+              <label className="block text-sm font-medium mb-2">邮箱 *</label>
+              <Input
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                type="email"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">显示名称</label>
+              <Input
+                value={formData.displayName}
+                onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
+              />
+            </div>
             <div className="grid grid-cols-2 gap-4">
-              <Input
-                label="名"
-                value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-              />
-              <Input
-                label="姓"
-                value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-              />
+              <div>
+                <label className="block text-sm font-medium mb-2">名</label>
+                <Input
+                  value={formData.firstName}
+                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">姓</label>
+                <Input
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                />
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -448,11 +455,13 @@ const Users = () => {
                   options={ROLES.map(role => ({ label: role.label, value: role.value }))}
                 />
               </div>
-              <Input
-                label="手机号"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              />
+              <div>
+                <label className="block text-sm font-medium mb-2">手机号</label>
+                <Input
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                />
+              </div>
             </div>
               <div className="flex items-center gap-4">
                 <label className="flex items-center gap-2">
@@ -508,29 +517,37 @@ const Users = () => {
         >
           {editingUser && (
             <div className="space-y-4">
-              <Input
-                label="邮箱 *"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                type="email"
-                required
-              />
-              <Input
-                label="显示名称"
-                value={formData.displayName}
-                onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
-              />
+              <div>
+                <label className="block text-sm font-medium mb-2">邮箱 *</label>
+                <Input
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  type="email"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">显示名称</label>
+                <Input
+                  value={formData.displayName}
+                  onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
+                />
+              </div>
               <div className="grid grid-cols-2 gap-4">
-                <Input
-                  label="名"
-                  value={formData.firstName}
-                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                />
-                <Input
-                  label="姓"
-                  value={formData.lastName}
-                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                />
+                <div>
+                  <label className="block text-sm font-medium mb-2">名</label>
+                  <Input
+                    value={formData.firstName}
+                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">姓</label>
+                  <Input
+                    value={formData.lastName}
+                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                  />
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -542,11 +559,13 @@ const Users = () => {
                     options={ROLES.map(role => ({ label: role.label, value: role.value }))}
                   />
                 </div>
-                <Input
-                  label="手机号"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                />
+                <div>
+                  <label className="block text-sm font-medium mb-2">手机号</label>
+                  <Input
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  />
+                </div>
               </div>
               <div className="flex items-center gap-4">
                 <label className="flex items-center gap-2">

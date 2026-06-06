@@ -1,5 +1,5 @@
 // 数字人服务 API 配置
-const DIGITAL_HUMAN_BASE_URL = process.env.VITE_DIGITAL_HUMAN_API_URL || 'http://localhost:8880';
+const DIGITAL_HUMAN_BASE_URL = import.meta.env.VITE_DIGITAL_HUMAN_API_URL || 'http://localhost:8880';
 const API_BASE = `${DIGITAL_HUMAN_BASE_URL}/adh`;
 const SERVER_VERSION = 'v0';
 

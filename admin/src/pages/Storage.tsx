@@ -18,9 +18,8 @@ import {
   List,
   Image as ImageIcon,
 } from 'lucide-react'
-import { Button, Select, Modal, Card } from 'antd'
+import { Button, Select, Modal, Card, Input } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Input from '@/components/UI/Input'
 import Badge from '@/components/UI/Badge'
 import EmptyState from '@/components/UI/EmptyState'
 import ConfirmDialog from '@/components/UI/ConfirmDialog'

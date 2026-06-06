@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Shield, QrCode, Key } from 'lucide-react'
-import { Button, Card } from 'antd'
+import { Button, Card, Input } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Input from '@/components/UI/Input'
 import { getTwoFactorStatus, setupTwoFactor, enableTwoFactor, disableTwoFactor } from '@/services/adminApi'
 import { showAlert } from '@/utils/notification'
 
@@ -160,8 +159,8 @@ const Settings = () => {
                     </p>
                   </div>
                   <div>
+                    <label className="block text-sm font-medium mb-2">验证码</label>
                     <Input
-                      label="验证码"
                       value={twoFactorCode}
                       onChange={(e) => setTwoFactorCode(e.target.value)}
                       placeholder="输入6位验证码"
@@ -205,13 +204,15 @@ const Settings = () => {
                   </p>
                 </div>
                 <div className="space-y-3">
-                  <Input
-                    label="验证码（用于禁用2FA）"
-                    value={twoFactorCode}
-                    onChange={(e) => setTwoFactorCode(e.target.value)}
-                    placeholder="输入6位验证码"
-                    maxLength={6}
-                  />
+                  <div>
+                    <label className="block text-sm font-medium mb-2">验证码（用于禁用2FA）</label>
+                    <Input
+                      value={twoFactorCode}
+                      onChange={(e) => setTwoFactorCode(e.target.value)}
+                      placeholder="输入6位验证码"
+                      maxLength={6}
+                    />
+                  </div>
                   <Button
                     type="primary"
                     danger

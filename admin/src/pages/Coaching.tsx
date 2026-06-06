@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Calendar, Plus, RefreshCw, Trash2, Save } from 'lucide-react'
-import { Button, Card, Input } from 'antd'
+import { Button, Card, Input, Select } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import { showAlert } from '@/utils/notification'
 import { get, post, put, del } from '@/utils/request'
@@ -375,33 +375,23 @@ export default function Coaching() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
               <div>
                 <label className="text-xs text-slate-500 block mb-1">老师</label>
-                <select
-                  className="w-full border rounded-lg px-3 py-2 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700"
-                  value={qTeacher}
-                  onChange={(e) => setQTeacher(e.target.value)}
-                >
-                  <option value="">选择</option>
-                  {teachers.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {userLabel(u)} ({u.role})
-                    </option>
-                  ))}
-                </select>
+                <Select
+                  className="w-full"
+                  value={qTeacher || undefined}
+                  onChange={(value) => setQTeacher(value || '')}
+                  placeholder="选择"
+                  options={[{ label: '选择', value: '' }, ...teachers.map(u => ({ label: `${userLabel(u)} (${u.role})`, value: u.id }))]}
+                />
               </div>
               <div>
                 <label className="text-xs text-slate-500 block mb-1">学员</label>
-                <select
-                  className="w-full border rounded-lg px-3 py-2 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700"
-                  value={qStudent}
-                  onChange={(e) => setQStudent(e.target.value)}
-                >
-                  <option value="">选择</option>
-                  {students.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {userLabel(u)}
-                    </option>
-                  ))}
-                </select>
+                <Select
+                  className="w-full"
+                  value={qStudent || undefined}
+                  onChange={(value) => setQStudent(value || '')}
+                  placeholder="选择"
+                  options={[{ label: '选择', value: '' }, ...students.map(u => ({ label: userLabel(u), value: u.id }))]}
+                />
               </div>
               <div>
                 <label className="text-xs text-slate-500 block mb-1">剩余时间（小时）</label>
@@ -462,18 +452,13 @@ export default function Coaching() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
               <div className="lg:col-span-2">
                 <label className="text-xs text-slate-500 block mb-1">老师</label>
-                <select
-                  className="w-full border rounded-lg px-3 py-2 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700"
-                  value={usageTeacher}
-                  onChange={(e) => setUsageTeacher(e.target.value)}
-                >
-                  <option value="">选择后加载历史周期</option>
-                  {teachers.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {userLabel(u)}
-                    </option>
-                  ))}
-                </select>
+                <Select
+                  className="w-full"
+                  value={usageTeacher || undefined}
+                  onChange={(value) => setUsageTeacher(value || '')}
+                  placeholder="选择后加载历史周期"
+                  options={[{ label: '选择后加载历史周期', value: '' }, ...teachers.map(u => ({ label: userLabel(u), value: u.id }))]}
+                />
               </div>
               <Button type="default" icon={<RefreshCw className="w-4 h-4" />} onClick={() => void loadUsage()}>
                 刷新列表
@@ -660,33 +645,23 @@ export default function Coaching() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 border-t border-slate-100 dark:border-slate-800 pt-6">
               <div>
                 <label className="text-xs text-slate-500 block mb-1">老师</label>
-                <select
-                  className="w-full border rounded-lg px-3 py-2 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700"
-                  value={aTeacher}
-                  onChange={(e) => setATeacher(e.target.value)}
-                >
-                  <option value="">选择</option>
-                  {teachers.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {userLabel(u)}
-                    </option>
-                  ))}
-                </select>
+                <Select
+                  className="w-full"
+                  value={aTeacher || undefined}
+                  onChange={(value) => setATeacher(value || '')}
+                  placeholder="选择"
+                  options={[{ label: '选择', value: '' }, ...teachers.map(u => ({ label: userLabel(u), value: u.id }))]}
+                />
               </div>
               <div>
                 <label className="text-xs text-slate-500 block mb-1">学员</label>
-                <select
-                  className="w-full border rounded-lg px-3 py-2 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700"
-                  value={aStudent}
-                  onChange={(e) => setAStudent(e.target.value)}
-                >
-                  <option value="">选择</option>
-                  {students.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {userLabel(u)}
-                    </option>
-                  ))}
-                </select>
+                <Select
+                  className="w-full"
+                  value={aStudent || undefined}
+                  onChange={(value) => setAStudent(value || '')}
+                  placeholder="选择"
+                  options={[{ label: '选择', value: '' }, ...students.map(u => ({ label: userLabel(u), value: u.id }))]}
+                />
               </div>
               <div>
                 <label className="text-xs text-slate-500 block mb-1">日期</label>
@@ -694,11 +669,11 @@ export default function Coaching() {
               </div>
               <div>
                 <label className="text-xs text-slate-500 block mb-1">开始</label>
-                <Input value={aStart} onChange={(e) => setAStart(e.target.value)} placeholder="09:00" />
+                <Input type="time" value={aStart} onChange={(e) => setAStart(e.target.value)} />
               </div>
               <div>
                 <label className="text-xs text-slate-500 block mb-1">结束</label>
-                <Input value={aEnd} onChange={(e) => setAEnd(e.target.value)} placeholder="10:00" />
+                <Input type="time" value={aEnd} onChange={(e) => setAEnd(e.target.value)} />
               </div>
               <div>
                 <label className="text-xs text-slate-500 block mb-1">标题（可选）</label>

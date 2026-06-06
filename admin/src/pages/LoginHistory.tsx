@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { History, CheckCircle2, XCircle, AlertTriangle, Search, RefreshCw } from 'lucide-react'
-import { Button, Select } from 'antd'
+import { Button, Select, Card } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Card from '@/components/UI/Card'
 import Input from '@/components/UI/Input'
 import Badge from '@/components/UI/Badge'
 import EmptyState from '@/components/UI/EmptyState'
@@ -66,7 +65,7 @@ const LoginHistoryPage = () => {
       <div className="space-y-6">
         {/* 搜索和过滤 */}
         <Card>
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-4 p-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
@@ -111,18 +110,19 @@ const LoginHistoryPage = () => {
 
         {/* 登录历史列表 */}
         <Card>
-          {loading && histories.length === 0 ? (
-            <div className="flex items-center justify-center py-12">
-              <RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" />
-            </div>
-          ) : histories.length === 0 ? (
-            <EmptyState
-              icon={History}
-              title="暂无登录历史"
-              description="还没有登录记录"
-            />
-          ) : (
-            <div className="overflow-x-auto">
+          <div className="p-4">
+            {loading && histories.length === 0 ? (
+              <div className="flex items-center justify-center py-12">
+                <RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" />
+              </div>
+            ) : histories.length === 0 ? (
+              <EmptyState
+                icon={History}
+                title="暂无登录历史"
+                description="还没有登录记录"
+              />
+            ) : (
+              <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-border">
@@ -225,6 +225,7 @@ const LoginHistoryPage = () => {
               </div>
             </div>
           )}
+          </div>
         </Card>
       </div>
     </AdminLayout>

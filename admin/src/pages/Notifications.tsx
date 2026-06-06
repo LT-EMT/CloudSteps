@@ -1,8 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { CheckCheck, Trash2, Search, CheckCircle2, AlertCircle, Info, XCircle, Eye } from 'lucide-react'
-import { Button, Modal } from 'antd'
+import { Button, Modal, Card } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Card from '@/components/UI/Card'
 import Input from '@/components/UI/Input'
 import ConfirmDialog from '@/components/UI/ConfirmDialog'
 import Badge from '@/components/UI/Badge'
@@ -241,8 +240,8 @@ const Notifications = () => {
     >
       <div className="space-y-6">
         {/* 搜索和筛选 */}
-        <Card className="p-4">
-          <div className="flex flex-col sm:flex-row gap-4">
+        <Card>
+          <div className="flex flex-col sm:flex-row gap-4 p-4">
             <div className="flex-1">
               <Input
                 placeholder="搜索消息..."
@@ -291,17 +290,18 @@ const Notifications = () => {
         </Card>
 
         {/* 通知列表表格 */}
-        <Card className="p-6">
-          <DataTable
-            data={notifications}
-            columns={columns}
-            loading={loading}
-            searchable={false}
-            onRowClick={handleRowClick}
-            emptyText="暂无通知"
-            pageSize={pageSize}
-            showPagination={true}
-          />
+        <Card>
+          <div className="p-6">
+            <DataTable
+              data={notifications}
+              columns={columns}
+              loading={loading}
+              searchable={false}
+              onRowClick={handleRowClick}
+              emptyText="暂无通知"
+              pageSize={pageSize}
+              showPagination={true}
+            />
           {/* 自定义分页 */}
           {total > pageSize && (
             <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
@@ -365,6 +365,7 @@ const Notifications = () => {
               </div>
             </div>
           )}
+          </div>
         </Card>
       </div>
 

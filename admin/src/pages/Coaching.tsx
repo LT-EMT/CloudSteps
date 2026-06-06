@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Calendar, Plus, RefreshCw, Trash2, Save } from 'lucide-react'
-import { Button } from 'antd'
+import { Button, Card } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Card from '@/components/UI/Card'
 import Input from '@/components/UI/Input'
 import { showAlert } from '@/utils/notification'
 import { get, post, put, del } from '@/utils/request'
@@ -376,8 +375,9 @@ export default function Coaching() {
         </div>
 
         {tab === 'quota' && (
-          <Card className="p-6 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+          <Card>
+            <div className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
               <div>
                 <label className="text-xs text-slate-500 block mb-1">老师</label>
                 <select
@@ -457,12 +457,14 @@ export default function Coaching() {
                 </tbody>
               </table>
             </div>
+            </div>
           </Card>
         )}
 
         {tab === 'usage' && (
-          <Card className="p-6 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+          <Card>
+            <div className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
               <div className="lg:col-span-2">
                 <label className="text-xs text-slate-500 block mb-1">老师</label>
                 <select
@@ -544,12 +546,14 @@ export default function Coaching() {
                 </tbody>
               </table>
             </div>
+            </div>
           </Card>
         )}
 
         {tab === 'audit' && (
-          <Card className="p-6 space-y-6">
-            <div className="flex flex-wrap gap-4 items-end">
+          <Card>
+            <div className="p-6 space-y-6">
+              <div className="flex flex-wrap gap-4 items-end">
               <div>
                 <label className="text-xs text-slate-500 block mb-1">action 筛选（可选）</label>
                 <Input
@@ -637,12 +641,14 @@ export default function Coaching() {
                 </Button>
               </div>
             </div>
+            </div>
           </Card>
         )}
 
         {tab === 'appt' && (
-          <Card className="p-6 space-y-6">
-            <div className="flex flex-wrap gap-4 items-end">
+          <Card>
+            <div className="p-6 space-y-6">
+              <div className="flex flex-wrap gap-4 items-end">
               <div>
                 <label className="text-xs text-slate-500 block mb-1">周范围 from</label>
                 <Input type="date" value={range.from} onChange={(e) => setRange((r) => ({ ...r, from: e.target.value }))} />
@@ -741,6 +747,7 @@ export default function Coaching() {
                   ))}
                 </tbody>
               </table>
+            </div>
             </div>
           </Card>
         )}

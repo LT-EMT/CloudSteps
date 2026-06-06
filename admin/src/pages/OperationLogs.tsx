@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Search, FileText, Calendar, User, Globe, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react'
-import { Button } from 'antd'
+import { Button, Card } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Card from '@/components/UI/Card'
 import Input from '@/components/UI/Input'
 import { getOperationLogs, type OperationLog } from '@/services/adminApi'
 import { showAlert } from '@/utils/notification'
@@ -57,7 +56,7 @@ const OperationLogs = () => {
       <div className="space-y-6">
         {/* 筛选 */}
         <Card>
-          <div className="flex flex-col sm:flex-row gap-3 items-end">
+          <div className="flex flex-col sm:flex-row gap-3 items-end p-4">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 flex-1">
               <Input
                 placeholder="用户ID"
@@ -84,15 +83,16 @@ const OperationLogs = () => {
 
         {/* 列表 */}
         <Card>
-          {loading && logs.length === 0 ? (
-            <div className="flex items-center justify-center py-16">
-              <RefreshCw className="w-6 h-6 animate-spin text-slate-400" />
-            </div>
-          ) : logs.length === 0 ? (
-            <div className="text-center py-16">
-              <FileText className="w-12 h-12 mx-auto mb-3 text-slate-300 dark:text-slate-600" />
-              <p className="text-slate-500 dark:text-slate-400">暂无操作日志</p>
-            </div>
+          <div className="p-4">
+            {loading && logs.length === 0 ? (
+              <div className="flex items-center justify-center py-16">
+                <RefreshCw className="w-6 h-6 animate-spin text-slate-400" />
+              </div>
+            ) : logs.length === 0 ? (
+              <div className="text-center py-16">
+                <FileText className="w-12 h-12 mx-auto mb-3 text-slate-300 dark:text-slate-600" />
+                <p className="text-slate-500 dark:text-slate-400">暂无操作日志</p>
+              </div>
           ) : (
             <div className="divide-y divide-slate-100 dark:divide-slate-800">
               {logs.map((log) => {
@@ -153,6 +153,7 @@ const OperationLogs = () => {
               </div>
             </div>
           )}
+          </div>
         </Card>
       </div>
     </AdminLayout>

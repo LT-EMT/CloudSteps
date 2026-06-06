@@ -18,9 +18,8 @@ import {
   List,
   Image as ImageIcon,
 } from 'lucide-react'
-import { Button, Select, Modal } from 'antd'
+import { Button, Select, Modal, Card } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Card from '@/components/UI/Card'
 import Input from '@/components/UI/Input'
 import Badge from '@/components/UI/Badge'
 import EmptyState from '@/components/UI/EmptyState'
@@ -480,7 +479,7 @@ const Storage = () => {
       <div className="space-y-1 flex flex-col overflow-hidden" style={{ height: 'calc(100vh - 152px)', maxHeight: 'calc(100vh - 152px)' }}>
         {/* 存储信息卡片 */}
         {storageInfo && (
-          <Card padding="none" className="flex-shrink-0">
+          <Card>
             <div className="flex items-center gap-4 px-4 py-2">
               <div className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground">当前存储类型：</span>
@@ -516,8 +515,8 @@ const Storage = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-1 min-h-0">
           {/* 左侧：存储桶列表 */}
-          <Card className="lg:col-span-1 max-h-[77vh] h-[77vh]">
-            <div className="border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+          <Card className="lg:col-span-1 max-h-[77vh] h-[77vh] flex flex-col">
+            <div className="border-b border-slate-200 dark:border-slate-700 flex items-center justify-between p-4">
               <h2 className="font-semibold text-slate-900 dark:text-slate-100">存储桶列表</h2>
               <Button
                 size="small"
@@ -587,16 +586,17 @@ const Storage = () => {
 
           {/* 右侧：文件列表 */}
           <Card className="lg:col-span-3 max-h-[77vh] h-[77vh] flex flex-col overflow-hidden">
-            {!selectedBucket ? (
-              <div className="p-12 text-center">
-                <EmptyState
-                  icon={Folder}
-                  title="请选择存储桶"
-                  description="从左侧选择一个存储桶以查看文件"
-                />
-              </div>
-            ) : (
-              <div className="flex flex-col h-full overflow-hidden">
+            <div className="flex flex-col h-full overflow-hidden">
+              {!selectedBucket ? (
+                <div className="p-12 text-center">
+                  <EmptyState
+                    icon={Folder}
+                    title="请选择存储桶"
+                    description="从左侧选择一个存储桶以查看文件"
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col h-full overflow-hidden">
                 {/* 工具栏 */}
                 <div className="p-4 border-b border-slate-200 dark:border-slate-700 space-y-4 flex-shrink-0">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -1005,7 +1005,8 @@ const Storage = () => {
                   )}
                 </div>
               </div>
-            )}
+              )}
+            </div>
           </Card>
         </div>
 

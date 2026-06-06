@@ -13,9 +13,8 @@ import {
   UserCheck,
   UserX,
 } from 'lucide-react'
-import { Button, Select, Modal } from 'antd'
+import { Button, Select, Modal, Card } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Card from '@/components/UI/Card'
 import Input from '@/components/UI/Input'
 import Badge from '@/components/UI/Badge'
 import EmptyState from '@/components/UI/EmptyState'
@@ -220,7 +219,7 @@ const Users = () => {
       <div className="space-y-6">
         {/* Toolbar */}
         <Card>
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between p-4">
             <div className="flex flex-1 flex-wrap gap-3 items-center">
               <Input
                 placeholder="搜索邮箱、姓名..."
@@ -280,9 +279,10 @@ const Users = () => {
 
         {/* Users Table */}
         <Card>
-          {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <RefreshCw className="w-6 h-6 animate-spin text-slate-400" />
+          <div className="p-4">
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <RefreshCw className="w-6 h-6 animate-spin text-slate-400" />
             </div>
           ) : users.length === 0 ? (
             <EmptyState
@@ -402,6 +402,7 @@ const Users = () => {
               </div>
             </div>
           )}
+          </div>
         </Card>
 
         {/* Create Modal */}

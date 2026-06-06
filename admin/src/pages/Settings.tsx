@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Shield, QrCode, Key } from 'lucide-react'
-import { Button } from 'antd'
+import { Button, Card } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Card from '@/components/UI/Card'
 import Input from '@/components/UI/Input'
 import { getTwoFactorStatus, setupTwoFactor, enableTwoFactor, disableTwoFactor } from '@/services/adminApi'
 import { showAlert } from '@/utils/notification'
@@ -95,8 +94,9 @@ const Settings = () => {
     >
       <div className="space-y-6">
         {/* 安全设置 */}
-        <Card className="p-6">
-          <div className="flex items-center gap-3 mb-6">
+        <Card>
+          <div className="p-6">
+            <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
               <Shield className="w-5 h-5 text-red-600 dark:text-red-400" />
             </div>
@@ -224,6 +224,7 @@ const Settings = () => {
                 </div>
               </div>
             )}
+          </div>
           </div>
         </Card>
       </div>

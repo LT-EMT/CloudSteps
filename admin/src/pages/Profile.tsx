@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Save, User, Mail, Phone, MapPin, Calendar, Edit2, Lock } from 'lucide-react'
-import { Button } from 'antd'
+import { Button, Card } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Card from '@/components/UI/Card'
 import Input from '@/components/UI/Input'
 import { useAuthStore } from '@/stores/authStore'
 import { getCurrentUser, updateProfile, changePassword, ProfileUpdateRequest, ChangePasswordRequest } from '@/services/adminApi'
@@ -133,8 +132,8 @@ const Profile = () => {
     >
       <div className="space-y-6">
         {/* 用户信息卡片 */}
-        <Card className="p-6">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+        <Card>
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6">
             <div className="flex-1 text-center sm:text-left">
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                 {formData.displayName || currentUser.email || '管理员'}
@@ -157,10 +156,11 @@ const Profile = () => {
         </Card>
 
         {/* 个人信息 */}
-        <Card className="p-6">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">
-            个人信息
-          </h3>
+        <Card>
+          <div className="p-6">
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">
+              个人信息
+            </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
@@ -254,13 +254,15 @@ const Profile = () => {
               </p>
             )}
           </div>
+          </div>
         </Card>
 
         {/* 账户安全 */}
-        <Card className="p-6">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">
-            账户安全
-          </h3>
+        <Card>
+          <div className="p-6">
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">
+              账户安全
+            </h3>
           <div className="space-y-4">
             <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-800">
               <div className="flex items-center justify-between mb-4">
@@ -325,6 +327,7 @@ const Profile = () => {
                 </div>
               )}
             </div>
+          </div>
           </div>
         </Card>
       </div>

@@ -7,9 +7,8 @@ import {
   Trash2,
   RefreshCw,
 } from 'lucide-react'
-import { Button, Select, Switch, Modal } from 'antd'
+import { Button, Select, Switch, Modal, Card } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
-import Card from '@/components/UI/Card'
 import Input from '@/components/UI/Input'
 import Badge from '@/components/UI/Badge'
 import EmptyState from '@/components/UI/EmptyState'
@@ -209,14 +208,15 @@ const ScenarioDialogues = () => {
           </div>
 
           <Card>
-            {scenarios.length === 0 && !loading ? (
-              <EmptyState
-                icon={MessageSquare}
-                title="暂无场景"
-                description="点击上方按钮创建第一个场景"
-              />
-            ) : (
-              <div className="overflow-x-auto">
+            <div className="p-4">
+              {scenarios.length === 0 && !loading ? (
+                <EmptyState
+                  icon={MessageSquare}
+                  title="暂无场景"
+                  description="点击上方按钮创建第一个场景"
+                />
+              ) : (
+                <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-slate-200">
@@ -268,6 +268,7 @@ const ScenarioDialogues = () => {
                 </table>
               </div>
             )}
+            </div>
           </Card>
         </motion.div>
       </div>

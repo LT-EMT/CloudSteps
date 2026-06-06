@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { Button } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import { get, post, put, del } from '@/utils/request'
 import { getApiBaseURL } from '@/config/apiConfig'
@@ -93,12 +94,9 @@ export default function SelfTestWords() {
       <div className="p-6 space-y-4">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">自测题库</h1>
-          <button
-            onClick={openCreate}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-colors"
-          >
-            <Plus className="w-4 h-4" /> 新增单词
-          </button>
+          <Button onClick={openCreate} type="primary" icon={<Plus className="w-4 h-4" />}>
+            新增单词
+          </Button>
         </div>
 
         {/* 筛选栏 */}
@@ -152,12 +150,8 @@ export default function SelfTestWords() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => openEdit(w)} className="p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500">
-                        <Pencil className="w-4 h-4" />
-                      </button>
-                      <button onClick={() => handleDelete(w.id)} className="p-1.5 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      <Button onClick={() => openEdit(w)} type="text" size="small" icon={<Pencil className="w-4 h-4" />} />
+                      <Button onClick={() => handleDelete(w.id)} type="text" size="small" danger icon={<Trash2 className="w-4 h-4" />} />
                     </div>
                   </td>
                 </tr>
@@ -171,11 +165,9 @@ export default function SelfTestWords() {
           <div className="flex items-center justify-between text-sm text-slate-500">
             <span>共 {total} 条</span>
             <div className="flex gap-2">
-              <button disabled={page <= 1} onClick={() => setPage(p => p - 1)}
-                className="px-3 py-1 rounded border border-slate-200 dark:border-slate-700 disabled:opacity-40">上一页</button>
+              <Button disabled={page <= 1} onClick={() => setPage(p => p - 1)} size="small">上一页</Button>
               <span className="px-3 py-1">{page} / {totalPages}</span>
-              <button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)}
-                className="px-3 py-1 rounded border border-slate-200 dark:border-slate-700 disabled:opacity-40">下一页</button>
+              <Button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)} size="small">下一页</Button>
             </div>
           </div>
         )}
@@ -187,7 +179,7 @@ export default function SelfTestWords() {
           <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl w-full max-w-md">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800">
               <h2 className="font-semibold text-slate-900 dark:text-slate-100">{editing ? '编辑单词' : '新增单词'}</h2>
-              <button onClick={() => setModalOpen(false)}><X className="w-5 h-5 text-slate-400" /></button>
+              <Button onClick={() => setModalOpen(false)} type="text" icon={<X className="w-5 h-5 text-slate-400" />} />
             </div>
             <div className="px-6 py-4 space-y-4">
               <div>
@@ -210,12 +202,10 @@ export default function SelfTestWords() {
               </div>
             </div>
             <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-200 dark:border-slate-800">
-              <button onClick={() => setModalOpen(false)}
-                className="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-400">取消</button>
-              <button onClick={handleSave} disabled={saving}
-                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm disabled:opacity-50">
+              <Button onClick={() => setModalOpen(false)}>取消</Button>
+              <Button onClick={handleSave} disabled={saving} type="primary" loading={saving}>
                 {saving ? '保存中...' : '保存'}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

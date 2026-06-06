@@ -19,8 +19,7 @@ import {
   Code,
   GitBranch
 } from 'lucide-react'
-import { Button } from 'antd'
-import Card, { CardContent } from '@/components/UI/Card'
+import { Button, Card } from 'antd'
 import Badge from '@/components/UI/Badge'
 
 interface DocumentRendererProps {
@@ -169,50 +168,49 @@ const DocumentRenderer = ({ content }: DocumentRendererProps) => {
         
         return (
           <Card key={index} className="mb-4">
-            <CardContent className="p-0">
-              <div 
-                className="p-4 cursor-pointer hover:bg-muted/50 transition-colors"
-                onClick={() => toggleEndpoint(item.path)}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Badge className={`${getMethodColor(item.method)} flex items-center gap-1`}>
-                      {getMethodIcon(item.method)}
-                      <span>{item.method}</span>
+            <div 
+              className="p-4 cursor-pointer hover:bg-muted/50 transition-colors"
+              onClick={() => toggleEndpoint(item.path)}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Badge className={`${getMethodColor(item.method)} flex items-center gap-1`}>
+                    {getMethodIcon(item.method)}
+                    <span>{item.method}</span>
+                  </Badge>
+                  <code className="text-sm font-mono bg-muted px-2 py-1 rounded">
+                    {item.path}
+                  </code>
+                  {item.auth && (
+                    <Badge variant="outline" className="text-xs flex items-center gap-1">
+                      <Lock className="w-3 h-3" />
+                      <span>需要认证</span>
                     </Badge>
-                    <code className="text-sm font-mono bg-muted px-2 py-1 rounded">
-                      {item.path}
-                    </code>
-                    {item.auth && (
-                      <Badge variant="outline" className="text-xs flex items-center gap-1">
-                        <Lock className="w-3 h-3" />
-                        <span>需要认证</span>
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <h4 className="font-medium">{item.title}</h4>
-                    {isExpanded ? (
-                      <ChevronDown className="w-4 h-4" />
-                    ) : (
-                      <ChevronRight className="w-4 h-4" />
-                    )}
-                  </div>
+                  )}
                 </div>
-                <p className="text-sm text-muted-foreground mt-2">
-                  {item.description}
-                </p>
+                <div className="flex items-center gap-2">
+                  <h4 className="font-medium">{item.title}</h4>
+                  {isExpanded ? (
+                    <ChevronDown className="w-4 h-4" />
+                  ) : (
+                    <ChevronRight className="w-4 h-4" />
+                  )}
+                </div>
               </div>
+              <p className="text-sm text-muted-foreground mt-2">
+                {item.description}
+              </p>
+            </div>
 
-              {isExpanded && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="border-t"
-                >
-                  <div className="p-4 space-y-4">
+            {isExpanded && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className="border-t"
+              >
+                <div className="p-4 space-y-4">
                     {/* 参数 */}
                     {item.parameters && item.parameters.length > 0 && (
                       <div>
@@ -305,7 +303,6 @@ const DocumentRenderer = ({ content }: DocumentRendererProps) => {
                   </div>
                 </motion.div>
               )}
-            </CardContent>
           </Card>
         )
 
@@ -325,7 +322,7 @@ const DocumentRenderer = ({ content }: DocumentRendererProps) => {
               
               return (
                 <Card key={featureIndex}>
-                  <CardContent className="p-6">
+                  <div className="p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${colorClasses[feature.color as keyof typeof colorClasses]}`}>
                         <Icon className="w-5 h-5" />
@@ -343,7 +340,7 @@ const DocumentRenderer = ({ content }: DocumentRendererProps) => {
                         </li>
                       ))}
                     </ul>
-                  </CardContent>
+                  </div>
                 </Card>
               )
             })}
@@ -359,13 +356,13 @@ const DocumentRenderer = ({ content }: DocumentRendererProps) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {category.technologies.map((tech: any, techIndex: number) => (
                     <Card key={techIndex}>
-                      <CardContent className="p-4">
+                      <div className="p-4">
                         <div className="flex items-center justify-between mb-2">
                           <h5 className="font-medium">{tech.name}</h5>
                           <Badge variant="outline">{tech.version}</Badge>
                         </div>
                         <p className="text-sm text-muted-foreground">{tech.description}</p>
-                      </CardContent>
+                      </div>
                     </Card>
                   ))}
                 </div>
@@ -379,7 +376,7 @@ const DocumentRenderer = ({ content }: DocumentRendererProps) => {
           <div key={index} className="space-y-4 mb-6">
             {item.variables.map((variable: any, varIndex: number) => (
               <Card key={varIndex}>
-                <CardContent className="p-4">
+                <div className="p-4">
                   <div className="flex items-center justify-between mb-2">
                     <code className="text-sm font-mono bg-muted px-2 py-1 rounded">
                       {variable.name}
@@ -395,7 +392,7 @@ const DocumentRenderer = ({ content }: DocumentRendererProps) => {
                   <div className="text-xs text-muted-foreground">
                     <strong>示例:</strong> <code className="bg-muted px-1 rounded">{variable.example}</code>
                   </div>
-                </CardContent>
+                </div>
               </Card>
             ))}
           </div>
@@ -408,13 +405,13 @@ const DocumentRenderer = ({ content }: DocumentRendererProps) => {
               const Icon = getIcon(tip.icon)
               return (
                 <Card key={tipIndex}>
-                  <CardContent className="p-4">
+                  <div className="p-4">
                     <div className="flex items-center gap-3 mb-2">
                       <Icon className="w-5 h-5 text-primary" />
                       <h5 className="font-medium">{tip.title}</h5>
                     </div>
                     <p className="text-sm text-muted-foreground">{tip.description}</p>
-                  </CardContent>
+                  </div>
                 </Card>
               )
             })}

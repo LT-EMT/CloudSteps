@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Button, Input } from 'antd'
+import { Button, Input, Select } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import { get, post, put, del } from '@/utils/request'
 import { getApiBaseURL } from '@/config/apiConfig'
@@ -315,14 +315,15 @@ export default function Achievements() {
                 </div>
                 <div>
                   <div className="text-sm text-slate-500 mb-1">启用</div>
-                  <select
-                    value={String(form.isActive ?? true)}
-                    onChange={(e) => setForm((f) => ({ ...f, isActive: e.target.value === 'true' }))}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-transparent"
-                  >
-                    <option value="true">是</option>
-                    <option value="false">否</option>
-                  </select>
+                  <Select
+                    value={form.isActive ?? true}
+                    onChange={(value) => setForm((f) => ({ ...f, isActive: value }))}
+                    className="w-full"
+                    options={[
+                      { label: '是', value: true },
+                      { label: '否', value: false }
+                    ]}
+                  />
                 </div>
               </div>
 

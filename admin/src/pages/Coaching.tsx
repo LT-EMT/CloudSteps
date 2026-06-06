@@ -359,18 +359,14 @@ export default function Coaching() {
 
         <div className="flex gap-2 border-b border-slate-200 dark:border-slate-700 pb-2">
           {tabs.map((t) => (
-            <button
+            <Button
               key={t.id}
-              type="button"
+              type={tab === t.id ? 'default' : 'text'}
               onClick={() => setTab(t.id)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                tab === t.id
-                  ? 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-200'
-                  : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'
-              }`}
+              className={tab === t.id ? 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-200' : ''}
             >
               {t.label}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -735,13 +731,15 @@ export default function Coaching() {
                       </td>
                       <td className="p-2">{a.status}</td>
                       <td className="p-2">
-                        <button
-                          type="button"
-                          className="text-red-600 hover:underline text-xs flex items-center gap-1"
+                        <Button
+                          type="link"
+                          danger
+                          size="small"
                           onClick={() => void removeAppt(a.id)}
+                          icon={<Trash2 className="w-3 h-3" />}
                         >
-                          <Trash2 className="w-3 h-3" /> 删
-                        </button>
+                          删
+                        </Button>
                       </td>
                     </tr>
                   ))}

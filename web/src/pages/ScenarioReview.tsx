@@ -104,7 +104,11 @@ export default function ScenarioReview() {
     <div className="min-h-screen bg-gray-50 pb-24">
       <div className="bg-white sticky top-0 z-10 shadow-sm">
         <div className="flex items-center px-4 py-4">
-          <button onClick={() => navigate("/scenario-selection")} className="p-2 -ml-2 hover:bg-gray-100 rounded-full">
+          <button 
+            onClick={() => navigate(-1)} 
+            className="p-2 -ml-2 hover:bg-gray-100 rounded-full active:bg-gray-200 transition-colors"
+            aria-label="返回上一页"
+          >
             <ArrowLeft size={24} className="text-[#2D3748]" />
           </button>
           <h1 className="flex-1 text-center text-lg font-semibold text-[#2D3748] -ml-10">

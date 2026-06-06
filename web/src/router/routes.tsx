@@ -27,6 +27,10 @@ import ProfileEdit from "@/pages/ProfileEdit";
 import About from "@/pages/About";
 import Terms from "@/pages/Terms";
 import Privacy from "@/pages/Privacy";
+import ScenarioSelection from "@/pages/ScenarioSelection";
+import ScenarioDialogue from "@/pages/ScenarioDialogue";
+import ScenarioReview from "@/pages/ScenarioReview";
+import ScenarioHistory from "@/pages/ScenarioHistory";
 import { RouteErrorBoundary } from "@/components/RouteErrorBoundary";
 import { PublicOnly, RequireAuth, RequireRole } from "@/components/AuthGuard";
 import MyStudents from "@/pages/MyStudents";
@@ -34,9 +38,6 @@ import StudentTrainingRecords from "@/pages/StudentTrainingRecords";
 import WordBooks from "@/pages/WordBooks";
 import WordBookWords from "@/pages/WordBookWords";
 import LighthouseWords from "@/pages/LighthouseWords";
-import ScenarioSelection from "@/pages/ScenarioSelection";
-import ScenarioDialogue from "@/pages/ScenarioDialogue";
-import ScenarioReview from "@/pages/ScenarioReview";
 
 export const router = createBrowserRouter([
   {
@@ -263,6 +264,14 @@ export const router = createBrowserRouter([
     element: (
       <RequireAuth>
         <ScenarioReview />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/scenario-history",
+    element: (
+      <RequireAuth>
+        <ScenarioHistory />
       </RequireAuth>
     ),
   },

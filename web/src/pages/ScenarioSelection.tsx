@@ -81,9 +81,17 @@ export default function ScenarioSelection() {
 
         {stats && stats.totalSessions > 0 && (
           <div className="bg-white rounded-xl p-4 mb-4 border border-[#E2E8F0]">
-            <div className="flex items-center gap-2 mb-3">
-              <BarChart3 size={18} className="text-[#4ECDC4]" />
-              <span className="font-medium text-[#2D3748]">口语能力概览</span>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <BarChart3 size={18} className="text-[#4ECDC4]" />
+                <span className="font-medium text-[#2D3748]">口语能力概览</span>
+              </div>
+              <button
+                onClick={() => navigate("/scenario-history")}
+                className="text-xs text-[#4ECDC4] hover:text-[#3DBCB4] font-medium"
+              >
+                查看历史
+              </button>
             </div>
             <div className="grid grid-cols-3 gap-3 text-center">
               <div>

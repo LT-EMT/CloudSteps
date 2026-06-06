@@ -89,7 +89,7 @@ export default function ScenarioReview() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
         <p className="text-[#718096]">会话不存在</p>
-        <button onClick={() => navigate("/scenario-selection")} className="text-[#4ECDC4]">
+        <button onClick={() => navigate("/scenario-dialogues")} className="text-[#4ECDC4]">
           返回选场景
         </button>
       </div>
@@ -243,7 +243,7 @@ export default function ScenarioReview() {
         )}
 
         <button
-          onClick={() => navigate("/scenario-selection")}
+          onClick={() => navigate("/scenario-dialogues")}
           className="w-full py-4 bg-[#4ECDC4] text-white rounded-full font-medium hover:bg-[#3DBCB4] transition-colors"
         >
           再练一个场景

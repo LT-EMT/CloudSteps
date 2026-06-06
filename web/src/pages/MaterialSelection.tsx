@@ -23,7 +23,7 @@ export default function MaterialSelection() {
     } else if (material.name === "单词练习") {
       navigate("/word-training");
     } else if (material.name === "场景对话") {
-      navigate("/scenario-selection");
+      navigate("/scenario-dialogues");
     }
   };
 

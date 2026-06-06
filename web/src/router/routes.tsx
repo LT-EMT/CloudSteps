@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import { Layout } from "@/components/Layout";
 import Home from "@/pages/Home";
 import AntiForgetting from "@/pages/AntiForgetting";
@@ -71,6 +71,8 @@ export const router = createBrowserRouter([
       { path: "lighthouse-words", element: <LighthouseWords /> },
       { path: "anti-forgetting", element: <AntiForgetting /> },
       { path: "coach-center", element: <CoachCenter /> },
+      { path: "scenario-dialogues", element: <ScenarioSelection /> },
+      { path: "scenario-dialogues/history", element: <ScenarioHistory /> },
       { path: "profile/edit", element: <ProfileEdit /> },
       { path: "notifications", element: <Notifications /> },
     ],
@@ -247,7 +249,7 @@ export const router = createBrowserRouter([
     path: "/scenario-selection",
     element: (
       <RequireAuth>
-        <ScenarioSelection />
+        <Navigate to="/scenario-dialogues" replace />
       </RequireAuth>
     ),
   },
@@ -271,7 +273,7 @@ export const router = createBrowserRouter([
     path: "/scenario-history",
     element: (
       <RequireAuth>
-        <ScenarioHistory />
+        <Navigate to="/scenario-dialogues/history" replace />
       </RequireAuth>
     ),
   },

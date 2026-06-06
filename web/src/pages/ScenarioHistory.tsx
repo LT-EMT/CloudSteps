@@ -30,7 +30,7 @@ export default function ScenarioHistory() {
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
         <p className="text-[#718096]">暂无对话记录</p>
         <button
-          onClick={() => navigate("/scenario-selection")}
+          onClick={() => navigate("/scenario-dialogues")}
           className="text-[#4ECDC4] hover:text-[#3DBCB4]"
         >
           开始练习
@@ -161,7 +161,7 @@ export default function ScenarioHistory() {
         </div>
 
         <button
-          onClick={() => navigate("/scenario-selection")}
+          onClick={() => navigate("/scenario-dialogues")}
           className="w-full py-4 bg-[#4ECDC4] text-white rounded-full font-medium hover:bg-[#3DBCB4] transition-colors"
         >
           继续练习

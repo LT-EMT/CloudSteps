@@ -68,7 +68,7 @@ export default function ScenarioDialogue() {
 
   useEffect(() => {
     if (!state?.sessionId) {
-      navigate("/scenario-selection", { replace: true });
+      navigate("/scenario-dialogues", { replace: true });
       return;
     }
     if (state.voiceReady && !state.voiceReady.ready) {

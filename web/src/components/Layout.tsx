@@ -5,8 +5,7 @@ import {
   RefreshCw,
   Users,
   Library,
-  Menu,
-  X,
+  MessageSquare,
 } from "lucide-react";
 import { Header } from "@/components/header";
 import { NavMenu } from "@/components/NavMenu";
@@ -15,6 +14,7 @@ import { useAuthStore } from "@/stores/authStore";
 const navItems = [
   { path: "/", label: "首页", icon: Home },
   { path: "/word-books", label: "备课", icon: Library },
+  { path: "/scenario-dialogues", label: "场景对话", icon: MessageSquare },
   { path: "/anti-forgetting", label: "抗遗忘", icon: RefreshCw },
   { path: "/coach-center", label: "陪练中心", icon: Users },
 ];

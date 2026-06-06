@@ -87,7 +87,7 @@ export default function ScenarioSelection() {
                 <span className="font-medium text-[#2D3748]">口语能力概览</span>
               </div>
               <button
-                onClick={() => navigate("/scenario-history")}
+                onClick={() => navigate("/scenario-dialogues/history")}
                 className="text-xs text-[#4ECDC4] hover:text-[#3DBCB4] font-medium"
               >
                 查看历史

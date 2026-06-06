@@ -112,7 +112,7 @@ export default function AIInterview() {
   const wsUrl = useMemo(() => {
     const wsBase = getWebSocketBaseURL()
     const host = wsBase.replace(/\/$/, "")
-    return `${host}/ws/realtime/ai-interview`
+    return `${host}/api/ws/realtime/ai-interview`
   }, [])
 
   const voice = useRealtimeVoice({

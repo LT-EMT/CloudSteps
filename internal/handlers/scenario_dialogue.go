@@ -48,7 +48,7 @@ func (h *Handlers) registerScenarioDialogueRoutes(r *gin.RouterGroup) {
 	// xiaozhi realtime WebSocket (no AuthRequired — validated via device-id)
 	r.GET("/voice/CloudStepsGo/v1/", h.handleScenarioVoiceWS)
 
-	// AI interview realtime WebSocket
+	// AI interview realtime WebSocket (no AuthRequired)
 	r.GET("/ws/realtime/ai-interview", h.handleAIInterviewWS)
 }
 
@@ -87,6 +87,27 @@ func (h *Handlers) ensureRealtimeFactory() *voice.RealtimeFactory {
 		}
 	}
 	return h.realtimeFactory
+}
+
+// AI interview realtime WebSocket (root level)
+func (h *Handlers) handleAIInterviewWS(c *gin.Context) {
+	h.ensureRealtimeFactory()
+	if h.xiaozhiServer == nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"code": 503, "msg": "语音服务未就绪"})
+		return
+	}
+
+	ready := voice.CheckReady()
+	if !ready.Ready {
+		c.JSON(http.StatusServiceUnavailable, gin.H{
+			"code": 503,
+			"msg":  ready.Hint,
+		})
+		return
+	}
+
+	// Use the same xiaozhi server for AI interview
+	h.xiaozhiServer.Handle(c.Writer, c.Request)
 }
 
 func (h *Handlers) handleScenarioVoiceWS(c *gin.Context) {

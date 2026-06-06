@@ -22,6 +22,7 @@ const WordBookWords = lazy(() => import('@/pages/WordBookWords'))
 const VocabQuestions = lazy(() => import('@/pages/VocabQuestions'))
 const VocabTestRecords = lazy(() => import('@/pages/VocabTestRecords'))
 const Coaching = lazy(() => import('@/pages/Coaching'))
+const ScenarioDialogues = lazy(() => import('@/pages/ScenarioDialogues'))
 
 function App() {
   const { refreshUserInfo, isAuthenticated } = useAuthStore()
@@ -104,6 +105,7 @@ function App() {
             <Route path="/vocab-questions" element={<ProtectedRoute><VocabQuestions /></ProtectedRoute>} />
             <Route path="/vocab-records" element={<ProtectedRoute><VocabTestRecords /></ProtectedRoute>} />
             <Route path="/coaching" element={<ProtectedRoute><Coaching /></ProtectedRoute>} />
+            <Route path="/scenario-dialogues" element={<ProtectedRoute><ScenarioDialogues /></ProtectedRoute>} />
 
             {/* 默认重定向 */}
             <Route path="/" element={<Navigate to="/wordbooks" replace />} />

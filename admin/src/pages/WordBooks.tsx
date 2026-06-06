@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Input } from 'antd'
+import { Button, Input, Select } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import { get, post, put, del } from '@/utils/request'
 import { getApiBaseURL } from '@/config/apiConfig'
@@ -294,10 +294,12 @@ export default function WordBooks() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">等级</label>
-                  <select value={form.level} onChange={e => setForm(f => ({ ...f, level: e.target.value }))}
-                    className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500">
-                    {LEVELS.map(l => <option key={l} value={l}>{l || '不限'}</option>)}
-                  </select>
+                  <Select
+                    value={form.level || undefined}
+                    onChange={(value) => setForm(f => ({ ...f, level: value || '' }))}
+                    className="w-full"
+                    options={LEVELS.map(l => ({ label: l || '不限', value: l }))}
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">排序权重</label>

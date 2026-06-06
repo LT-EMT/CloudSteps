@@ -336,10 +336,29 @@ func (h *Handlers) coachingAdminUpdateAppointment(c *gin.Context) {
 func (h *Handlers) coachingAdminDeleteAppointment(c *gin.Context) {
 	db := c.MustGet(constants.DbField).(*gorm.DB)
 	id, _ := strconv.Atoi(c.Param("id"))
-	if err := db.Model(&models.CoachingAppointment{}).Where("id = ?", id).Update("is_deleted", 1).Error; err != nil {
-		response.Fail(c, "删除失败", err.Error())
+	
+	// 先查询记录是否存在
+	var ap models.CoachingAppointment
+	if err := db.Where("id = ? AND is_deleted = 0", id).First(&ap).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{"code": 404, "msg": "排课不存在或已删除"})
+			return
+		}
+		response.Fail(c, "查询失败", err.Error())
 		return
 	}
+	
+	// 执行软删除
+	result := db.Model(&models.CoachingAppointment{}).Where("id = ?", id).Update("is_deleted", 1)
+	if result.Error != nil {
+		response.Fail(c, "删除失败", result.Error.Error())
+		return
+	}
+	if result.RowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"code": 404, "msg": "排课不存在或已删除"})
+		return
+	}
+	
 	uid := uint(id)
 	coachingWriteCoachingAudit(db, c, coachingAuditAppointmentDelete, "appointment", uid, uid, "删除排课", map[string]any{"appointmentId": id})
 	response.Success(c, "ok", gin.H{"id": id})

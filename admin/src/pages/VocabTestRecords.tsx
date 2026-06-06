@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Button } from 'antd'
+import { Button, Select } from 'antd'
 import AdminLayout from '@/components/Layout/AdminLayout'
 import { get, del } from '@/utils/request'
 import { getApiBaseURL } from '@/config/apiConfig'
@@ -77,13 +77,12 @@ export default function VocabTestRecords() {
 
         {/* 筛选栏 */}
         <div className="flex gap-3 flex-wrap">
-          <select
-            value={level}
-            onChange={e => { setLevel(e.target.value); setPage(1) }}
-            className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-700 dark:text-slate-300"
-          >
-            {LEVELS.map(l => <option key={l} value={l}>{l || '全部等级'}</option>)}
-          </select>
+          <Select
+            value={level || undefined}
+            onChange={(value) => { setLevel(value || ''); setPage(1) }}
+            className="w-32"
+            options={LEVELS.map(l => ({ label: l || '全部等级', value: l }))}
+          />
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input

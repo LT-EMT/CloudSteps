@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useRef, useState, useEffect } from 'react'
 
 const SAMPLE_RATE = 16000
 const FRAME_MS = 20
@@ -12,10 +12,11 @@ interface UseRealtimeVoiceOptions {
   onAssistantText?: (text: string) => void
   onError?: (message: string) => void
   onConnected?: () => void
+  expressionData?: string
 }
 
 export function useRealtimeVoice(options: UseRealtimeVoiceOptions) {
-  const { wsUrl, onUserText, onAssistantText, onError, onConnected } = options
+  const { wsUrl, onUserText, onAssistantText, onError, onConnected, expressionData } = options
   const [status, setStatus] = useState<VoiceStatus>('idle')
   const [userText, setUserText] = useState('')
   const [assistantText, setAssistantText] = useState('')
@@ -30,6 +31,7 @@ export function useRealtimeVoice(options: UseRealtimeVoiceOptions) {
   const playbackRateRef = useRef(SAMPLE_RATE)
   const nextPlayTimeRef = useRef(0)
   const playbackSourcesRef = useRef<AudioBufferSourceNode[]>([])
+  const lastExpressionDataRef = useRef('')
 
   const downsample = (input: Float32Array, fromRate: number, toRate: number) => {
     if (fromRate === toRate) return input
@@ -167,6 +169,14 @@ export function useRealtimeVoice(options: UseRealtimeVoiceOptions) {
       }
     }
   }, [onAssistantText, onConnected, onError, onUserText, sendJSON, stopPlayback])
+
+  // Send expression data to backend when it changes
+  useEffect(() => {
+    if (expressionData && expressionData !== lastExpressionDataRef.current && wsRef.current?.readyState === WebSocket.OPEN) {
+      sendJSON({ type: 'expression', data: expressionData })
+      lastExpressionDataRef.current = expressionData
+    }
+  }, [expressionData, sendJSON])
 
   const connect = useCallback(async () => {
     if (!wsUrl) return

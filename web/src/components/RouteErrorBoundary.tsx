@@ -2,7 +2,13 @@ import React from "react";
 import { isRouteErrorResponse, useRouteError } from "react-router";
 
 export function RouteErrorBoundary() {
-  const error = useRouteError();
+  let error;
+  try {
+    error = useRouteError();
+  } catch (e) {
+    // 如果 useRouteError 失败（可能在 Router 上下文外），使用默认错误
+    error = new Error("路由上下文错误");
+  }
 
   const title = isRouteErrorResponse(error)
     ? `${error.status} ${error.statusText}`

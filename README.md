@@ -1,5 +1,7 @@
 # 🎓 CloudSteps - AI 英语口语陪练系统
 
+【七牛云demo视频演示-哔哩哔哩】 https://b23.tv/0Uquu1H
+
 <div align="center">
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)

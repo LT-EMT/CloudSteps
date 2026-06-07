@@ -38,7 +38,8 @@ function getApiConfig(): ApiConfig {
   if (!wsBaseURL) {
     // 从API URL提取host部分，转换为WebSocket URL
     const apiHost = apiBaseURL.replace(/^https?:\/\//, '').replace(/\/api.*$/, '')
-    wsBaseURL = convertToWebSocketURL(apiBaseURL.split('/api')[0] || `http://${apiHost}`)
+    const apiBaseWithoutPath = apiBaseURL.split('/api')[0] || `http://${apiHost}`
+    wsBaseURL = convertToWebSocketURL(apiBaseWithoutPath)
   }
   
   const uploadsBaseURL = import.meta.env.VITE_UPLOADS_BASE_URL || apiBaseURL.replace('/api', '/uploads')
